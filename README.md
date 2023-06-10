@@ -5,6 +5,7 @@ wide range of features to create and manipulate Word documents using a few lines
 FileFormat.Words is a wrapper that makes use of OpenXML SDK immensely and enables developers to use its features easily.
 This <b>Open-Source .NET library</b> helps developers automate Word document generation & manipulation without depending upon any third-party library.
 </p>
+
 ## About this Repo
 
 <table>
@@ -28,22 +29,23 @@ This <b>Open-Source .NET library</b> helps developers automate Word document gen
 
 ## Library Features & Provisions
 
-<p> <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/api/index.html">FileFormat.Words</a> not only offers provisions to create new Word documents but also lets developers read & modify
+<p> <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/api/index.html">FileFormat.Words</a> not only offers provisions to create new <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/api/FileFormat.Words.html">Word documents</a> but also lets developers read & modify
 the existing documents programmatically. This .NET library is enterprise-level and  all the processes happen seamlessly.</p>
 
 This Open-Source .NET library offers the following features:
 
  - <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/">FileFormat.Words</a> offers empty Word document creation as well as with the content. Developers can
    open existing Word document from a file & stream.
- - This Open-Source API lets you add Paragraphs to the document. Developers can make the text Bold, Italic, and can set the various props such as alignment, style and more.
- - Developers can add Tables using this Open-Source .NET API. There are many features offered by the Table namespace such as creating tables, setting table border style, and setting table width.
+ - This Open-Source API lets you add <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/api/FileFormat.Words.Paragraph.html">Paragraphs</a> to the document. Developers can make the text Bold, Italic, and can set the various props such as alignment, style and more.
+ - Developers can add <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/api/FileFormat.Words.Table.Table.html">Tables</a> using this Open-Source .NET API. There are many features offered by the <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/api/FileFormat.Words.Table.html">Table namespace</a> such as creating tables, setting table border style, and setting table width.
    In addition, developers can read tables along with all the props(i.e. rows, columns and more) from an existing Word document, and can add/update/remove rows and cells. Further, it lets you edit text inside table cells & more.
- - The Image class lets you add images with custom props into a Word document. 
+ - The <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/api/FileFormat.Words.Image.html">Image</a> class lets you add images with custom props into a Word document. 
 
 ## Getting Started With FileFormat.Words For .NET
 
-<p> The installation procedure of this Open-Source <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/api/index.html">.NET API</a> is just one command away. Simply, run <code>Install-Package FileFormat.Words</code> in NuGet Package Manager and you are all set to leverage this document
+<p> The installation procedure of this Open-Source <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/api/index.html">.NET API</a> is just one command away. Simply, run the following command in the NuGet Package Manager and you are all set to leverage this document
 automation library.</p>
+<code>Install-Package FileFormat.Words</code>
 
 ## Creating a Word Document Programmatically
 
