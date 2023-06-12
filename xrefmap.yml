@@ -1367,12 +1367,6 @@ references:
   isSpec: "True"
   fullName: FileFormat.Words.Table.TableRow.TableRow
   nameWithType: TableRow.TableRow
-- uid: FileFormat.Words.Table.TableRow.Append(DocumentFormat.OpenXml.Wordprocessing.TableRowProperties)
-  name: Append(DocumentFormat.OpenXml.Wordprocessing.TableRowProperties)
-  href: api/FileFormat.Words.Table.TableRow.html#FileFormat_Words_Table_TableRow_Append_DocumentFormat_OpenXml_Wordprocessing_TableRowProperties_
-  commentId: M:FileFormat.Words.Table.TableRow.Append(DocumentFormat.OpenXml.Wordprocessing.TableRowProperties)
-  fullName: FileFormat.Words.Table.TableRow.Append(DocumentFormat.OpenXml.Wordprocessing.TableRowProperties)
-  nameWithType: TableRow.Append(DocumentFormat.OpenXml.Wordprocessing.TableRowProperties)
 - uid: FileFormat.Words.Table.TableRow.Append(FileFormat.Words.Table.TableCell)
   name: Append(TableCell)
   href: api/FileFormat.Words.Table.TableRow.html#FileFormat_Words_Table_TableRow_Append_FileFormat_Words_Table_TableCell_
