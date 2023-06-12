@@ -24,7 +24,7 @@
           "hash": "1HXK6AbwNR1Gm6d6vUP0y1hUI/wDWWmxhbxkdAtZAKA="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -36,7 +36,7 @@
           "hash": "3FIg65JwpC1Ly2cenLnGiJuxCzZMROhvchz0K17Z7i4="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -48,7 +48,7 @@
           "hash": "T0MJimKlRGysifIqr2f0TT4NoW8lZINjK7mQfUwzgws="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -60,7 +60,7 @@
           "hash": "dsbigJBYxr9SVA9K2q7/HPticTg07sfgO/By1l4HwpE="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -72,7 +72,7 @@
           "hash": "m9ygRYh5+XOtUYcyc+RWUrETOOqqxZeR/sAHLdhZozs="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -84,7 +84,7 @@
           "hash": "3SK9Zvn30WSRbqUHmSIeDL08Dov56thbjiyMjZf7ezI="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -141,7 +141,7 @@
       "output": {
         ".html": {
           "relative_path": "api/FileFormat.Words.Table.TableJustification.html",
-          "hash": "t0rj+lTIHr54Q1QdKXJptm4QhfqhmHlO1f4XPWXaDBY="
+          "hash": "qm1D5uGWZa6G/n9v4pz/u3b0d+QTdNFJ9scRjUs6ZKY="
         }
       },
       "is_incremental": false,
@@ -173,11 +173,23 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/FileFormat.Words.Table.TableRowAlignmentValues.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/FileFormat.Words.Table.TableRowAlignmentValues.html",
+          "hash": "CczKlvPxU8vFDWCjZjHitnI5S5DLbxikUQdgK5DHGPE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/FileFormat.Words.Table.yml",
       "output": {
         ".html": {
           "relative_path": "api/FileFormat.Words.Table.html",
-          "hash": "g3aIDt04S01J0QQa2+y7RoxouvjDeuGdPhDbXttFc5E="
+          "hash": "92vUdnef5nWtae6U/BSLxLpCm6lxq1uF25fKYEyARsM="
         }
       },
       "is_incremental": false,
@@ -207,7 +219,7 @@
           "hash": "R0/vk/K0yPkkrjJsntaMpw1W001GPuaD+Oy5ANNaLaU="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -216,7 +228,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "CMmKQ2ZViMZTb+RoUcNVvXjSvNzk2LMLhRfdOZtAeTw="
+          "hash": "hpC7Ln+Rbxs4+pQxP0+eJ7mPrmCU7F/EsKndbJRTZYM="
         }
       },
       "is_incremental": false,
@@ -292,8 +304,8 @@
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 16,
-          "skipped_file_count": 10
+          "total_file_count": 17,
+          "skipped_file_count": 14
         },
         "TocDocumentProcessor": {
           "can_incremental": false,

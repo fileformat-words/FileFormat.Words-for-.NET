@@ -1252,12 +1252,12 @@ references:
   commentId: T:FileFormat.Words.Table.TableJustification
   fullName: FileFormat.Words.Table.TableJustification
   nameWithType: TableJustification
-- uid: FileFormat.Words.Table.TableJustification.#ctor(DocumentFormat.OpenXml.Wordprocessing.TableRowAlignmentValues)
-  name: TableJustification(DocumentFormat.OpenXml.Wordprocessing.TableRowAlignmentValues)
-  href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification__ctor_DocumentFormat_OpenXml_Wordprocessing_TableRowAlignmentValues_
-  commentId: M:FileFormat.Words.Table.TableJustification.#ctor(DocumentFormat.OpenXml.Wordprocessing.TableRowAlignmentValues)
-  fullName: FileFormat.Words.Table.TableJustification.TableJustification(DocumentFormat.OpenXml.Wordprocessing.TableRowAlignmentValues)
-  nameWithType: TableJustification.TableJustification(DocumentFormat.OpenXml.Wordprocessing.TableRowAlignmentValues)
+- uid: FileFormat.Words.Table.TableJustification.#ctor
+  name: TableJustification()
+  href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification__ctor
+  commentId: M:FileFormat.Words.Table.TableJustification.#ctor
+  fullName: FileFormat.Words.Table.TableJustification.TableJustification()
+  nameWithType: TableJustification.TableJustification()
 - uid: FileFormat.Words.Table.TableJustification.#ctor*
   name: TableJustification
   href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification__ctor_
@@ -1265,6 +1265,45 @@ references:
   isSpec: "True"
   fullName: FileFormat.Words.Table.TableJustification.TableJustification
   nameWithType: TableJustification.TableJustification
+- uid: FileFormat.Words.Table.TableJustification.AlignCneter(FileFormat.Words.Table.TableRowAlignmentValues)
+  name: AlignCneter(TableRowAlignmentValues)
+  href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification_AlignCneter_FileFormat_Words_Table_TableRowAlignmentValues_
+  commentId: M:FileFormat.Words.Table.TableJustification.AlignCneter(FileFormat.Words.Table.TableRowAlignmentValues)
+  fullName: FileFormat.Words.Table.TableJustification.AlignCneter(FileFormat.Words.Table.TableRowAlignmentValues)
+  nameWithType: TableJustification.AlignCneter(TableRowAlignmentValues)
+- uid: FileFormat.Words.Table.TableJustification.AlignCneter*
+  name: AlignCneter
+  href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification_AlignCneter_
+  commentId: Overload:FileFormat.Words.Table.TableJustification.AlignCneter
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.TableJustification.AlignCneter
+  nameWithType: TableJustification.AlignCneter
+- uid: FileFormat.Words.Table.TableJustification.AlignLeft(FileFormat.Words.Table.TableRowAlignmentValues)
+  name: AlignLeft(TableRowAlignmentValues)
+  href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification_AlignLeft_FileFormat_Words_Table_TableRowAlignmentValues_
+  commentId: M:FileFormat.Words.Table.TableJustification.AlignLeft(FileFormat.Words.Table.TableRowAlignmentValues)
+  fullName: FileFormat.Words.Table.TableJustification.AlignLeft(FileFormat.Words.Table.TableRowAlignmentValues)
+  nameWithType: TableJustification.AlignLeft(TableRowAlignmentValues)
+- uid: FileFormat.Words.Table.TableJustification.AlignLeft*
+  name: AlignLeft
+  href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification_AlignLeft_
+  commentId: Overload:FileFormat.Words.Table.TableJustification.AlignLeft
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.TableJustification.AlignLeft
+  nameWithType: TableJustification.AlignLeft
+- uid: FileFormat.Words.Table.TableJustification.AlignRight(FileFormat.Words.Table.TableRowAlignmentValues)
+  name: AlignRight(TableRowAlignmentValues)
+  href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification_AlignRight_FileFormat_Words_Table_TableRowAlignmentValues_
+  commentId: M:FileFormat.Words.Table.TableJustification.AlignRight(FileFormat.Words.Table.TableRowAlignmentValues)
+  fullName: FileFormat.Words.Table.TableJustification.AlignRight(FileFormat.Words.Table.TableRowAlignmentValues)
+  nameWithType: TableJustification.AlignRight(TableRowAlignmentValues)
+- uid: FileFormat.Words.Table.TableJustification.AlignRight*
+  name: AlignRight
+  href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification_AlignRight_
+  commentId: Overload:FileFormat.Words.Table.TableJustification.AlignRight
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.TableJustification.AlignRight
+  nameWithType: TableJustification.AlignRight
 - uid: FileFormat.Words.Table.TableJustification.justification
   name: justification
   href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification_justification
@@ -1372,3 +1411,54 @@ references:
   commentId: F:FileFormat.Words.Table.TableRow.tableRow
   fullName: FileFormat.Words.Table.TableRow.tableRow
   nameWithType: TableRow.tableRow
+- uid: FileFormat.Words.Table.TableRowAlignmentValues
+  name: TableRowAlignmentValues
+  href: api/FileFormat.Words.Table.TableRowAlignmentValues.html
+  commentId: T:FileFormat.Words.Table.TableRowAlignmentValues
+  fullName: FileFormat.Words.Table.TableRowAlignmentValues
+  nameWithType: TableRowAlignmentValues
+- uid: FileFormat.Words.Table.TableRowAlignmentValues.AlignCenter
+  name: AlignCenter
+  href: api/FileFormat.Words.Table.TableRowAlignmentValues.html#FileFormat_Words_Table_TableRowAlignmentValues_AlignCenter
+  commentId: P:FileFormat.Words.Table.TableRowAlignmentValues.AlignCenter
+  fullName: FileFormat.Words.Table.TableRowAlignmentValues.AlignCenter
+  nameWithType: TableRowAlignmentValues.AlignCenter
+- uid: FileFormat.Words.Table.TableRowAlignmentValues.AlignCenter*
+  name: AlignCenter
+  href: api/FileFormat.Words.Table.TableRowAlignmentValues.html#FileFormat_Words_Table_TableRowAlignmentValues_AlignCenter_
+  commentId: Overload:FileFormat.Words.Table.TableRowAlignmentValues.AlignCenter
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.TableRowAlignmentValues.AlignCenter
+  nameWithType: TableRowAlignmentValues.AlignCenter
+- uid: FileFormat.Words.Table.TableRowAlignmentValues.AlignLeft
+  name: AlignLeft
+  href: api/FileFormat.Words.Table.TableRowAlignmentValues.html#FileFormat_Words_Table_TableRowAlignmentValues_AlignLeft
+  commentId: P:FileFormat.Words.Table.TableRowAlignmentValues.AlignLeft
+  fullName: FileFormat.Words.Table.TableRowAlignmentValues.AlignLeft
+  nameWithType: TableRowAlignmentValues.AlignLeft
+- uid: FileFormat.Words.Table.TableRowAlignmentValues.AlignLeft*
+  name: AlignLeft
+  href: api/FileFormat.Words.Table.TableRowAlignmentValues.html#FileFormat_Words_Table_TableRowAlignmentValues_AlignLeft_
+  commentId: Overload:FileFormat.Words.Table.TableRowAlignmentValues.AlignLeft
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.TableRowAlignmentValues.AlignLeft
+  nameWithType: TableRowAlignmentValues.AlignLeft
+- uid: FileFormat.Words.Table.TableRowAlignmentValues.AlignRight
+  name: AlignRight
+  href: api/FileFormat.Words.Table.TableRowAlignmentValues.html#FileFormat_Words_Table_TableRowAlignmentValues_AlignRight
+  commentId: P:FileFormat.Words.Table.TableRowAlignmentValues.AlignRight
+  fullName: FileFormat.Words.Table.TableRowAlignmentValues.AlignRight
+  nameWithType: TableRowAlignmentValues.AlignRight
+- uid: FileFormat.Words.Table.TableRowAlignmentValues.AlignRight*
+  name: AlignRight
+  href: api/FileFormat.Words.Table.TableRowAlignmentValues.html#FileFormat_Words_Table_TableRowAlignmentValues_AlignRight_
+  commentId: Overload:FileFormat.Words.Table.TableRowAlignmentValues.AlignRight
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.TableRowAlignmentValues.AlignRight
+  nameWithType: TableRowAlignmentValues.AlignRight
+- uid: FileFormat.Words.Table.TableRowAlignmentValues.tableRowAlignmentValues1
+  name: tableRowAlignmentValues1
+  href: api/FileFormat.Words.Table.TableRowAlignmentValues.html#FileFormat_Words_Table_TableRowAlignmentValues_tableRowAlignmentValues1
+  commentId: F:FileFormat.Words.Table.TableRowAlignmentValues.tableRowAlignmentValues1
+  fullName: FileFormat.Words.Table.TableRowAlignmentValues.tableRowAlignmentValues1
+  nameWithType: TableRowAlignmentValues.tableRowAlignmentValues1
