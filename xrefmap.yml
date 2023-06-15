@@ -141,11 +141,11 @@ references:
   commentId: M:FileFormat.Words.Document.#ctor
   fullName: FileFormat.Words.Document.Document()
   nameWithType: Document.Document()
-- uid: FileFormat.Words.Document.#ctor(Stream)
+- uid: FileFormat.Words.Document.#ctor(System.IO.Stream)
   name: Document(Stream)
-  href: api/FileFormat.Words.Document.html#FileFormat_Words_Document__ctor_Stream_
-  commentId: M:FileFormat.Words.Document.#ctor(Stream)
-  fullName: FileFormat.Words.Document.Document(Stream)
+  href: api/FileFormat.Words.Document.html#FileFormat_Words_Document__ctor_System_IO_Stream_
+  commentId: M:FileFormat.Words.Document.#ctor(System.IO.Stream)
+  fullName: FileFormat.Words.Document.Document(System.IO.Stream)
   nameWithType: Document.Document(Stream)
 - uid: FileFormat.Words.Document.#ctor(System.String)
   name: Document(String)
@@ -192,11 +192,11 @@ references:
   isSpec: "True"
   fullName: FileFormat.Words.Document.Dispose
   nameWithType: Document.Dispose
-- uid: FileFormat.Words.Document.Save(Stream)
+- uid: FileFormat.Words.Document.Save(System.IO.Stream)
   name: Save(Stream)
-  href: api/FileFormat.Words.Document.html#FileFormat_Words_Document_Save_Stream_
-  commentId: M:FileFormat.Words.Document.Save(Stream)
-  fullName: FileFormat.Words.Document.Save(Stream)
+  href: api/FileFormat.Words.Document.html#FileFormat_Words_Document_Save_System_IO_Stream_
+  commentId: M:FileFormat.Words.Document.Save(System.IO.Stream)
+  fullName: FileFormat.Words.Document.Save(System.IO.Stream)
   nameWithType: Document.Save(Stream)
 - uid: FileFormat.Words.Document.Save(System.String)
   name: Save(String)
@@ -255,19 +255,6 @@ references:
   commentId: F:FileFormat.Words.Image.drawing
   fullName: FileFormat.Words.Image.drawing
   nameWithType: Image.drawing
-- uid: FileFormat.Words.Image.Drawing
-  name: Drawing
-  href: api/FileFormat.Words.Image.html#FileFormat_Words_Image_Drawing
-  commentId: P:FileFormat.Words.Image.Drawing
-  fullName: FileFormat.Words.Image.Drawing
-  nameWithType: Image.Drawing
-- uid: FileFormat.Words.Image.Drawing*
-  name: Drawing
-  href: api/FileFormat.Words.Image.html#FileFormat_Words_Image_Drawing_
-  commentId: Overload:FileFormat.Words.Image.Drawing
-  isSpec: "True"
-  fullName: FileFormat.Words.Image.Drawing
-  nameWithType: Image.Drawing
 - uid: FileFormat.Words.Image.ExtractImagesFromDocument(FileFormat.Words.Document)
   name: ExtractImagesFromDocument(Document)
   href: api/FileFormat.Words.Image.html#FileFormat_Words_Image_ExtractImagesFromDocument_FileFormat_Words_Document_
@@ -281,6 +268,32 @@ references:
   isSpec: "True"
   fullName: FileFormat.Words.Image.ExtractImagesFromDocument
   nameWithType: Image.ExtractImagesFromDocument
+- uid: FileFormat.Words.Image.GetExtentCx
+  name: GetExtentCx()
+  href: api/FileFormat.Words.Image.html#FileFormat_Words_Image_GetExtentCx
+  commentId: M:FileFormat.Words.Image.GetExtentCx
+  fullName: FileFormat.Words.Image.GetExtentCx()
+  nameWithType: Image.GetExtentCx()
+- uid: FileFormat.Words.Image.GetExtentCx*
+  name: GetExtentCx
+  href: api/FileFormat.Words.Image.html#FileFormat_Words_Image_GetExtentCx_
+  commentId: Overload:FileFormat.Words.Image.GetExtentCx
+  isSpec: "True"
+  fullName: FileFormat.Words.Image.GetExtentCx
+  nameWithType: Image.GetExtentCx
+- uid: FileFormat.Words.Image.GetExtentCy
+  name: GetExtentCy()
+  href: api/FileFormat.Words.Image.html#FileFormat_Words_Image_GetExtentCy
+  commentId: M:FileFormat.Words.Image.GetExtentCy
+  fullName: FileFormat.Words.Image.GetExtentCy()
+  nameWithType: Image.GetExtentCy()
+- uid: FileFormat.Words.Image.GetExtentCy*
+  name: GetExtentCy
+  href: api/FileFormat.Words.Image.html#FileFormat_Words_Image_GetExtentCy_
+  commentId: Overload:FileFormat.Words.Image.GetExtentCy
+  isSpec: "True"
+  fullName: FileFormat.Words.Image.GetExtentCy
+  nameWithType: Image.GetExtentCy
 - uid: FileFormat.Words.Image.parentParagraph
   name: parentParagraph
   href: api/FileFormat.Words.Image.html#FileFormat_Words_Image_parentParagraph
@@ -642,18 +655,12 @@ references:
   isSpec: "True"
   fullName: FileFormat.Words.Run.Run
   nameWithType: Run.Run
-- uid: FileFormat.Words.Run.AppendChild(Drawing)
-  name: AppendChild(Drawing)
-  href: api/FileFormat.Words.Run.html#FileFormat_Words_Run_AppendChild_Drawing_
-  commentId: M:FileFormat.Words.Run.AppendChild(Drawing)
-  fullName: FileFormat.Words.Run.AppendChild(Drawing)
-  nameWithType: Run.AppendChild(Drawing)
-- uid: FileFormat.Words.Run.AppendChild(Graphic)
-  name: AppendChild(Graphic)
-  href: api/FileFormat.Words.Run.html#FileFormat_Words_Run_AppendChild_Graphic_
-  commentId: M:FileFormat.Words.Run.AppendChild(Graphic)
-  fullName: FileFormat.Words.Run.AppendChild(Graphic)
-  nameWithType: Run.AppendChild(Graphic)
+- uid: FileFormat.Words.Run.AppendChild(FileFormat.Words.Image)
+  name: AppendChild(Image)
+  href: api/FileFormat.Words.Run.html#FileFormat_Words_Run_AppendChild_FileFormat_Words_Image_
+  commentId: M:FileFormat.Words.Run.AppendChild(FileFormat.Words.Image)
+  fullName: FileFormat.Words.Run.AppendChild(FileFormat.Words.Image)
+  nameWithType: Run.AppendChild(Image)
 - uid: FileFormat.Words.Run.AppendChild*
   name: AppendChild
   href: api/FileFormat.Words.Run.html#FileFormat_Words_Run_AppendChild_
@@ -764,6 +771,326 @@ references:
   commentId: N:FileFormat.Words.Table
   fullName: FileFormat.Words.Table
   nameWithType: FileFormat.Words.Table
+- uid: FileFormat.Words.Table.BottomBorder
+  name: BottomBorder
+  href: api/FileFormat.Words.Table.BottomBorder.html
+  commentId: T:FileFormat.Words.Table.BottomBorder
+  fullName: FileFormat.Words.Table.BottomBorder
+  nameWithType: BottomBorder
+- uid: FileFormat.Words.Table.BottomBorder.#ctor
+  name: BottomBorder()
+  href: api/FileFormat.Words.Table.BottomBorder.html#FileFormat_Words_Table_BottomBorder__ctor
+  commentId: M:FileFormat.Words.Table.BottomBorder.#ctor
+  fullName: FileFormat.Words.Table.BottomBorder.BottomBorder()
+  nameWithType: BottomBorder.BottomBorder()
+- uid: FileFormat.Words.Table.BottomBorder.#ctor*
+  name: BottomBorder
+  href: api/FileFormat.Words.Table.BottomBorder.html#FileFormat_Words_Table_BottomBorder__ctor_
+  commentId: Overload:FileFormat.Words.Table.BottomBorder.#ctor
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.BottomBorder.BottomBorder
+  nameWithType: BottomBorder.BottomBorder
+- uid: FileFormat.Words.Table.BottomBorder.basicBlackSquares_border(System.UInt32)
+  name: basicBlackSquares_border(UInt32)
+  href: api/FileFormat.Words.Table.BottomBorder.html#FileFormat_Words_Table_BottomBorder_basicBlackSquares_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.BottomBorder.basicBlackSquares_border(System.UInt32)
+  fullName: FileFormat.Words.Table.BottomBorder.basicBlackSquares_border(System.UInt32)
+  nameWithType: BottomBorder.basicBlackSquares_border(UInt32)
+- uid: FileFormat.Words.Table.BottomBorder.basicBlackSquares_border*
+  name: basicBlackSquares_border
+  href: api/FileFormat.Words.Table.BottomBorder.html#FileFormat_Words_Table_BottomBorder_basicBlackSquares_border_
+  commentId: Overload:FileFormat.Words.Table.BottomBorder.basicBlackSquares_border
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.BottomBorder.basicBlackSquares_border
+  nameWithType: BottomBorder.basicBlackSquares_border
+- uid: FileFormat.Words.Table.BottomBorder.bottomBorder
+  name: bottomBorder
+  href: api/FileFormat.Words.Table.BottomBorder.html#FileFormat_Words_Table_BottomBorder_bottomBorder
+  commentId: F:FileFormat.Words.Table.BottomBorder.bottomBorder
+  fullName: FileFormat.Words.Table.BottomBorder.bottomBorder
+  nameWithType: BottomBorder.bottomBorder
+- uid: FileFormat.Words.Table.BottomBorder.dashed_border(System.UInt32)
+  name: dashed_border(UInt32)
+  href: api/FileFormat.Words.Table.BottomBorder.html#FileFormat_Words_Table_BottomBorder_dashed_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.BottomBorder.dashed_border(System.UInt32)
+  fullName: FileFormat.Words.Table.BottomBorder.dashed_border(System.UInt32)
+  nameWithType: BottomBorder.dashed_border(UInt32)
+- uid: FileFormat.Words.Table.BottomBorder.dashed_border*
+  name: dashed_border
+  href: api/FileFormat.Words.Table.BottomBorder.html#FileFormat_Words_Table_BottomBorder_dashed_border_
+  commentId: Overload:FileFormat.Words.Table.BottomBorder.dashed_border
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.BottomBorder.dashed_border
+  nameWithType: BottomBorder.dashed_border
+- uid: FileFormat.Words.Table.BottomBorder.dotted_border(System.UInt32)
+  name: dotted_border(UInt32)
+  href: api/FileFormat.Words.Table.BottomBorder.html#FileFormat_Words_Table_BottomBorder_dotted_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.BottomBorder.dotted_border(System.UInt32)
+  fullName: FileFormat.Words.Table.BottomBorder.dotted_border(System.UInt32)
+  nameWithType: BottomBorder.dotted_border(UInt32)
+- uid: FileFormat.Words.Table.BottomBorder.dotted_border*
+  name: dotted_border
+  href: api/FileFormat.Words.Table.BottomBorder.html#FileFormat_Words_Table_BottomBorder_dotted_border_
+  commentId: Overload:FileFormat.Words.Table.BottomBorder.dotted_border
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.BottomBorder.dotted_border
+  nameWithType: BottomBorder.dotted_border
+- uid: FileFormat.Words.Table.InsideHorizontalBorder
+  name: InsideHorizontalBorder
+  href: api/FileFormat.Words.Table.InsideHorizontalBorder.html
+  commentId: T:FileFormat.Words.Table.InsideHorizontalBorder
+  fullName: FileFormat.Words.Table.InsideHorizontalBorder
+  nameWithType: InsideHorizontalBorder
+- uid: FileFormat.Words.Table.InsideHorizontalBorder.#ctor
+  name: InsideHorizontalBorder()
+  href: api/FileFormat.Words.Table.InsideHorizontalBorder.html#FileFormat_Words_Table_InsideHorizontalBorder__ctor
+  commentId: M:FileFormat.Words.Table.InsideHorizontalBorder.#ctor
+  fullName: FileFormat.Words.Table.InsideHorizontalBorder.InsideHorizontalBorder()
+  nameWithType: InsideHorizontalBorder.InsideHorizontalBorder()
+- uid: FileFormat.Words.Table.InsideHorizontalBorder.#ctor*
+  name: InsideHorizontalBorder
+  href: api/FileFormat.Words.Table.InsideHorizontalBorder.html#FileFormat_Words_Table_InsideHorizontalBorder__ctor_
+  commentId: Overload:FileFormat.Words.Table.InsideHorizontalBorder.#ctor
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.InsideHorizontalBorder.InsideHorizontalBorder
+  nameWithType: InsideHorizontalBorder.InsideHorizontalBorder
+- uid: FileFormat.Words.Table.InsideHorizontalBorder.basicBlackSquares_border(System.UInt32)
+  name: basicBlackSquares_border(UInt32)
+  href: api/FileFormat.Words.Table.InsideHorizontalBorder.html#FileFormat_Words_Table_InsideHorizontalBorder_basicBlackSquares_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.InsideHorizontalBorder.basicBlackSquares_border(System.UInt32)
+  fullName: FileFormat.Words.Table.InsideHorizontalBorder.basicBlackSquares_border(System.UInt32)
+  nameWithType: InsideHorizontalBorder.basicBlackSquares_border(UInt32)
+- uid: FileFormat.Words.Table.InsideHorizontalBorder.basicBlackSquares_border*
+  name: basicBlackSquares_border
+  href: api/FileFormat.Words.Table.InsideHorizontalBorder.html#FileFormat_Words_Table_InsideHorizontalBorder_basicBlackSquares_border_
+  commentId: Overload:FileFormat.Words.Table.InsideHorizontalBorder.basicBlackSquares_border
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.InsideHorizontalBorder.basicBlackSquares_border
+  nameWithType: InsideHorizontalBorder.basicBlackSquares_border
+- uid: FileFormat.Words.Table.InsideHorizontalBorder.dashed_border(System.UInt32)
+  name: dashed_border(UInt32)
+  href: api/FileFormat.Words.Table.InsideHorizontalBorder.html#FileFormat_Words_Table_InsideHorizontalBorder_dashed_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.InsideHorizontalBorder.dashed_border(System.UInt32)
+  fullName: FileFormat.Words.Table.InsideHorizontalBorder.dashed_border(System.UInt32)
+  nameWithType: InsideHorizontalBorder.dashed_border(UInt32)
+- uid: FileFormat.Words.Table.InsideHorizontalBorder.dashed_border*
+  name: dashed_border
+  href: api/FileFormat.Words.Table.InsideHorizontalBorder.html#FileFormat_Words_Table_InsideHorizontalBorder_dashed_border_
+  commentId: Overload:FileFormat.Words.Table.InsideHorizontalBorder.dashed_border
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.InsideHorizontalBorder.dashed_border
+  nameWithType: InsideHorizontalBorder.dashed_border
+- uid: FileFormat.Words.Table.InsideHorizontalBorder.dotted_border(System.UInt32)
+  name: dotted_border(UInt32)
+  href: api/FileFormat.Words.Table.InsideHorizontalBorder.html#FileFormat_Words_Table_InsideHorizontalBorder_dotted_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.InsideHorizontalBorder.dotted_border(System.UInt32)
+  fullName: FileFormat.Words.Table.InsideHorizontalBorder.dotted_border(System.UInt32)
+  nameWithType: InsideHorizontalBorder.dotted_border(UInt32)
+- uid: FileFormat.Words.Table.InsideHorizontalBorder.dotted_border*
+  name: dotted_border
+  href: api/FileFormat.Words.Table.InsideHorizontalBorder.html#FileFormat_Words_Table_InsideHorizontalBorder_dotted_border_
+  commentId: Overload:FileFormat.Words.Table.InsideHorizontalBorder.dotted_border
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.InsideHorizontalBorder.dotted_border
+  nameWithType: InsideHorizontalBorder.dotted_border
+- uid: FileFormat.Words.Table.InsideHorizontalBorder.insideHorizontalBorder
+  name: insideHorizontalBorder
+  href: api/FileFormat.Words.Table.InsideHorizontalBorder.html#FileFormat_Words_Table_InsideHorizontalBorder_insideHorizontalBorder
+  commentId: F:FileFormat.Words.Table.InsideHorizontalBorder.insideHorizontalBorder
+  fullName: FileFormat.Words.Table.InsideHorizontalBorder.insideHorizontalBorder
+  nameWithType: InsideHorizontalBorder.insideHorizontalBorder
+- uid: FileFormat.Words.Table.InsideVerticalBorder
+  name: InsideVerticalBorder
+  href: api/FileFormat.Words.Table.InsideVerticalBorder.html
+  commentId: T:FileFormat.Words.Table.InsideVerticalBorder
+  fullName: FileFormat.Words.Table.InsideVerticalBorder
+  nameWithType: InsideVerticalBorder
+- uid: FileFormat.Words.Table.InsideVerticalBorder.#ctor
+  name: InsideVerticalBorder()
+  href: api/FileFormat.Words.Table.InsideVerticalBorder.html#FileFormat_Words_Table_InsideVerticalBorder__ctor
+  commentId: M:FileFormat.Words.Table.InsideVerticalBorder.#ctor
+  fullName: FileFormat.Words.Table.InsideVerticalBorder.InsideVerticalBorder()
+  nameWithType: InsideVerticalBorder.InsideVerticalBorder()
+- uid: FileFormat.Words.Table.InsideVerticalBorder.#ctor*
+  name: InsideVerticalBorder
+  href: api/FileFormat.Words.Table.InsideVerticalBorder.html#FileFormat_Words_Table_InsideVerticalBorder__ctor_
+  commentId: Overload:FileFormat.Words.Table.InsideVerticalBorder.#ctor
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.InsideVerticalBorder.InsideVerticalBorder
+  nameWithType: InsideVerticalBorder.InsideVerticalBorder
+- uid: FileFormat.Words.Table.InsideVerticalBorder.basicBlackSquares_border(System.UInt32)
+  name: basicBlackSquares_border(UInt32)
+  href: api/FileFormat.Words.Table.InsideVerticalBorder.html#FileFormat_Words_Table_InsideVerticalBorder_basicBlackSquares_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.InsideVerticalBorder.basicBlackSquares_border(System.UInt32)
+  fullName: FileFormat.Words.Table.InsideVerticalBorder.basicBlackSquares_border(System.UInt32)
+  nameWithType: InsideVerticalBorder.basicBlackSquares_border(UInt32)
+- uid: FileFormat.Words.Table.InsideVerticalBorder.basicBlackSquares_border*
+  name: basicBlackSquares_border
+  href: api/FileFormat.Words.Table.InsideVerticalBorder.html#FileFormat_Words_Table_InsideVerticalBorder_basicBlackSquares_border_
+  commentId: Overload:FileFormat.Words.Table.InsideVerticalBorder.basicBlackSquares_border
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.InsideVerticalBorder.basicBlackSquares_border
+  nameWithType: InsideVerticalBorder.basicBlackSquares_border
+- uid: FileFormat.Words.Table.InsideVerticalBorder.dashed_border(System.UInt32)
+  name: dashed_border(UInt32)
+  href: api/FileFormat.Words.Table.InsideVerticalBorder.html#FileFormat_Words_Table_InsideVerticalBorder_dashed_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.InsideVerticalBorder.dashed_border(System.UInt32)
+  fullName: FileFormat.Words.Table.InsideVerticalBorder.dashed_border(System.UInt32)
+  nameWithType: InsideVerticalBorder.dashed_border(UInt32)
+- uid: FileFormat.Words.Table.InsideVerticalBorder.dashed_border*
+  name: dashed_border
+  href: api/FileFormat.Words.Table.InsideVerticalBorder.html#FileFormat_Words_Table_InsideVerticalBorder_dashed_border_
+  commentId: Overload:FileFormat.Words.Table.InsideVerticalBorder.dashed_border
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.InsideVerticalBorder.dashed_border
+  nameWithType: InsideVerticalBorder.dashed_border
+- uid: FileFormat.Words.Table.InsideVerticalBorder.dotted_border(System.UInt32)
+  name: dotted_border(UInt32)
+  href: api/FileFormat.Words.Table.InsideVerticalBorder.html#FileFormat_Words_Table_InsideVerticalBorder_dotted_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.InsideVerticalBorder.dotted_border(System.UInt32)
+  fullName: FileFormat.Words.Table.InsideVerticalBorder.dotted_border(System.UInt32)
+  nameWithType: InsideVerticalBorder.dotted_border(UInt32)
+- uid: FileFormat.Words.Table.InsideVerticalBorder.dotted_border*
+  name: dotted_border
+  href: api/FileFormat.Words.Table.InsideVerticalBorder.html#FileFormat_Words_Table_InsideVerticalBorder_dotted_border_
+  commentId: Overload:FileFormat.Words.Table.InsideVerticalBorder.dotted_border
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.InsideVerticalBorder.dotted_border
+  nameWithType: InsideVerticalBorder.dotted_border
+- uid: FileFormat.Words.Table.InsideVerticalBorder.insideVerticalBorder
+  name: insideVerticalBorder
+  href: api/FileFormat.Words.Table.InsideVerticalBorder.html#FileFormat_Words_Table_InsideVerticalBorder_insideVerticalBorder
+  commentId: F:FileFormat.Words.Table.InsideVerticalBorder.insideVerticalBorder
+  fullName: FileFormat.Words.Table.InsideVerticalBorder.insideVerticalBorder
+  nameWithType: InsideVerticalBorder.insideVerticalBorder
+- uid: FileFormat.Words.Table.LeftBorder
+  name: LeftBorder
+  href: api/FileFormat.Words.Table.LeftBorder.html
+  commentId: T:FileFormat.Words.Table.LeftBorder
+  fullName: FileFormat.Words.Table.LeftBorder
+  nameWithType: LeftBorder
+- uid: FileFormat.Words.Table.LeftBorder.#ctor
+  name: LeftBorder()
+  href: api/FileFormat.Words.Table.LeftBorder.html#FileFormat_Words_Table_LeftBorder__ctor
+  commentId: M:FileFormat.Words.Table.LeftBorder.#ctor
+  fullName: FileFormat.Words.Table.LeftBorder.LeftBorder()
+  nameWithType: LeftBorder.LeftBorder()
+- uid: FileFormat.Words.Table.LeftBorder.#ctor*
+  name: LeftBorder
+  href: api/FileFormat.Words.Table.LeftBorder.html#FileFormat_Words_Table_LeftBorder__ctor_
+  commentId: Overload:FileFormat.Words.Table.LeftBorder.#ctor
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.LeftBorder.LeftBorder
+  nameWithType: LeftBorder.LeftBorder
+- uid: FileFormat.Words.Table.LeftBorder.basicBlackSquares_border(System.UInt32)
+  name: basicBlackSquares_border(UInt32)
+  href: api/FileFormat.Words.Table.LeftBorder.html#FileFormat_Words_Table_LeftBorder_basicBlackSquares_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.LeftBorder.basicBlackSquares_border(System.UInt32)
+  fullName: FileFormat.Words.Table.LeftBorder.basicBlackSquares_border(System.UInt32)
+  nameWithType: LeftBorder.basicBlackSquares_border(UInt32)
+- uid: FileFormat.Words.Table.LeftBorder.basicBlackSquares_border*
+  name: basicBlackSquares_border
+  href: api/FileFormat.Words.Table.LeftBorder.html#FileFormat_Words_Table_LeftBorder_basicBlackSquares_border_
+  commentId: Overload:FileFormat.Words.Table.LeftBorder.basicBlackSquares_border
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.LeftBorder.basicBlackSquares_border
+  nameWithType: LeftBorder.basicBlackSquares_border
+- uid: FileFormat.Words.Table.LeftBorder.dashed_border(System.UInt32)
+  name: dashed_border(UInt32)
+  href: api/FileFormat.Words.Table.LeftBorder.html#FileFormat_Words_Table_LeftBorder_dashed_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.LeftBorder.dashed_border(System.UInt32)
+  fullName: FileFormat.Words.Table.LeftBorder.dashed_border(System.UInt32)
+  nameWithType: LeftBorder.dashed_border(UInt32)
+- uid: FileFormat.Words.Table.LeftBorder.dashed_border*
+  name: dashed_border
+  href: api/FileFormat.Words.Table.LeftBorder.html#FileFormat_Words_Table_LeftBorder_dashed_border_
+  commentId: Overload:FileFormat.Words.Table.LeftBorder.dashed_border
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.LeftBorder.dashed_border
+  nameWithType: LeftBorder.dashed_border
+- uid: FileFormat.Words.Table.LeftBorder.dotted_border(System.UInt32)
+  name: dotted_border(UInt32)
+  href: api/FileFormat.Words.Table.LeftBorder.html#FileFormat_Words_Table_LeftBorder_dotted_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.LeftBorder.dotted_border(System.UInt32)
+  fullName: FileFormat.Words.Table.LeftBorder.dotted_border(System.UInt32)
+  nameWithType: LeftBorder.dotted_border(UInt32)
+- uid: FileFormat.Words.Table.LeftBorder.dotted_border*
+  name: dotted_border
+  href: api/FileFormat.Words.Table.LeftBorder.html#FileFormat_Words_Table_LeftBorder_dotted_border_
+  commentId: Overload:FileFormat.Words.Table.LeftBorder.dotted_border
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.LeftBorder.dotted_border
+  nameWithType: LeftBorder.dotted_border
+- uid: FileFormat.Words.Table.LeftBorder.leftBorder
+  name: leftBorder
+  href: api/FileFormat.Words.Table.LeftBorder.html#FileFormat_Words_Table_LeftBorder_leftBorder
+  commentId: F:FileFormat.Words.Table.LeftBorder.leftBorder
+  fullName: FileFormat.Words.Table.LeftBorder.leftBorder
+  nameWithType: LeftBorder.leftBorder
+- uid: FileFormat.Words.Table.RightBorder
+  name: RightBorder
+  href: api/FileFormat.Words.Table.RightBorder.html
+  commentId: T:FileFormat.Words.Table.RightBorder
+  fullName: FileFormat.Words.Table.RightBorder
+  nameWithType: RightBorder
+- uid: FileFormat.Words.Table.RightBorder.#ctor
+  name: RightBorder()
+  href: api/FileFormat.Words.Table.RightBorder.html#FileFormat_Words_Table_RightBorder__ctor
+  commentId: M:FileFormat.Words.Table.RightBorder.#ctor
+  fullName: FileFormat.Words.Table.RightBorder.RightBorder()
+  nameWithType: RightBorder.RightBorder()
+- uid: FileFormat.Words.Table.RightBorder.#ctor*
+  name: RightBorder
+  href: api/FileFormat.Words.Table.RightBorder.html#FileFormat_Words_Table_RightBorder__ctor_
+  commentId: Overload:FileFormat.Words.Table.RightBorder.#ctor
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.RightBorder.RightBorder
+  nameWithType: RightBorder.RightBorder
+- uid: FileFormat.Words.Table.RightBorder.basicBlackSquares_border(System.UInt32)
+  name: basicBlackSquares_border(UInt32)
+  href: api/FileFormat.Words.Table.RightBorder.html#FileFormat_Words_Table_RightBorder_basicBlackSquares_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.RightBorder.basicBlackSquares_border(System.UInt32)
+  fullName: FileFormat.Words.Table.RightBorder.basicBlackSquares_border(System.UInt32)
+  nameWithType: RightBorder.basicBlackSquares_border(UInt32)
+- uid: FileFormat.Words.Table.RightBorder.basicBlackSquares_border*
+  name: basicBlackSquares_border
+  href: api/FileFormat.Words.Table.RightBorder.html#FileFormat_Words_Table_RightBorder_basicBlackSquares_border_
+  commentId: Overload:FileFormat.Words.Table.RightBorder.basicBlackSquares_border
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.RightBorder.basicBlackSquares_border
+  nameWithType: RightBorder.basicBlackSquares_border
+- uid: FileFormat.Words.Table.RightBorder.dashed_border(System.UInt32)
+  name: dashed_border(UInt32)
+  href: api/FileFormat.Words.Table.RightBorder.html#FileFormat_Words_Table_RightBorder_dashed_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.RightBorder.dashed_border(System.UInt32)
+  fullName: FileFormat.Words.Table.RightBorder.dashed_border(System.UInt32)
+  nameWithType: RightBorder.dashed_border(UInt32)
+- uid: FileFormat.Words.Table.RightBorder.dashed_border*
+  name: dashed_border
+  href: api/FileFormat.Words.Table.RightBorder.html#FileFormat_Words_Table_RightBorder_dashed_border_
+  commentId: Overload:FileFormat.Words.Table.RightBorder.dashed_border
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.RightBorder.dashed_border
+  nameWithType: RightBorder.dashed_border
+- uid: FileFormat.Words.Table.RightBorder.dotted_border(System.UInt32)
+  name: dotted_border(UInt32)
+  href: api/FileFormat.Words.Table.RightBorder.html#FileFormat_Words_Table_RightBorder_dotted_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.RightBorder.dotted_border(System.UInt32)
+  fullName: FileFormat.Words.Table.RightBorder.dotted_border(System.UInt32)
+  nameWithType: RightBorder.dotted_border(UInt32)
+- uid: FileFormat.Words.Table.RightBorder.dotted_border*
+  name: dotted_border
+  href: api/FileFormat.Words.Table.RightBorder.html#FileFormat_Words_Table_RightBorder_dotted_border_
+  commentId: Overload:FileFormat.Words.Table.RightBorder.dotted_border
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.RightBorder.dotted_border
+  nameWithType: RightBorder.dotted_border
+- uid: FileFormat.Words.Table.RightBorder.rightBorder
+  name: rightBorder
+  href: api/FileFormat.Words.Table.RightBorder.html#FileFormat_Words_Table_RightBorder_rightBorder
+  commentId: F:FileFormat.Words.Table.RightBorder.rightBorder
+  fullName: FileFormat.Words.Table.RightBorder.rightBorder
+  nameWithType: RightBorder.rightBorder
 - uid: FileFormat.Words.Table.Table
   name: Table
   href: api/FileFormat.Words.Table.Table.html
@@ -783,45 +1110,6 @@ references:
   isSpec: "True"
   fullName: FileFormat.Words.Table.Table.Table
   nameWithType: Table.Table
-- uid: FileFormat.Words.Table.Table.AlignCenter
-  name: AlignCenter
-  href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_AlignCenter
-  commentId: P:FileFormat.Words.Table.Table.AlignCenter
-  fullName: FileFormat.Words.Table.Table.AlignCenter
-  nameWithType: Table.AlignCenter
-- uid: FileFormat.Words.Table.Table.AlignCenter*
-  name: AlignCenter
-  href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_AlignCenter_
-  commentId: Overload:FileFormat.Words.Table.Table.AlignCenter
-  isSpec: "True"
-  fullName: FileFormat.Words.Table.Table.AlignCenter
-  nameWithType: Table.AlignCenter
-- uid: FileFormat.Words.Table.Table.AlignLeft
-  name: AlignLeft
-  href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_AlignLeft
-  commentId: P:FileFormat.Words.Table.Table.AlignLeft
-  fullName: FileFormat.Words.Table.Table.AlignLeft
-  nameWithType: Table.AlignLeft
-- uid: FileFormat.Words.Table.Table.AlignLeft*
-  name: AlignLeft
-  href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_AlignLeft_
-  commentId: Overload:FileFormat.Words.Table.Table.AlignLeft
-  isSpec: "True"
-  fullName: FileFormat.Words.Table.Table.AlignLeft
-  nameWithType: Table.AlignLeft
-- uid: FileFormat.Words.Table.Table.AlignRight
-  name: AlignRight
-  href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_AlignRight
-  commentId: P:FileFormat.Words.Table.Table.AlignRight
-  fullName: FileFormat.Words.Table.Table.AlignRight
-  nameWithType: Table.AlignRight
-- uid: FileFormat.Words.Table.Table.AlignRight*
-  name: AlignRight
-  href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_AlignRight_
-  commentId: Overload:FileFormat.Words.Table.Table.AlignRight
-  isSpec: "True"
-  fullName: FileFormat.Words.Table.Table.AlignRight
-  nameWithType: Table.AlignRight
 - uid: FileFormat.Words.Table.Table.Append(FileFormat.Words.Table.TableRow)
   name: Append(TableRow)
   href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_Append_FileFormat_Words_Table_TableRow_
@@ -848,45 +1136,6 @@ references:
   isSpec: "True"
   fullName: FileFormat.Words.Table.Table.AppendChild
   nameWithType: Table.AppendChild
-- uid: FileFormat.Words.Table.Table.borderValue_BasicBlackSquares
-  name: borderValue_BasicBlackSquares
-  href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_borderValue_BasicBlackSquares
-  commentId: P:FileFormat.Words.Table.Table.borderValue_BasicBlackSquares
-  fullName: FileFormat.Words.Table.Table.borderValue_BasicBlackSquares
-  nameWithType: Table.borderValue_BasicBlackSquares
-- uid: FileFormat.Words.Table.Table.borderValue_BasicBlackSquares*
-  name: borderValue_BasicBlackSquares
-  href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_borderValue_BasicBlackSquares_
-  commentId: Overload:FileFormat.Words.Table.Table.borderValue_BasicBlackSquares
-  isSpec: "True"
-  fullName: FileFormat.Words.Table.Table.borderValue_BasicBlackSquares
-  nameWithType: Table.borderValue_BasicBlackSquares
-- uid: FileFormat.Words.Table.Table.borderValue_Dashed
-  name: borderValue_Dashed
-  href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_borderValue_Dashed
-  commentId: P:FileFormat.Words.Table.Table.borderValue_Dashed
-  fullName: FileFormat.Words.Table.Table.borderValue_Dashed
-  nameWithType: Table.borderValue_Dashed
-- uid: FileFormat.Words.Table.Table.borderValue_Dashed*
-  name: borderValue_Dashed
-  href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_borderValue_Dashed_
-  commentId: Overload:FileFormat.Words.Table.Table.borderValue_Dashed
-  isSpec: "True"
-  fullName: FileFormat.Words.Table.Table.borderValue_Dashed
-  nameWithType: Table.borderValue_Dashed
-- uid: FileFormat.Words.Table.Table.borderValue_Dotted
-  name: borderValue_Dotted
-  href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_borderValue_Dotted
-  commentId: P:FileFormat.Words.Table.Table.borderValue_Dotted
-  fullName: FileFormat.Words.Table.Table.borderValue_Dotted
-  nameWithType: Table.borderValue_Dotted
-- uid: FileFormat.Words.Table.Table.borderValue_Dotted*
-  name: borderValue_Dotted
-  href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_borderValue_Dotted_
-  commentId: Overload:FileFormat.Words.Table.Table.borderValue_Dotted
-  isSpec: "True"
-  fullName: FileFormat.Words.Table.Table.borderValue_Dotted
-  nameWithType: Table.borderValue_Dotted
 - uid: FileFormat.Words.Table.Table.CellWidth
   name: CellWidth
   href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_CellWidth
@@ -926,32 +1175,6 @@ references:
   isSpec: "True"
   fullName: FileFormat.Words.Table.Table.ExistingTableHeaders
   nameWithType: Table.ExistingTableHeaders
-- uid: FileFormat.Words.Table.Table.getDocumentTables(DocumentFormat.OpenXml.Wordprocessing.Body)
-  name: getDocumentTables(DocumentFormat.OpenXml.Wordprocessing.Body)
-  href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_getDocumentTables_DocumentFormat_OpenXml_Wordprocessing_Body_
-  commentId: M:FileFormat.Words.Table.Table.getDocumentTables(DocumentFormat.OpenXml.Wordprocessing.Body)
-  fullName: FileFormat.Words.Table.Table.getDocumentTables(DocumentFormat.OpenXml.Wordprocessing.Body)
-  nameWithType: Table.getDocumentTables(DocumentFormat.OpenXml.Wordprocessing.Body)
-- uid: FileFormat.Words.Table.Table.getDocumentTables*
-  name: getDocumentTables
-  href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_getDocumentTables_
-  commentId: Overload:FileFormat.Words.Table.Table.getDocumentTables
-  isSpec: "True"
-  fullName: FileFormat.Words.Table.Table.getDocumentTables
-  nameWithType: Table.getDocumentTables
-- uid: FileFormat.Words.Table.Table.getDocumentTablesByText(DocumentFormat.OpenXml.Wordprocessing.Body,System.String)
-  name: getDocumentTablesByText(DocumentFormat.OpenXml.Wordprocessing.Body, String)
-  href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_getDocumentTablesByText_DocumentFormat_OpenXml_Wordprocessing_Body_System_String_
-  commentId: M:FileFormat.Words.Table.Table.getDocumentTablesByText(DocumentFormat.OpenXml.Wordprocessing.Body,System.String)
-  fullName: FileFormat.Words.Table.Table.getDocumentTablesByText(DocumentFormat.OpenXml.Wordprocessing.Body, System.String)
-  nameWithType: Table.getDocumentTablesByText(DocumentFormat.OpenXml.Wordprocessing.Body, String)
-- uid: FileFormat.Words.Table.Table.getDocumentTablesByText*
-  name: getDocumentTablesByText
-  href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_getDocumentTablesByText_
-  commentId: Overload:FileFormat.Words.Table.Table.getDocumentTablesByText
-  isSpec: "True"
-  fullName: FileFormat.Words.Table.Table.getDocumentTablesByText
-  nameWithType: Table.getDocumentTablesByText
 - uid: FileFormat.Words.Table.Table.getTableCells
   name: getTableCells
   href: api/FileFormat.Words.Table.Table.html#FileFormat_Words_Table_Table_getTableCells
@@ -1088,6 +1311,109 @@ references:
   isSpec: "True"
   fullName: FileFormat.Words.Table.Table.TablePosition
   nameWithType: Table.TablePosition
+- uid: FileFormat.Words.Table.TableBorders
+  name: TableBorders
+  href: api/FileFormat.Words.Table.TableBorders.html
+  commentId: T:FileFormat.Words.Table.TableBorders
+  fullName: FileFormat.Words.Table.TableBorders
+  nameWithType: TableBorders
+- uid: FileFormat.Words.Table.TableBorders.#ctor
+  name: TableBorders()
+  href: api/FileFormat.Words.Table.TableBorders.html#FileFormat_Words_Table_TableBorders__ctor
+  commentId: M:FileFormat.Words.Table.TableBorders.#ctor
+  fullName: FileFormat.Words.Table.TableBorders.TableBorders()
+  nameWithType: TableBorders.TableBorders()
+- uid: FileFormat.Words.Table.TableBorders.#ctor*
+  name: TableBorders
+  href: api/FileFormat.Words.Table.TableBorders.html#FileFormat_Words_Table_TableBorders__ctor_
+  commentId: Overload:FileFormat.Words.Table.TableBorders.#ctor
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.TableBorders.TableBorders
+  nameWithType: TableBorders.TableBorders
+- uid: FileFormat.Words.Table.TableBorders.AppendBottomBorder(FileFormat.Words.Table.BottomBorder)
+  name: AppendBottomBorder(BottomBorder)
+  href: api/FileFormat.Words.Table.TableBorders.html#FileFormat_Words_Table_TableBorders_AppendBottomBorder_FileFormat_Words_Table_BottomBorder_
+  commentId: M:FileFormat.Words.Table.TableBorders.AppendBottomBorder(FileFormat.Words.Table.BottomBorder)
+  fullName: FileFormat.Words.Table.TableBorders.AppendBottomBorder(FileFormat.Words.Table.BottomBorder)
+  nameWithType: TableBorders.AppendBottomBorder(BottomBorder)
+- uid: FileFormat.Words.Table.TableBorders.AppendBottomBorder*
+  name: AppendBottomBorder
+  href: api/FileFormat.Words.Table.TableBorders.html#FileFormat_Words_Table_TableBorders_AppendBottomBorder_
+  commentId: Overload:FileFormat.Words.Table.TableBorders.AppendBottomBorder
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.TableBorders.AppendBottomBorder
+  nameWithType: TableBorders.AppendBottomBorder
+- uid: FileFormat.Words.Table.TableBorders.AppendInsideHorizontalBorder(FileFormat.Words.Table.InsideHorizontalBorder)
+  name: AppendInsideHorizontalBorder(InsideHorizontalBorder)
+  href: api/FileFormat.Words.Table.TableBorders.html#FileFormat_Words_Table_TableBorders_AppendInsideHorizontalBorder_FileFormat_Words_Table_InsideHorizontalBorder_
+  commentId: M:FileFormat.Words.Table.TableBorders.AppendInsideHorizontalBorder(FileFormat.Words.Table.InsideHorizontalBorder)
+  fullName: FileFormat.Words.Table.TableBorders.AppendInsideHorizontalBorder(FileFormat.Words.Table.InsideHorizontalBorder)
+  nameWithType: TableBorders.AppendInsideHorizontalBorder(InsideHorizontalBorder)
+- uid: FileFormat.Words.Table.TableBorders.AppendInsideHorizontalBorder*
+  name: AppendInsideHorizontalBorder
+  href: api/FileFormat.Words.Table.TableBorders.html#FileFormat_Words_Table_TableBorders_AppendInsideHorizontalBorder_
+  commentId: Overload:FileFormat.Words.Table.TableBorders.AppendInsideHorizontalBorder
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.TableBorders.AppendInsideHorizontalBorder
+  nameWithType: TableBorders.AppendInsideHorizontalBorder
+- uid: FileFormat.Words.Table.TableBorders.AppendInsideVerticalBorder(FileFormat.Words.Table.InsideVerticalBorder)
+  name: AppendInsideVerticalBorder(InsideVerticalBorder)
+  href: api/FileFormat.Words.Table.TableBorders.html#FileFormat_Words_Table_TableBorders_AppendInsideVerticalBorder_FileFormat_Words_Table_InsideVerticalBorder_
+  commentId: M:FileFormat.Words.Table.TableBorders.AppendInsideVerticalBorder(FileFormat.Words.Table.InsideVerticalBorder)
+  fullName: FileFormat.Words.Table.TableBorders.AppendInsideVerticalBorder(FileFormat.Words.Table.InsideVerticalBorder)
+  nameWithType: TableBorders.AppendInsideVerticalBorder(InsideVerticalBorder)
+- uid: FileFormat.Words.Table.TableBorders.AppendInsideVerticalBorder*
+  name: AppendInsideVerticalBorder
+  href: api/FileFormat.Words.Table.TableBorders.html#FileFormat_Words_Table_TableBorders_AppendInsideVerticalBorder_
+  commentId: Overload:FileFormat.Words.Table.TableBorders.AppendInsideVerticalBorder
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.TableBorders.AppendInsideVerticalBorder
+  nameWithType: TableBorders.AppendInsideVerticalBorder
+- uid: FileFormat.Words.Table.TableBorders.AppendLeftBorder(FileFormat.Words.Table.LeftBorder)
+  name: AppendLeftBorder(LeftBorder)
+  href: api/FileFormat.Words.Table.TableBorders.html#FileFormat_Words_Table_TableBorders_AppendLeftBorder_FileFormat_Words_Table_LeftBorder_
+  commentId: M:FileFormat.Words.Table.TableBorders.AppendLeftBorder(FileFormat.Words.Table.LeftBorder)
+  fullName: FileFormat.Words.Table.TableBorders.AppendLeftBorder(FileFormat.Words.Table.LeftBorder)
+  nameWithType: TableBorders.AppendLeftBorder(LeftBorder)
+- uid: FileFormat.Words.Table.TableBorders.AppendLeftBorder*
+  name: AppendLeftBorder
+  href: api/FileFormat.Words.Table.TableBorders.html#FileFormat_Words_Table_TableBorders_AppendLeftBorder_
+  commentId: Overload:FileFormat.Words.Table.TableBorders.AppendLeftBorder
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.TableBorders.AppendLeftBorder
+  nameWithType: TableBorders.AppendLeftBorder
+- uid: FileFormat.Words.Table.TableBorders.AppendRightBorder(FileFormat.Words.Table.RightBorder)
+  name: AppendRightBorder(RightBorder)
+  href: api/FileFormat.Words.Table.TableBorders.html#FileFormat_Words_Table_TableBorders_AppendRightBorder_FileFormat_Words_Table_RightBorder_
+  commentId: M:FileFormat.Words.Table.TableBorders.AppendRightBorder(FileFormat.Words.Table.RightBorder)
+  fullName: FileFormat.Words.Table.TableBorders.AppendRightBorder(FileFormat.Words.Table.RightBorder)
+  nameWithType: TableBorders.AppendRightBorder(RightBorder)
+- uid: FileFormat.Words.Table.TableBorders.AppendRightBorder*
+  name: AppendRightBorder
+  href: api/FileFormat.Words.Table.TableBorders.html#FileFormat_Words_Table_TableBorders_AppendRightBorder_
+  commentId: Overload:FileFormat.Words.Table.TableBorders.AppendRightBorder
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.TableBorders.AppendRightBorder
+  nameWithType: TableBorders.AppendRightBorder
+- uid: FileFormat.Words.Table.TableBorders.AppendTopBorder(FileFormat.Words.Table.TopBorder)
+  name: AppendTopBorder(TopBorder)
+  href: api/FileFormat.Words.Table.TableBorders.html#FileFormat_Words_Table_TableBorders_AppendTopBorder_FileFormat_Words_Table_TopBorder_
+  commentId: M:FileFormat.Words.Table.TableBorders.AppendTopBorder(FileFormat.Words.Table.TopBorder)
+  fullName: FileFormat.Words.Table.TableBorders.AppendTopBorder(FileFormat.Words.Table.TopBorder)
+  nameWithType: TableBorders.AppendTopBorder(TopBorder)
+- uid: FileFormat.Words.Table.TableBorders.AppendTopBorder*
+  name: AppendTopBorder
+  href: api/FileFormat.Words.Table.TableBorders.html#FileFormat_Words_Table_TableBorders_AppendTopBorder_
+  commentId: Overload:FileFormat.Words.Table.TableBorders.AppendTopBorder
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.TableBorders.AppendTopBorder
+  nameWithType: TableBorders.AppendTopBorder
+- uid: FileFormat.Words.Table.TableBorders.tableBorders
+  name: tableBorders
+  href: api/FileFormat.Words.Table.TableBorders.html#FileFormat_Words_Table_TableBorders_tableBorders
+  commentId: F:FileFormat.Words.Table.TableBorders.tableBorders
+  fullName: FileFormat.Words.Table.TableBorders.tableBorders
+  nameWithType: TableBorders.tableBorders
 - uid: FileFormat.Words.Table.TableCell
   name: TableCell
   href: api/FileFormat.Words.Table.TableCell.html
@@ -1265,12 +1591,12 @@ references:
   isSpec: "True"
   fullName: FileFormat.Words.Table.TableJustification.TableJustification
   nameWithType: TableJustification.TableJustification
-- uid: FileFormat.Words.Table.TableJustification.AlignCneter(FileFormat.Words.Table.TableRowAlignmentValues)
-  name: AlignCneter(TableRowAlignmentValues)
-  href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification_AlignCneter_FileFormat_Words_Table_TableRowAlignmentValues_
-  commentId: M:FileFormat.Words.Table.TableJustification.AlignCneter(FileFormat.Words.Table.TableRowAlignmentValues)
-  fullName: FileFormat.Words.Table.TableJustification.AlignCneter(FileFormat.Words.Table.TableRowAlignmentValues)
-  nameWithType: TableJustification.AlignCneter(TableRowAlignmentValues)
+- uid: FileFormat.Words.Table.TableJustification.AlignCneter
+  name: AlignCneter()
+  href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification_AlignCneter
+  commentId: M:FileFormat.Words.Table.TableJustification.AlignCneter
+  fullName: FileFormat.Words.Table.TableJustification.AlignCneter()
+  nameWithType: TableJustification.AlignCneter()
 - uid: FileFormat.Words.Table.TableJustification.AlignCneter*
   name: AlignCneter
   href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification_AlignCneter_
@@ -1278,12 +1604,12 @@ references:
   isSpec: "True"
   fullName: FileFormat.Words.Table.TableJustification.AlignCneter
   nameWithType: TableJustification.AlignCneter
-- uid: FileFormat.Words.Table.TableJustification.AlignLeft(FileFormat.Words.Table.TableRowAlignmentValues)
-  name: AlignLeft(TableRowAlignmentValues)
-  href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification_AlignLeft_FileFormat_Words_Table_TableRowAlignmentValues_
-  commentId: M:FileFormat.Words.Table.TableJustification.AlignLeft(FileFormat.Words.Table.TableRowAlignmentValues)
-  fullName: FileFormat.Words.Table.TableJustification.AlignLeft(FileFormat.Words.Table.TableRowAlignmentValues)
-  nameWithType: TableJustification.AlignLeft(TableRowAlignmentValues)
+- uid: FileFormat.Words.Table.TableJustification.AlignLeft
+  name: AlignLeft()
+  href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification_AlignLeft
+  commentId: M:FileFormat.Words.Table.TableJustification.AlignLeft
+  fullName: FileFormat.Words.Table.TableJustification.AlignLeft()
+  nameWithType: TableJustification.AlignLeft()
 - uid: FileFormat.Words.Table.TableJustification.AlignLeft*
   name: AlignLeft
   href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification_AlignLeft_
@@ -1291,12 +1617,12 @@ references:
   isSpec: "True"
   fullName: FileFormat.Words.Table.TableJustification.AlignLeft
   nameWithType: TableJustification.AlignLeft
-- uid: FileFormat.Words.Table.TableJustification.AlignRight(FileFormat.Words.Table.TableRowAlignmentValues)
-  name: AlignRight(TableRowAlignmentValues)
-  href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification_AlignRight_FileFormat_Words_Table_TableRowAlignmentValues_
-  commentId: M:FileFormat.Words.Table.TableJustification.AlignRight(FileFormat.Words.Table.TableRowAlignmentValues)
-  fullName: FileFormat.Words.Table.TableJustification.AlignRight(FileFormat.Words.Table.TableRowAlignmentValues)
-  nameWithType: TableJustification.AlignRight(TableRowAlignmentValues)
+- uid: FileFormat.Words.Table.TableJustification.AlignRight
+  name: AlignRight()
+  href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification_AlignRight
+  commentId: M:FileFormat.Words.Table.TableJustification.AlignRight
+  fullName: FileFormat.Words.Table.TableJustification.AlignRight()
+  nameWithType: TableJustification.AlignRight()
 - uid: FileFormat.Words.Table.TableJustification.AlignRight*
   name: AlignRight
   href: api/FileFormat.Words.Table.TableJustification.html#FileFormat_Words_Table_TableJustification_AlignRight_
@@ -1316,12 +1642,12 @@ references:
   commentId: T:FileFormat.Words.Table.TableProperties
   fullName: FileFormat.Words.Table.TableProperties
   nameWithType: TableProperties
-- uid: FileFormat.Words.Table.TableProperties.#ctor(UInt32,DocumentFormat.OpenXml.Wordprocessing.BorderValues)
-  name: TableProperties(UInt32, DocumentFormat.OpenXml.Wordprocessing.BorderValues)
-  href: api/FileFormat.Words.Table.TableProperties.html#FileFormat_Words_Table_TableProperties__ctor_UInt32_DocumentFormat_OpenXml_Wordprocessing_BorderValues_
-  commentId: M:FileFormat.Words.Table.TableProperties.#ctor(UInt32,DocumentFormat.OpenXml.Wordprocessing.BorderValues)
-  fullName: FileFormat.Words.Table.TableProperties.TableProperties(UInt32, DocumentFormat.OpenXml.Wordprocessing.BorderValues)
-  nameWithType: TableProperties.TableProperties(UInt32, DocumentFormat.OpenXml.Wordprocessing.BorderValues)
+- uid: FileFormat.Words.Table.TableProperties.#ctor
+  name: TableProperties()
+  href: api/FileFormat.Words.Table.TableProperties.html#FileFormat_Words_Table_TableProperties__ctor
+  commentId: M:FileFormat.Words.Table.TableProperties.#ctor
+  fullName: FileFormat.Words.Table.TableProperties.TableProperties()
+  nameWithType: TableProperties.TableProperties()
 - uid: FileFormat.Words.Table.TableProperties.#ctor*
   name: TableProperties
   href: api/FileFormat.Words.Table.TableProperties.html#FileFormat_Words_Table_TableProperties__ctor_
@@ -1329,6 +1655,12 @@ references:
   isSpec: "True"
   fullName: FileFormat.Words.Table.TableProperties.TableProperties
   nameWithType: TableProperties.TableProperties
+- uid: FileFormat.Words.Table.TableProperties.Append(FileFormat.Words.Table.TableBorders)
+  name: Append(TableBorders)
+  href: api/FileFormat.Words.Table.TableProperties.html#FileFormat_Words_Table_TableProperties_Append_FileFormat_Words_Table_TableBorders_
+  commentId: M:FileFormat.Words.Table.TableProperties.Append(FileFormat.Words.Table.TableBorders)
+  fullName: FileFormat.Words.Table.TableProperties.Append(FileFormat.Words.Table.TableBorders)
+  nameWithType: TableProperties.Append(TableBorders)
 - uid: FileFormat.Words.Table.TableProperties.Append(FileFormat.Words.Table.TableJustification)
   name: Append(TableJustification)
   href: api/FileFormat.Words.Table.TableProperties.html#FileFormat_Words_Table_TableProperties_Append_FileFormat_Words_Table_TableJustification_
@@ -1405,54 +1737,67 @@ references:
   commentId: F:FileFormat.Words.Table.TableRow.tableRow
   fullName: FileFormat.Words.Table.TableRow.tableRow
   nameWithType: TableRow.tableRow
-- uid: FileFormat.Words.Table.TableRowAlignmentValues
-  name: TableRowAlignmentValues
-  href: api/FileFormat.Words.Table.TableRowAlignmentValues.html
-  commentId: T:FileFormat.Words.Table.TableRowAlignmentValues
-  fullName: FileFormat.Words.Table.TableRowAlignmentValues
-  nameWithType: TableRowAlignmentValues
-- uid: FileFormat.Words.Table.TableRowAlignmentValues.AlignCenter
-  name: AlignCenter
-  href: api/FileFormat.Words.Table.TableRowAlignmentValues.html#FileFormat_Words_Table_TableRowAlignmentValues_AlignCenter
-  commentId: P:FileFormat.Words.Table.TableRowAlignmentValues.AlignCenter
-  fullName: FileFormat.Words.Table.TableRowAlignmentValues.AlignCenter
-  nameWithType: TableRowAlignmentValues.AlignCenter
-- uid: FileFormat.Words.Table.TableRowAlignmentValues.AlignCenter*
-  name: AlignCenter
-  href: api/FileFormat.Words.Table.TableRowAlignmentValues.html#FileFormat_Words_Table_TableRowAlignmentValues_AlignCenter_
-  commentId: Overload:FileFormat.Words.Table.TableRowAlignmentValues.AlignCenter
+- uid: FileFormat.Words.Table.TopBorder
+  name: TopBorder
+  href: api/FileFormat.Words.Table.TopBorder.html
+  commentId: T:FileFormat.Words.Table.TopBorder
+  fullName: FileFormat.Words.Table.TopBorder
+  nameWithType: TopBorder
+- uid: FileFormat.Words.Table.TopBorder.#ctor
+  name: TopBorder()
+  href: api/FileFormat.Words.Table.TopBorder.html#FileFormat_Words_Table_TopBorder__ctor
+  commentId: M:FileFormat.Words.Table.TopBorder.#ctor
+  fullName: FileFormat.Words.Table.TopBorder.TopBorder()
+  nameWithType: TopBorder.TopBorder()
+- uid: FileFormat.Words.Table.TopBorder.#ctor*
+  name: TopBorder
+  href: api/FileFormat.Words.Table.TopBorder.html#FileFormat_Words_Table_TopBorder__ctor_
+  commentId: Overload:FileFormat.Words.Table.TopBorder.#ctor
   isSpec: "True"
-  fullName: FileFormat.Words.Table.TableRowAlignmentValues.AlignCenter
-  nameWithType: TableRowAlignmentValues.AlignCenter
-- uid: FileFormat.Words.Table.TableRowAlignmentValues.AlignLeft
-  name: AlignLeft
-  href: api/FileFormat.Words.Table.TableRowAlignmentValues.html#FileFormat_Words_Table_TableRowAlignmentValues_AlignLeft
-  commentId: P:FileFormat.Words.Table.TableRowAlignmentValues.AlignLeft
-  fullName: FileFormat.Words.Table.TableRowAlignmentValues.AlignLeft
-  nameWithType: TableRowAlignmentValues.AlignLeft
-- uid: FileFormat.Words.Table.TableRowAlignmentValues.AlignLeft*
-  name: AlignLeft
-  href: api/FileFormat.Words.Table.TableRowAlignmentValues.html#FileFormat_Words_Table_TableRowAlignmentValues_AlignLeft_
-  commentId: Overload:FileFormat.Words.Table.TableRowAlignmentValues.AlignLeft
+  fullName: FileFormat.Words.Table.TopBorder.TopBorder
+  nameWithType: TopBorder.TopBorder
+- uid: FileFormat.Words.Table.TopBorder.basicBlackSquares_border(System.UInt32)
+  name: basicBlackSquares_border(UInt32)
+  href: api/FileFormat.Words.Table.TopBorder.html#FileFormat_Words_Table_TopBorder_basicBlackSquares_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.TopBorder.basicBlackSquares_border(System.UInt32)
+  fullName: FileFormat.Words.Table.TopBorder.basicBlackSquares_border(System.UInt32)
+  nameWithType: TopBorder.basicBlackSquares_border(UInt32)
+- uid: FileFormat.Words.Table.TopBorder.basicBlackSquares_border*
+  name: basicBlackSquares_border
+  href: api/FileFormat.Words.Table.TopBorder.html#FileFormat_Words_Table_TopBorder_basicBlackSquares_border_
+  commentId: Overload:FileFormat.Words.Table.TopBorder.basicBlackSquares_border
   isSpec: "True"
-  fullName: FileFormat.Words.Table.TableRowAlignmentValues.AlignLeft
-  nameWithType: TableRowAlignmentValues.AlignLeft
-- uid: FileFormat.Words.Table.TableRowAlignmentValues.AlignRight
-  name: AlignRight
-  href: api/FileFormat.Words.Table.TableRowAlignmentValues.html#FileFormat_Words_Table_TableRowAlignmentValues_AlignRight
-  commentId: P:FileFormat.Words.Table.TableRowAlignmentValues.AlignRight
-  fullName: FileFormat.Words.Table.TableRowAlignmentValues.AlignRight
-  nameWithType: TableRowAlignmentValues.AlignRight
-- uid: FileFormat.Words.Table.TableRowAlignmentValues.AlignRight*
-  name: AlignRight
-  href: api/FileFormat.Words.Table.TableRowAlignmentValues.html#FileFormat_Words_Table_TableRowAlignmentValues_AlignRight_
-  commentId: Overload:FileFormat.Words.Table.TableRowAlignmentValues.AlignRight
+  fullName: FileFormat.Words.Table.TopBorder.basicBlackSquares_border
+  nameWithType: TopBorder.basicBlackSquares_border
+- uid: FileFormat.Words.Table.TopBorder.dashed_border(System.UInt32)
+  name: dashed_border(UInt32)
+  href: api/FileFormat.Words.Table.TopBorder.html#FileFormat_Words_Table_TopBorder_dashed_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.TopBorder.dashed_border(System.UInt32)
+  fullName: FileFormat.Words.Table.TopBorder.dashed_border(System.UInt32)
+  nameWithType: TopBorder.dashed_border(UInt32)
+- uid: FileFormat.Words.Table.TopBorder.dashed_border*
+  name: dashed_border
+  href: api/FileFormat.Words.Table.TopBorder.html#FileFormat_Words_Table_TopBorder_dashed_border_
+  commentId: Overload:FileFormat.Words.Table.TopBorder.dashed_border
   isSpec: "True"
-  fullName: FileFormat.Words.Table.TableRowAlignmentValues.AlignRight
-  nameWithType: TableRowAlignmentValues.AlignRight
-- uid: FileFormat.Words.Table.TableRowAlignmentValues.tableRowAlignmentValues1
-  name: tableRowAlignmentValues1
-  href: api/FileFormat.Words.Table.TableRowAlignmentValues.html#FileFormat_Words_Table_TableRowAlignmentValues_tableRowAlignmentValues1
-  commentId: F:FileFormat.Words.Table.TableRowAlignmentValues.tableRowAlignmentValues1
-  fullName: FileFormat.Words.Table.TableRowAlignmentValues.tableRowAlignmentValues1
-  nameWithType: TableRowAlignmentValues.tableRowAlignmentValues1
+  fullName: FileFormat.Words.Table.TopBorder.dashed_border
+  nameWithType: TopBorder.dashed_border
+- uid: FileFormat.Words.Table.TopBorder.dotted_border(System.UInt32)
+  name: dotted_border(UInt32)
+  href: api/FileFormat.Words.Table.TopBorder.html#FileFormat_Words_Table_TopBorder_dotted_border_System_UInt32_
+  commentId: M:FileFormat.Words.Table.TopBorder.dotted_border(System.UInt32)
+  fullName: FileFormat.Words.Table.TopBorder.dotted_border(System.UInt32)
+  nameWithType: TopBorder.dotted_border(UInt32)
+- uid: FileFormat.Words.Table.TopBorder.dotted_border*
+  name: dotted_border
+  href: api/FileFormat.Words.Table.TopBorder.html#FileFormat_Words_Table_TopBorder_dotted_border_
+  commentId: Overload:FileFormat.Words.Table.TopBorder.dotted_border
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.TopBorder.dotted_border
+  nameWithType: TopBorder.dotted_border
+- uid: FileFormat.Words.Table.TopBorder.topBorder
+  name: topBorder
+  href: api/FileFormat.Words.Table.TopBorder.html#FileFormat_Words_Table_TopBorder_topBorder
+  commentId: F:FileFormat.Words.Table.TopBorder.topBorder
+  fullName: FileFormat.Words.Table.TopBorder.topBorder
+  nameWithType: TopBorder.topBorder

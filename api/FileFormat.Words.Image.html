@@ -81,11 +81,35 @@
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">Image</span></div>
   </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="FileFormat.Words.html">FileFormat.Words</a></h6>
   <h6><strong>Assembly</strong>: FileFormat.Words.dll</h6>
   <h5 id="FileFormat_Words_Image_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Image : object</code></pre>
+    <pre><code class="lang-csharp hljs">public class Image</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -157,7 +181,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Drawing</span></td>
+        <td><span class="xref">DocumentFormat.OpenXml.Wordprocessing.Drawing</span></td>
         <td><p>An object of the Parent Drawing class.</p>
 </td>
       </tr>
@@ -184,35 +208,6 @@
       <tr>
         <td><a class="xref" href="FileFormat.Words.Paragraph.html">Paragraph</a></td>
         <td><p>An object of the Parent Paragraph class.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="properties">Properties
-  </h3>
-  
-  
-  <a id="FileFormat_Words_Image_Drawing_" data-uid="FileFormat.Words.Image.Drawing*"></a>
-  <h4 id="FileFormat_Words_Image_Drawing" data-uid="FileFormat.Words.Image.Drawing">Drawing</h4>
-  <div class="markdown level1 summary"><p>It returns an object of the Drawing class.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Drawing Drawing { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Drawing</span></td>
-        <td><p>An object of Drawing class.</p>
 </td>
       </tr>
     </tbody>
@@ -263,7 +258,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static List&lt;ImagePart&gt; ExtractImagesFromDocument(Document document)</code></pre>
+    <pre><code class="lang-csharp hljs">public static List&lt;Stream&gt; ExtractImagesFromDocument(Document document)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -293,9 +288,61 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">List</span>&lt;<span class="xref">ImagePart</span>&gt;</td>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<span class="xref">System.IO.Stream</span>&gt;</td>
         <td><p>A collection of images.</p>
 </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="FileFormat_Words_Image_GetExtentCx_" data-uid="FileFormat.Words.Image.GetExtentCx*"></a>
+  <h4 id="FileFormat_Words_Image_GetExtentCx" data-uid="FileFormat.Words.Image.GetExtentCx">GetExtentCx()</h4>
+  <div class="markdown level1 summary"><p>This method will enable you to get the horizontal dimensions of the image.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public long GetExtentCx()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="FileFormat_Words_Image_GetExtentCy_" data-uid="FileFormat.Words.Image.GetExtentCy*"></a>
+  <h4 id="FileFormat_Words_Image_GetExtentCy" data-uid="FileFormat.Words.Image.GetExtentCy">GetExtentCy()</h4>
+  <div class="markdown level1 summary"><p>This method allows you to obtain the vertical dimensions of the image.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public long GetExtentCy()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
       </tr>
     </tbody>
   </table>

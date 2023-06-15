@@ -82,6 +82,10 @@
     <div class="level1"><a class="xref" href="FileFormat.Words.Document.html">Document</a></div>
     <div class="level2"><span class="xref">Body</span></div>
   </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
@@ -94,7 +98,7 @@
       <a class="xref" href="FileFormat.Words.Document.html#FileFormat_Words_Document_Save_System_String_">Document.Save(String)</a>
     </div>
     <div>
-      <a class="xref" href="FileFormat.Words.Document.html#FileFormat_Words_Document_Save_Stream_">Document.Save(Stream)</a>
+      <a class="xref" href="FileFormat.Words.Document.html#FileFormat_Words_Document_Save_System_IO_Stream_">Document.Save(Stream)</a>
     </div>
     <div>
       <a class="xref" href="FileFormat.Words.Document.html#FileFormat_Words_Document_Dispose_System_Boolean_">Document.Dispose(Boolean)</a>
@@ -102,12 +106,33 @@
     <div>
       <a class="xref" href="FileFormat.Words.Document.html#FileFormat_Words_Document_Dispose">Document.Dispose()</a>
     </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="FileFormat.Words.html">FileFormat.Words</a></h6>
   <h6><strong>Assembly</strong>: FileFormat.Words.dll</h6>
   <h5 id="FileFormat_Words_Body_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Body : Document</code></pre>
+    <pre><code class="lang-csharp hljs">public class Body : Document, IDisposable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -149,7 +174,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected DocumentFormat.OpenXml.Wordprocessing.Body wordDocumentBody</code></pre>
+    <pre><code class="lang-csharp hljs">protected Body wordDocumentBody</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -190,7 +215,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">List</span>&lt;<a class="xref" href="FileFormat.Words.Table.Table.html">Table</a>&gt;</td>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="FileFormat.Words.Table.Table.html">Table</a>&gt;</td>
         <td><p>A list of type Tables.</p>
 </td>
       </tr>
@@ -260,8 +285,7 @@
   
   <a id="FileFormat_Words_Body_FindTableByText_" data-uid="FileFormat.Words.Body.FindTableByText*"></a>
   <h4 id="FileFormat_Words_Body_FindTableByText_System_String_" data-uid="FileFormat.Words.Body.FindTableByText(System.String)">FindTableByText(String)</h4>
-  <div class="markdown level1 summary"><p>This method returns a table count that contains a specific text value.</p>
-</div>
+  <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -280,8 +304,7 @@
       <tr>
         <td><span class="xref">System.String</span></td>
         <td><span class="parametername">text</span></td>
-        <td><p>Any string value.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -296,8 +319,7 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Int32</span></td>
-        <td><p>An integer value.</p>
-</td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -352,7 +374,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">List</span>&lt;<a class="xref" href="FileFormat.Words.Table.TableCell.html">TableCell</a>&gt;</td>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="FileFormat.Words.Table.TableCell.html">TableCell</a>&gt;</td>
         <td><p>A list of cell objects.</p>
 </td>
       </tr>
@@ -403,7 +425,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">List</span>&lt;<a class="xref" href="FileFormat.Words.Table.TableRow.html">TableRow</a>&gt;</td>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="FileFormat.Words.Table.TableRow.html">TableRow</a>&gt;</td>
         <td><p>A list of row objects.</p>
 </td>
       </tr>
@@ -430,7 +452,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">List</span>&lt;<a class="xref" href="FileFormat.Words.Paragraph.html">Paragraph</a>&gt;</td>
+        <td><span class="xref">System.Collections.Generic.List</span>&lt;<a class="xref" href="FileFormat.Words.Paragraph.html">Paragraph</a>&gt;</td>
         <td><p>A list of Paragraphs.</p>
 </td>
       </tr>
@@ -446,6 +468,10 @@
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void LineBreak()</code></pre>
+  </div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
   </div>
 </article>
           </div>
