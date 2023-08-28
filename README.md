@@ -30,7 +30,7 @@ This <b>Open-Source .NET library</b> helps developers automate Word document gen
 ## Library Features & Provisions
 
 <p> <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/api/index.html">FileFormat.Words</a> not only offers provisions to create new <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/api/FileFormat.Words.html">Word documents</a> but also lets developers read & modify
-the existing documents programmatically. This .NET library is enterprise-level and  all the processes happen seamlessly.</p>
+the existing documents programmatically. This .NET library is user friendly and  all the processes happen seamlessly.</p>
 
 This Open-Source .NET library offers the following features:
 
