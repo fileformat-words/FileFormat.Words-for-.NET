@@ -7,27 +7,55 @@ using FileFormat.Words.Table;
 
 namespace FileFormat.Words
 {
+    /// <summary>
+    /// The Body class represents the main body of the Word document.
+    /// </summary>
     public class Body : Document
     {
+        /// <value>
+        /// An object of the Parent Body class.
+        /// </value>
         protected internal DocumentFormat.OpenXml.Wordprocessing.Body wordDocumentBody;
 
+        /// <summary>
+        /// Instantiate a new instance of the Body class.
+        /// </summary>
+        /// <param name="doc">An object of the Document class.</param>
         public Body(Document doc)
         {
             this.wordDocumentBody = doc.wordDocument.MainDocumentPart.Document.Body;
         }
 
+        /// <summary>
+        /// This method adds a Paragraph to a Word document.
+        /// </summary>
+        /// <param name="para">An object of the Paragragh class.</param>
         public void AppendChild(Paragraph para)
         {
             this.wordDocumentBody.AppendChild(para.wordDocumentParagraph);
         }
+
+        /// <summary>
+        /// This method adds a Table to a Word document.
+        /// </summary>
+        /// <param name="tab">An object of the Table class.</param>
         public void AppendChild(Table.Table tab)
         {
             this.wordDocumentBody.Append(tab.table);
         }
+
+        /// <summary>
+        /// This method adds a new line to a Word document.
+        /// </summary>
         public void LineBreak()
         {
             this.wordDocumentBody.AppendChild(new DocumentFormat.OpenXml.Wordprocessing.Paragraph(new DocumentFormat.OpenXml.Wordprocessing.Run(new Text(" "))));
         }
+
+        /// <summary>
+        /// This method returns a list of Paragraphs from a Word document.
+        /// </summary>
+        /// <returns>A list of Paragraphs.</returns>
         public List<Paragraph> GetParagraphs()
         {
             var paragraphs = this.wordDocumentBody.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>();
@@ -51,6 +79,13 @@ namespace FileFormat.Words
             }
             return lst;
         }
+
+        /// <summary>
+        /// This property returns a list of Tables from a Word document.
+        /// </summary>
+        /// <value>
+        /// A list of type Tables.
+        /// </value>
         public List<Table.Table> getDocumentTables
         {
 
@@ -85,6 +120,14 @@ namespace FileFormat.Words
                 return ls;
             }
         }
+
+        /// <summary>
+        /// This method returns a specific cell of a row along with cell props and Text.
+        /// </summary>
+        /// <param name="tableIndex">An integer value represents the table index. </param>
+        /// <param name="tableRow">An integer value represents row index.</param>
+        /// <param name="tableCell">An integer value represents a cell index.</param>
+        /// <returns>A list of cell objects.</returns>
         public List<Table.TableCell> FindTableCell(int tableIndex, int tableRow, int tableCell)
         {
 
@@ -125,6 +168,13 @@ namespace FileFormat.Words
             ls.Add(tableCell1);
             return ls;
         }
+
+        /// <summary>
+        /// This method returns a specific row and cell count from a particular table of an existing document.
+        /// </summary>
+        /// <param name="tableindex">An integer value represents a table index.</param>
+        /// <param name="tableRowIndex">An integer value represents the row index.</param>
+        /// <returns>A list of row objects.</returns>
         public List<Table.TableRow> FindTableRow(int tableindex, int tableRowIndex)
         {
             Table.Table tab = new Table.Table();
@@ -151,6 +201,11 @@ namespace FileFormat.Words
             ls.Add(tableRow1);
             return ls;
         }
+        /// <summary>
+        ///  This method returns a table count that contains a specific text value.
+        /// </summary>
+        /// <param name="text">Any string value.</param>
+        /// <returns>An integer value.</returns>
         public int FindTableByText(string text)
         {
             List<DocumentFormat.OpenXml.Wordprocessing.Table> table = wordDocumentBody.Elements<DocumentFormat.OpenXml.Wordprocessing.Table>().ToList();

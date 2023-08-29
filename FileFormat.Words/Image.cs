@@ -12,13 +12,29 @@ using System.Reflection.Metadata;
 
 namespace FileFormat.Words
 {
-
+    /// <summary>
+    /// This class contains methods to add, view and edit images into a Word document.
+    /// </summary>
     public class Image
     {
+        /// <value>
+        /// An object of the Parent Drawing class.
+        /// </value>
         protected internal Drawing drawing;
+
+        /// <value>
+        /// An object of the Parent Paragraph class.
+        /// </value>
         protected internal Paragraph parentParagraph;
         //protected internal string caption;
 
+        /// <summary>
+        /// Initialize an object of the Image class that inserts an image into a Word document.
+        /// </summary>
+        /// <param name="document">An object of the Document.</param>
+        /// <param name="imagePath">String value that represents the path of an image file.</param>
+        /// <param name="width">An integer value that represents the image's width.</param>
+        /// <param name="height">An integer value that represents the image's height.</param>
         public Image(Document document, string imagePath, int width, int height)
         {
             MainDocumentPart mainPart = document.wordDocument.MainDocumentPart;
@@ -82,7 +98,10 @@ namespace FileFormat.Words
                     });
 
         }
-
+        /// <summary>
+        /// It returns an object of the Drawing class.
+        /// </summary>
+        /// <returns>An object of Drawing class.</returns>
         internal Drawing Drawing
         {
             get
@@ -91,6 +110,10 @@ namespace FileFormat.Words
             }
         }
 
+        /// <summary>
+        /// This method will enable you to get the horizontal dimensions of the image.
+        /// </summary>
+        /// <returns>An integer value.</returns>
         public long GetExtentCx()
         {
             var inline = this.drawing?.Inline;
@@ -98,6 +121,10 @@ namespace FileFormat.Words
             return extent?.Cx ?? 0;
         }
 
+        /// <summary>
+        /// This method allows you to obtain the vertical dimensions of the image.
+        /// </summary>
+        /// <returns>An integer value.</returns>
         public long GetExtentCy()
         {
             var inline = this.drawing?.Inline;
@@ -105,7 +132,11 @@ namespace FileFormat.Words
             return extent?.Cy ?? 0;
         }
 
-
+        /// <summary>
+        /// Invoke this method to extract the collection of images from a Word document.
+        /// </summary>
+        /// <param name="document">An object of the Document class.</param>
+        /// <returns>A collection of images.</returns>
         public static List<Stream> ExtractImagesFromDocument(Document document)
         {
             MainDocumentPart mainDocumentPart = document.wordDocument.MainDocumentPart;
@@ -123,6 +154,11 @@ namespace FileFormat.Words
             return imageParts;
         }
 
+        /// <summary>
+        /// This method is used to set the border of the image.
+        /// </summary>
+        /// <param name="borderColor">String value that represents the border color.</param>
+        /// <param name="borderWidth">An integer value that represents the border width.</param>
         public void AddBorder(string borderColor, int borderWidth)
         {
             // Find the Picture element
@@ -155,6 +191,10 @@ namespace FileFormat.Words
             }
         }
 
+        /// <summary>
+        /// This method is used to rotate an image.
+        /// </summary>
+        /// <param name="rotationAngle">An integer value that represents a new angle of the image.</param>
         public void RotateImage(int rotationAngle)
         {
             // Find the Picture element
@@ -178,6 +218,11 @@ namespace FileFormat.Words
             }
         }
 
+        /// <summary>
+        /// Call this method to resize the image.
+        /// </summary>
+        /// <param name="newWidth">An integer value that represents the new width of the image.</param>
+        /// <param name="newHeight">An integer value that represents the new height of the image.</param>
         public void ResizeImage(int newWidth, int newHeight)
         {
             // Calculate the new extents

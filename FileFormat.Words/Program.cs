@@ -15,60 +15,22 @@ namespace Example
             try
             {
                 // create directory for reading/writing files. 
-                string rootDir =  "/Users/Mustafa/Projects/FileFormat.Words/TestDocs";
-    
+                string rootDir = "/Users/Mustafa/Desktop";
+
                 if (!Directory.Exists(rootDir))
                 {
                     Directory.CreateDirectory(rootDir);
                 }
-            
+
 
                 using (Document doc = new Document())
                 {
 
                     Body body = new Body(doc);
 
-                    // ********** this code block creates a paragraph into a word document  ********** // 
-                    Paragraph para1 = new Paragraph();
-                    para1.Style = "Heading2";
-                    para1.Text = "The Compare operation is particularly useful. For example, if I took my test Word document and saved it before setting the paragraph setting to and then set the setting to and saved another copy, then I could compare the two documents and that one change would be highlighted.";
-                    para1.Indent = "300";
-                    para1.LeftIndent = "250";
-                    para1.RihgtIndent = "350";
-                    para1.FirstLineIndent = "330";
-                    para1.Align = "Left";
-                    para1.LinesSpacing = "552";
-
-                    body.AppendChild(para1);
-
-                    Run run1 = new Run();
-                    run1.Bold = true;
-                    run1.Italic = true;
-                    run1.FontFamily = "Algerian";
-                    run1.FontSize = 40;
-                    run1.Underline = true;
-                    run1.Color = "FF0000";
-                    run1.Text = "Text for the run";
-
-
-                    para1.AppendChild(run1);
-
-                    IEnumerable<Run> runs = para1.GetRuns();
-
-                    //Loop through each run and print its text
-                    foreach (Run runner in runs)
-                    {
-                        Console.WriteLine("Runner Text = " + runner.Text);
-                    }
-
-                    // insert a new line into a document 
-                    body.LineBreak();
-
-
                     // ********** this code block creates a table into a word document  ********** // 
                     Table table = new Table();
 
-                    BorderValues borderValues = new BorderValues();
                     TopBorder topBorder = new TopBorder();
                     topBorder.basicBlackSquares_border(20);
 
@@ -138,6 +100,15 @@ namespace Example
                     tableCell2.Append(para2);
 
                     TableCellProperties tblCellProps2 = new TableCellProperties();
+
+                    VerticalMerge verticalMerge = new VerticalMerge();
+                    verticalMerge.MergeRestart = true;
+                    tblCellProps.Append(verticalMerge);
+
+                    HorizontalMerge horizontalMerge = new HorizontalMerge();
+                    horizontalMerge.MergeRestart = true;
+                    tblCellProps2.Append(horizontalMerge);
+
                     tblCellProps2.Append(new TableCellWidth("1400"));
                     tableCell2.Append(tblCellProps2);
 
@@ -149,8 +120,11 @@ namespace Example
                     para3.AppendChild(run3);
                     tableCell3.Append(para3);
 
+                    HorizontalMerge horizontalMerge1 = new HorizontalMerge();
+                    horizontalMerge1.MergeContinue = true;
                     TableCellProperties tblCellProps3 = new TableCellProperties();
                     tblCellProps3.Append(new TableCellWidth("1400"));
+                    tblCellProps3.Append(horizontalMerge1);
                     tableCell3.Append(tblCellProps3);
 
                     tableRow.Append(tableCell);
@@ -167,6 +141,11 @@ namespace Example
                     _tableCell.Append(_para);
 
                     TableCellProperties tblCellProps1_ = new TableCellProperties();
+
+                    VerticalMerge verticalMerge2 = new VerticalMerge();
+                    verticalMerge2.MergeContinue = true;
+                    tblCellProps1_.Append(verticalMerge2);
+
                     tblCellProps1_.Append(new TableCellWidth("2400"));
                     _tableCell.Append(tblCellProps1_);
 
@@ -207,88 +186,9 @@ namespace Example
                     // ********** end of table creation code block  ********** //
 
 
-
-                    // ********** this code block adds images to an existing Word document ********** // 
-
-                    var imagePath = rootDir + "/img1.png";
-                    var image = new Image(doc, imagePath, 100, 100);
-                    var paragraph = new Paragraph();
-                    var imageRun = new Run();
-                    imageRun.AppendChild(image);
-                    paragraph.AppendChild(imageRun);
-                    body.AppendChild(paragraph);
-
-                    // ********** end of image creation code block  ********** //
-
                     doc.Save(rootDir + "/Docs.docx");
 
                     Console.WriteLine(" Document created successfully ");
-                }
-
-                // ********** this code block reads tables from an existing Word document ********** // 
-                using (Document doc1 = new Document(rootDir + "/Docs2.docx"))
-                {
-                    Body body1 = new Body(doc1);
-                    Console.WriteLine("Total Number of Tables " + body1.getDocumentTables.Count());
-
-                    // find table by text
-                    int tableCount = body1.FindTableByText("Name");
-                    Console.WriteLine("number of tables with this text = " + tableCount);
-
-                    foreach (Table props in body1.getDocumentTables)
-                    {
-                        foreach (string tableHeader in props.ExistingTableHeaders)
-                        {
-                            Console.WriteLine(tableHeader);
-                        }
-                        Console.WriteLine(props.NumberOfRows);
-                        Console.WriteLine(props.NumberOfColumns);
-                        Console.WriteLine(props.NumberOfCells);
-                        Console.WriteLine(props.CellWidth);
-                        Console.WriteLine(props.TableBorder);
-                        Console.WriteLine(props.TablePosition);
-                        Console.WriteLine(" ");
-
-                    }
-                    foreach (FileFormat.Words.Table.TableRow row in body1.FindTableRow(0, 1))
-                    {
-                        Console.WriteLine(row.NumberOfCell);
-                    }
-                    foreach (FileFormat.Words.Table.TableCell cell in body1.FindTableCell(0, 1, 1))
-                    {
-                        Console.WriteLine(cell.Text);
-                        Console.WriteLine(cell.CellWidth);
-                    }
-                    Table tble = new Table();
-                    Console.WriteLine(tble.ChangeTextInCell(rootDir + "/Docs2.docx", 0, 1, 2, "changed"));
-
-                    // ********** this code block reads paragraphs from an existing Word document ********** // 
-                    List<Paragraph> paras = body1.GetParagraphs();
-
-                    Console.WriteLine("The number of Paragraphs " + paras.Count());
-                    foreach (Paragraph p in paras)
-                    {
-                        Console.WriteLine(p.LinesSpacing);
-                        Console.WriteLine(p.Indent);
-                        Console.WriteLine(p.Text);
-                    }
-
-                    // ********** this code block reads images from an existing Word document ********** //
-
-                    List<Stream> imageParts = Image.ExtractImagesFromDocument(doc1);
-                    int imageCount = imageParts.Count;
-                    Console.WriteLine($"Total number of images: {imageCount}");
-                    //// Process the image parts as needed
-                    var i = 1;
-                    foreach (Stream imagePart in imageParts)
-                    {
-                        using (FileStream stream = new FileStream(rootDir + "/" + i + ".jpeg", FileMode.Create))
-                        {
-                            imagePart.CopyTo(stream);
-                        }
-                        i = i + 1;
-                    }
-                    //Console.ReadLine();
                 }
 
             }

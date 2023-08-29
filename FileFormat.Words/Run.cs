@@ -9,17 +9,31 @@ using Underline = DocumentFormat.OpenXml.Wordprocessing.Underline;
 
 namespace FileFormat.Words
 {
+    /// <summary>
+    /// The Run class represents a run of characters in a Word document.
+    /// </summary>
     public class Run
     {
+        /// <value>
+        /// An object of the Parent Run class.
+        /// </value>
         protected internal DocumentFormat.OpenXml.Wordprocessing.Run wordDocumentRun;
         private string RunText;
         private bool IsBold = false;
         private bool IsItalic = false;
 
+        /// <summary>
+        /// Instantiate an object of the Run class.
+        /// </summary>
         public Run()
         {
             this.wordDocumentRun = new DocumentFormat.OpenXml.Wordprocessing.Run();
         }
+
+        /// <summary>
+        /// This property is used to get/set the text of the run.
+        /// </summary>
+        /// <returns>Returns string value.</returns>
         public string Text
         {
             get
@@ -31,6 +45,11 @@ namespace FileFormat.Words
                 this.wordDocumentRun.AppendChild(new Text(value));
             }
         }
+
+        /// <summary>
+        /// This property is used to make the run text Bold.
+        /// </summary>
+        /// <returns>Returns a boolean value.</returns>
         public bool Bold
         {
             get
@@ -54,6 +73,10 @@ namespace FileFormat.Words
             }
         }
 
+        /// <summary>
+        /// This property is used to make the run text Italic.
+        /// </summary>
+        /// <returns>Returns a boolean value.</returns>
         public bool Italic
         {
             get
@@ -77,6 +100,10 @@ namespace FileFormat.Words
             }
         }
 
+        /// <summary>
+        /// This property is used to underline the run text.
+        /// </summary>
+        /// <returns>Returns a boolean value.</returns>
         public bool Underline
         {
             get
@@ -101,6 +128,10 @@ namespace FileFormat.Words
             }
         }
 
+        /// <summary>
+        /// This property is used to get/set the font of the run text.
+        /// </summary>
+        /// <returns>Returns a string value.</returns>
         public string FontFamily
         {
             get
@@ -121,6 +152,10 @@ namespace FileFormat.Words
             }
         }
 
+        /// <summary>
+        /// This property is used to get/set the font size of the run text.
+        /// </summary>
+        /// <returns>Returns an integer value.</returns>
         public int FontSize
         {
             get
@@ -141,6 +176,10 @@ namespace FileFormat.Words
             }
         }
 
+        /// <summary>
+        /// This property is used to get/set the text color.
+        /// </summary>
+        /// <returns>Returns a string value.</returns>
         public string Color
         {
             get
@@ -163,15 +202,14 @@ namespace FileFormat.Words
                 }
             }
         }
+        /// <summary>
+        /// Call this method to append an object of the Image class.
+        /// </summary>
+        /// <param name="image">An object of the Image class.</param>
         public void AppendChild(Image image)
         {
             this.wordDocumentRun.AppendChild(image.Drawing);
         }
-
-        //public void AppendChild(Graphic graphic)
-        //{
-        //    this.wordDocumentRun.AppendChild(graphic);
-        //}
 
     }
 }

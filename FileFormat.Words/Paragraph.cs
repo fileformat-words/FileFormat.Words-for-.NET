@@ -7,17 +7,30 @@ using System.Linq;
 
 namespace FileFormat.Words
 {
+    /// <summary>
+    /// The Paragraph class represents a paragraph of text.
+    /// </summary>
     public class Paragraph
     {
+        /// <value>
+        /// An object of the Parent Paragraph class.
+        /// </value>
         protected internal DocumentFormat.OpenXml.Wordprocessing.Paragraph wordDocumentParagraph;
         private string ParaText;
         private Justification justification;
 
+        /// <summary>
+        /// Initialize an object of the Paragraph class.
+        /// </summary>
         public Paragraph()
         {
             this.wordDocumentParagraph = new DocumentFormat.OpenXml.Wordprocessing.Paragraph();
         }
 
+        /// <summary>
+        /// This property is used to get/set the inner text of the paragraph.
+        /// </summary>
+        /// <returns>Returns string value.</returns>
         public string Text
         {
             get
@@ -31,13 +44,19 @@ namespace FileFormat.Words
             }
         }
 
+        /// <summary>
+        /// This method is used to append a run inside the paragraph.
+        /// </summary>
+        /// <param name="run">An object of the Run class.</param>
         public void AppendChild(Run run)
         {
             this.wordDocumentParagraph.AppendChild(run.wordDocumentRun);
         }
 
-
-
+        /// <summary>
+        /// Invoke this method to get the collection of runs from a Word document.
+        /// </summary>
+        /// <returns>Returns a collection of runs.</returns>
         public IEnumerable<Run> GetRuns()
         {
             var runs = this.wordDocumentParagraph.
@@ -60,7 +79,10 @@ namespace FileFormat.Words
             return lst;
         }
 
-
+        /// <summary>
+        /// This property is used to get/set the style of the paragraph.
+        /// </summary>
+        /// <returns>Returns string value.</returns>
         public string Style
         {
             get
@@ -84,6 +106,11 @@ namespace FileFormat.Words
                 this.wordDocumentParagraph.ParagraphProperties.ParagraphStyleId = new ParagraphStyleId() { Val = value };
             }
         }
+
+        /// <summary>
+        /// This property is used to get/set the style of the paragraph.
+        /// </summary>
+        /// <returns>Returns string value.</returns>
         public string LinesSpacing
         {
             get
@@ -106,6 +133,10 @@ namespace FileFormat.Words
             }
         }
 
+        /// <summary>
+        /// This property is used to get/set the position of the paragraph.
+        /// </summary>
+        /// <returns>Returns string value.</returns>
         public string Align
         {
             get
@@ -147,6 +178,11 @@ namespace FileFormat.Words
 
             }
         }
+
+        /// <summary>
+        /// This property is used to get/set the indentation of the paragraph.
+        /// </summary>
+        /// <returns>Returns string value.</returns>
         public string Indent
         {
             get
@@ -167,6 +203,11 @@ namespace FileFormat.Words
                 this.wordDocumentParagraph.ParagraphProperties.Append(indent);
             }
         }
+
+        /// <summary>
+        /// This property is used to get/set the indentation of the first line of the paragraph.
+        /// </summary>
+        /// <returns>Returns string value.</returns>
         public string FirstLineIndent
         {
             get
@@ -187,6 +228,11 @@ namespace FileFormat.Words
                 this.wordDocumentParagraph.ParagraphProperties.Append(indent);
             }
         }
+
+        /// <summary>
+        /// This property is used to get/set the left indentation of the paragraph.
+        /// </summary>
+        /// <returns>Returns string value.</returns> 
         public string LeftIndent
         {
             get
@@ -207,6 +253,11 @@ namespace FileFormat.Words
                 this.wordDocumentParagraph.ParagraphProperties.Append(indent);
             }
         }
+
+        /// <summary>
+        /// This property is used to get/set the right indentation of the paragraph.
+        /// </summary>
+        /// <returns>Returns string value.</returns> 
         public string RihgtIndent
         {
             get
@@ -228,6 +279,10 @@ namespace FileFormat.Words
             }
         }
 
+        /// <summary>
+        /// This property is used to check if the paragraph  is a Heahing
+        /// </summary>
+        /// <returns>Returns a boolean value.</returns> 
         public bool IsHeading
         {
             get

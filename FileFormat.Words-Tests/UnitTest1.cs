@@ -22,8 +22,8 @@ namespace FileFormat_Tests
     public class TestDocumentClass
     {
 
-        private static string testDir = "/Users/fahadadeelqazi/github/Aspose/FileFormat.Words-for-.NET/TestDocs/";
-        private static string processedDir = "/Users/fahadadeelqazi/github/Aspose/FileFormat.Words-for-.NET/TestDocs/ProcessedDocs/";
+        private static string testDir = "/Users/Mustafa/Projects/FileFormat.Words/TestDocs/";
+        private static string processedDir = "/Users/Mustafa/Projects/FileFormat.Words/TestDocs/ProcessedDocs/";
         private static string testDoc = "UbuntuSoftwareCenter";
         /// <summary>
         /// Test #1 Create empty WordprocessingML document and save to disk
@@ -95,8 +95,8 @@ namespace FileFormat_Tests
     [TestClass]
     public class ParagraphTests
     {
-        private static string testDir = "/Users/fahadadeelqazi/github/Aspose/FileFormat.Words-for-.NET/TestDocs/";
-        private static string processedDir = "/Users/fahadadeelqazi/github/Aspose/FileFormat.Words-for-.NET/TestDocs/ProcessedDocs/";
+        private static string testDir = "/Users/Mustafa/Projects/FileFormat.Words/TestDocs/";
+        private static string processedDir = "/Users/Mustafa/Projects/FileFormat.Words/TestDocs/ProcessedDocs/";
         private static string testDoc = "UbuntuSoftwareCenter";
 
         [TestMethod]
@@ -253,8 +253,8 @@ namespace FileFormat_Tests
     public class RunTests
     {
 
-        private static string testDir = "/Users/fahadadeelqazi/github/Aspose/FileFormat.Words-for-.NET/TestDocs/";
-        private static string processedDir = "/Users/fahadadeelqazi/github/Aspose/FileFormat.Words-for-.NET/TestDocs/ProcessedDocs/";
+        private static string testDir = "/Users/Mustafa/Projects/FileFormat.Words/TestDocs/";
+        private static string processedDir = "/Users/Mustafa/Projects/FileFormat.Words/TestDocs/ProcessedDocs/";
         private static string testDoc = "UbuntuSoftwareCenter";
         [TestMethod]
         public void TestRunText()
@@ -323,18 +323,16 @@ namespace FileFormat_Tests
     [TestClass]
     public class TestsTableClass
     {
-        private const string TestFile = "/Users/fahadadeelqazi/github/Aspose/FileFormat.Words-for-.NET/TestDocs/table.docx";
+        private const string TestFile = "/Users/Mustafa/Projects/FileFormat.Words/TestDocs/Docs.docx";
 
         [TestMethod]
         public void TestCreateTable()
         {
             var doc = new Document();
-            var body = new Body(doc);
-            Table table = new Table();
-            TableRow tableRow = new TableRow();
-            TableRow tableRow2 = new TableRow();
+            Body body = new Body(doc);
 
-            TableProperties tableProperties = new TableProperties();
+            // ********** this code block creates a table into a word document  ********** // 
+            Table table = new Table();
 
             TopBorder topBorder = new TopBorder();
             topBorder.basicBlackSquares_border(20);
@@ -355,7 +353,6 @@ namespace FileFormat_Tests
             insideHorizontalBorder.basicBlackSquares_border(20);
 
             TableBorders tableBorders = new TableBorders();
-
             tableBorders.AppendTopBorder(topBorder);
             tableBorders.AppendBottomBorder(bottomBorder);
             tableBorders.AppendRightBorder(rightBorder);
@@ -363,83 +360,155 @@ namespace FileFormat_Tests
             tableBorders.AppendInsideVerticalBorder(insideVerticalBorder);
             tableBorders.AppendInsideHorizontalBorder(insideHorizontalBorder);
 
-            tableProperties.Append(tableBorders);
+            // specify its border style of the table
+            TableProperties tblProp = new TableProperties();
+
+            tblProp.Append(tableBorders);
 
             TableJustification tableJustification = new TableJustification();
-            tableJustification.AlignRight();
-            tableProperties.Append(tableJustification);
-            table.AppendChild(tableProperties);
+            tableJustification.AlignLeft();
+            // set the position of the table to Right.
+            tblProp.Append(tableJustification);
 
+            // create two table rows
+            TableRow tableRow = new TableRow();
+            TableRow tableRow2 = new TableRow();
+
+            // create table cell
             TableCell tableCell = new TableCell();
+            Paragraph para = new Paragraph();
+            Run run = new Run();
 
-            TableCellWidth tableCellWidth = new TableCellWidth("1400");
-            TableCellProperties tableCellProperties = new TableCellProperties();
-            tableCellProperties.Append(tableCellWidth);
-            tableCell.Append(tableCellProperties);
+            // set the header of the first column
+            table.TableHeaders("Name");
+            run.Text = "Mustafa";
+            para.AppendChild(run);
+            tableCell.Append(para);
+
+            // create table properties
+            TableCellProperties tblCellProps = new TableCellProperties();
+
+            // set the width of table cell 
+            tblCellProps.Append(new TableCellWidth("2400"));
+            tableCell.Append(tblCellProps);
 
             TableCell tableCell2 = new TableCell();
-            TableCellWidth tableCellWidth2 = new TableCellWidth("900");
-            TableCellProperties tableCellProperties2 = new TableCellProperties();
-            tableCellProperties2.Append(tableCellWidth2);
-            tableCell2.Append(tableCellProperties2);
-
-            table.TableHeaders("name");
-            table.TableHeaders("age");
-            Paragraph paragraph = new Paragraph();
-            Run run = new Run();
-            run.Text = "abdul";
-            paragraph.AppendChild(run);
-            tableCell.Append(paragraph);
-
-            Paragraph paragraph2 = new Paragraph();
+            Paragraph para2 = new Paragraph();
             Run run2 = new Run();
-            run2.Text = "10";
-            paragraph2.AppendChild(run2);
-            tableCell2.Append(paragraph2);
+
+            // set the header of the second column
+            table.TableHeaders("Nationality");
+            run2.Text = "Pakistani";
+            para2.AppendChild(run2);
+            tableCell2.Append(para2);
+
+            TableCellProperties tblCellProps2 = new TableCellProperties();
+
+            VerticalMerge verticalMerge = new VerticalMerge();
+            verticalMerge.MergeRestart = true;
+            tblCellProps.Append(verticalMerge);
+
+            HorizontalMerge horizontalMerge = new HorizontalMerge();
+            horizontalMerge.MergeRestart = true;
+            tblCellProps2.Append(horizontalMerge);
+
+            tblCellProps2.Append(new TableCellWidth("1400"));
+            tableCell2.Append(tblCellProps2);
 
             TableCell tableCell3 = new TableCell();
-            Paragraph paragraph3 = new Paragraph();
+            Paragraph para3 = new Paragraph();
             Run run3 = new Run();
-            run3.Text = "mustafa";
-            paragraph3.AppendChild(run3);
-            tableCell3.Append(paragraph3);
+            table.TableHeaders("Age");
+            run3.Text = "30";
+            para3.AppendChild(run3);
+            tableCell3.Append(para3);
 
-            TableCell tableCell4 = new TableCell();
-            Paragraph paragraph4 = new Paragraph();
-            Run run4 = new Run();
-            run4.Text = "30";
-            paragraph4.AppendChild(run4);
-            tableCell4.Append(paragraph4);
+            HorizontalMerge horizontalMerge1 = new HorizontalMerge();
+            horizontalMerge1.MergeContinue = true;
+            TableCellProperties tblCellProps3 = new TableCellProperties();
+            tblCellProps3.Append(new TableCellWidth("1400"));
+            tblCellProps3.Append(horizontalMerge1);
+            tableCell3.Append(tblCellProps3);
 
             tableRow.Append(tableCell);
             tableRow.Append(tableCell2);
+            tableRow.Append(tableCell3);
 
-            tableRow2.Append(tableCell3);
-            tableRow2.Append(tableCell4);
+            // create table cell
+            TableCell _tableCell = new TableCell();
+            Paragraph _para = new Paragraph();
+            Run _run = new Run();
+
+            _run.Text = "sultan";
+            _para.AppendChild(_run);
+            _tableCell.Append(_para);
+
+            TableCellProperties tblCellProps1_ = new TableCellProperties();
+
+            VerticalMerge verticalMerge2 = new VerticalMerge();
+            verticalMerge2.MergeContinue = true;
+            tblCellProps1_.Append(verticalMerge2);
+
+            tblCellProps1_.Append(new TableCellWidth("2400"));
+            _tableCell.Append(tblCellProps1_);
+
+
+            TableCell _tableCell2 = new TableCell();
+            Paragraph _para2 = new Paragraph();
+            Run _run2 = new Run();
+
+            _run2.Text = "British";
+            _para2.AppendChild(_run2);
+            _tableCell2.Append(_para2);
+
+            TableCellProperties tblCellProps2_ = new TableCellProperties();
+            tblCellProps2_.Append(new TableCellWidth("1400"));
+            _tableCell2.Append(tblCellProps2_);
+
+            TableCell _tableCell3 = new TableCell();
+            Paragraph _para3 = new Paragraph();
+            Run _run3 = new Run();
+
+            _run3.Text = "2";
+            _para3.AppendChild(_run3);
+            _tableCell3.Append(_para3);
+
+            TableCellProperties tblCellProps3_ = new TableCellProperties();
+            tblCellProps3_.Append(new TableCellWidth("1400"));
+            _tableCell3.Append(tblCellProps3_);
+
+            tableRow2.Append(_tableCell);
+            tableRow2.Append(_tableCell2);
+            tableRow2.Append(_tableCell3);
+
+            table.AppendChild(tblProp);
             table.Append(tableRow);
             table.Append(tableRow2);
+
             body.AppendChild(table);
-            int count = body.FindTableByText("name");
+      
+
+            int count = body.FindTableByText("Name");
             Assert.AreEqual(count, 1);
             foreach (TableRow row in body.FindTableRow(0, 1))
             {
-                Assert.AreEqual(int.Parse(row.NumberOfCell), 2);
+                Assert.AreEqual(int.Parse(row.NumberOfCell), 3);
             }
             foreach (TableCell cell in body.FindTableCell(0, 0, 0))
             {
-                Assert.AreEqual(cell.CellWidth, "1400");
-                Assert.AreEqual(cell.Text, "name");
+                Assert.AreEqual(cell.CellWidth, "2400");
+                Assert.AreEqual(cell.Text, "Name");
             }
 
             Assert.AreEqual(body.getDocumentTables.Count(), 1);
             foreach (FileFormat.Words.Table.Table props in body.getDocumentTables)
             {
                 Assert.AreEqual(int.Parse(props.NumberOfRows), 3);
-                Assert.AreEqual(int.Parse(props.NumberOfColumns), 2);
-                Assert.AreEqual(int.Parse(props.NumberOfCells), 6);
+                Assert.AreEqual(int.Parse(props.NumberOfColumns), 3);
+                Assert.AreEqual(int.Parse(props.NumberOfCells), 9);
                 Assert.AreEqual(props.TableBorder, "basicBlackSquares");
-                Assert.AreEqual(props.CellWidth, "1400");
-                Assert.AreEqual(props.TablePosition, "right");
+                Assert.AreEqual(props.CellWidth, "2400");
+                Assert.AreEqual(props.TablePosition, "left");
 
             }
             Assert.AreEqual(table.ChangeTextInCell(TestFile, 0, 0, 0, "changed"), "Cell updated successfully");
@@ -453,8 +522,8 @@ namespace FileFormat_Tests
     [TestClass]
     public class ImageTests
     {
-        private static string testDir = "/Users/fahadadeelqazi/github/Aspose/FileFormat.Words-for-.NET/TestDocs/";
-        private static string processedDir = "/Users/fahadadeelqazi/github/Aspose/FileFormat.Words-for-.NET/TestDocs/ProcessedDocs/";
+        private static string testDir = "/Users/Mustafa/Projects/FileFormat.Words/TestDocs/";
+        private static string processedDir = "/Users/Mustafa/Projects/FileFormat.Words/TestDocs/ProcessedDocs/";
         private static string testDoc = "UbuntuSoftwareCenter";
         [TestMethod]
         public void TestAddImageToDoc()
