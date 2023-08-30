@@ -835,6 +835,57 @@ references:
   isSpec: "True"
   fullName: FileFormat.Words.Table.BottomBorder.dotted_border
   nameWithType: BottomBorder.dotted_border
+- uid: FileFormat.Words.Table.HorizontalMerge
+  name: HorizontalMerge
+  href: api/FileFormat.Words.Table.HorizontalMerge.html
+  commentId: T:FileFormat.Words.Table.HorizontalMerge
+  fullName: FileFormat.Words.Table.HorizontalMerge
+  nameWithType: HorizontalMerge
+- uid: FileFormat.Words.Table.HorizontalMerge.#ctor
+  name: HorizontalMerge()
+  href: api/FileFormat.Words.Table.HorizontalMerge.html#FileFormat_Words_Table_HorizontalMerge__ctor
+  commentId: M:FileFormat.Words.Table.HorizontalMerge.#ctor
+  fullName: FileFormat.Words.Table.HorizontalMerge.HorizontalMerge()
+  nameWithType: HorizontalMerge.HorizontalMerge()
+- uid: FileFormat.Words.Table.HorizontalMerge.#ctor*
+  name: HorizontalMerge
+  href: api/FileFormat.Words.Table.HorizontalMerge.html#FileFormat_Words_Table_HorizontalMerge__ctor_
+  commentId: Overload:FileFormat.Words.Table.HorizontalMerge.#ctor
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.HorizontalMerge.HorizontalMerge
+  nameWithType: HorizontalMerge.HorizontalMerge
+- uid: FileFormat.Words.Table.HorizontalMerge.horizontalMerge
+  name: horizontalMerge
+  href: api/FileFormat.Words.Table.HorizontalMerge.html#FileFormat_Words_Table_HorizontalMerge_horizontalMerge
+  commentId: F:FileFormat.Words.Table.HorizontalMerge.horizontalMerge
+  fullName: FileFormat.Words.Table.HorizontalMerge.horizontalMerge
+  nameWithType: HorizontalMerge.horizontalMerge
+- uid: FileFormat.Words.Table.HorizontalMerge.MergeContinue
+  name: MergeContinue
+  href: api/FileFormat.Words.Table.HorizontalMerge.html#FileFormat_Words_Table_HorizontalMerge_MergeContinue
+  commentId: P:FileFormat.Words.Table.HorizontalMerge.MergeContinue
+  fullName: FileFormat.Words.Table.HorizontalMerge.MergeContinue
+  nameWithType: HorizontalMerge.MergeContinue
+- uid: FileFormat.Words.Table.HorizontalMerge.MergeContinue*
+  name: MergeContinue
+  href: api/FileFormat.Words.Table.HorizontalMerge.html#FileFormat_Words_Table_HorizontalMerge_MergeContinue_
+  commentId: Overload:FileFormat.Words.Table.HorizontalMerge.MergeContinue
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.HorizontalMerge.MergeContinue
+  nameWithType: HorizontalMerge.MergeContinue
+- uid: FileFormat.Words.Table.HorizontalMerge.MergeRestart
+  name: MergeRestart
+  href: api/FileFormat.Words.Table.HorizontalMerge.html#FileFormat_Words_Table_HorizontalMerge_MergeRestart
+  commentId: P:FileFormat.Words.Table.HorizontalMerge.MergeRestart
+  fullName: FileFormat.Words.Table.HorizontalMerge.MergeRestart
+  nameWithType: HorizontalMerge.MergeRestart
+- uid: FileFormat.Words.Table.HorizontalMerge.MergeRestart*
+  name: MergeRestart
+  href: api/FileFormat.Words.Table.HorizontalMerge.html#FileFormat_Words_Table_HorizontalMerge_MergeRestart_
+  commentId: Overload:FileFormat.Words.Table.HorizontalMerge.MergeRestart
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.HorizontalMerge.MergeRestart
+  nameWithType: HorizontalMerge.MergeRestart
 - uid: FileFormat.Words.Table.InsideHorizontalBorder
   name: InsideHorizontalBorder
   href: api/FileFormat.Words.Table.InsideHorizontalBorder.html
@@ -1515,12 +1566,24 @@ references:
   isSpec: "True"
   fullName: FileFormat.Words.Table.TableCellProperties.TableCellProperties
   nameWithType: TableCellProperties.TableCellProperties
+- uid: FileFormat.Words.Table.TableCellProperties.Append(FileFormat.Words.Table.HorizontalMerge)
+  name: Append(HorizontalMerge)
+  href: api/FileFormat.Words.Table.TableCellProperties.html#FileFormat_Words_Table_TableCellProperties_Append_FileFormat_Words_Table_HorizontalMerge_
+  commentId: M:FileFormat.Words.Table.TableCellProperties.Append(FileFormat.Words.Table.HorizontalMerge)
+  fullName: FileFormat.Words.Table.TableCellProperties.Append(FileFormat.Words.Table.HorizontalMerge)
+  nameWithType: TableCellProperties.Append(HorizontalMerge)
 - uid: FileFormat.Words.Table.TableCellProperties.Append(FileFormat.Words.Table.TableCellWidth)
   name: Append(TableCellWidth)
   href: api/FileFormat.Words.Table.TableCellProperties.html#FileFormat_Words_Table_TableCellProperties_Append_FileFormat_Words_Table_TableCellWidth_
   commentId: M:FileFormat.Words.Table.TableCellProperties.Append(FileFormat.Words.Table.TableCellWidth)
   fullName: FileFormat.Words.Table.TableCellProperties.Append(FileFormat.Words.Table.TableCellWidth)
   nameWithType: TableCellProperties.Append(TableCellWidth)
+- uid: FileFormat.Words.Table.TableCellProperties.Append(FileFormat.Words.Table.VerticalMerge)
+  name: Append(VerticalMerge)
+  href: api/FileFormat.Words.Table.TableCellProperties.html#FileFormat_Words_Table_TableCellProperties_Append_FileFormat_Words_Table_VerticalMerge_
+  commentId: M:FileFormat.Words.Table.TableCellProperties.Append(FileFormat.Words.Table.VerticalMerge)
+  fullName: FileFormat.Words.Table.TableCellProperties.Append(FileFormat.Words.Table.VerticalMerge)
+  nameWithType: TableCellProperties.Append(VerticalMerge)
 - uid: FileFormat.Words.Table.TableCellProperties.Append*
   name: Append
   href: api/FileFormat.Words.Table.TableCellProperties.html#FileFormat_Words_Table_TableCellProperties_Append_
@@ -1801,3 +1864,54 @@ references:
   commentId: F:FileFormat.Words.Table.TopBorder.topBorder
   fullName: FileFormat.Words.Table.TopBorder.topBorder
   nameWithType: TopBorder.topBorder
+- uid: FileFormat.Words.Table.VerticalMerge
+  name: VerticalMerge
+  href: api/FileFormat.Words.Table.VerticalMerge.html
+  commentId: T:FileFormat.Words.Table.VerticalMerge
+  fullName: FileFormat.Words.Table.VerticalMerge
+  nameWithType: VerticalMerge
+- uid: FileFormat.Words.Table.VerticalMerge.#ctor
+  name: VerticalMerge()
+  href: api/FileFormat.Words.Table.VerticalMerge.html#FileFormat_Words_Table_VerticalMerge__ctor
+  commentId: M:FileFormat.Words.Table.VerticalMerge.#ctor
+  fullName: FileFormat.Words.Table.VerticalMerge.VerticalMerge()
+  nameWithType: VerticalMerge.VerticalMerge()
+- uid: FileFormat.Words.Table.VerticalMerge.#ctor*
+  name: VerticalMerge
+  href: api/FileFormat.Words.Table.VerticalMerge.html#FileFormat_Words_Table_VerticalMerge__ctor_
+  commentId: Overload:FileFormat.Words.Table.VerticalMerge.#ctor
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.VerticalMerge.VerticalMerge
+  nameWithType: VerticalMerge.VerticalMerge
+- uid: FileFormat.Words.Table.VerticalMerge.MergeContinue
+  name: MergeContinue
+  href: api/FileFormat.Words.Table.VerticalMerge.html#FileFormat_Words_Table_VerticalMerge_MergeContinue
+  commentId: P:FileFormat.Words.Table.VerticalMerge.MergeContinue
+  fullName: FileFormat.Words.Table.VerticalMerge.MergeContinue
+  nameWithType: VerticalMerge.MergeContinue
+- uid: FileFormat.Words.Table.VerticalMerge.MergeContinue*
+  name: MergeContinue
+  href: api/FileFormat.Words.Table.VerticalMerge.html#FileFormat_Words_Table_VerticalMerge_MergeContinue_
+  commentId: Overload:FileFormat.Words.Table.VerticalMerge.MergeContinue
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.VerticalMerge.MergeContinue
+  nameWithType: VerticalMerge.MergeContinue
+- uid: FileFormat.Words.Table.VerticalMerge.MergeRestart
+  name: MergeRestart
+  href: api/FileFormat.Words.Table.VerticalMerge.html#FileFormat_Words_Table_VerticalMerge_MergeRestart
+  commentId: P:FileFormat.Words.Table.VerticalMerge.MergeRestart
+  fullName: FileFormat.Words.Table.VerticalMerge.MergeRestart
+  nameWithType: VerticalMerge.MergeRestart
+- uid: FileFormat.Words.Table.VerticalMerge.MergeRestart*
+  name: MergeRestart
+  href: api/FileFormat.Words.Table.VerticalMerge.html#FileFormat_Words_Table_VerticalMerge_MergeRestart_
+  commentId: Overload:FileFormat.Words.Table.VerticalMerge.MergeRestart
+  isSpec: "True"
+  fullName: FileFormat.Words.Table.VerticalMerge.MergeRestart
+  nameWithType: VerticalMerge.MergeRestart
+- uid: FileFormat.Words.Table.VerticalMerge.verticalMerge
+  name: verticalMerge
+  href: api/FileFormat.Words.Table.VerticalMerge.html#FileFormat_Words_Table_VerticalMerge_verticalMerge
+  commentId: F:FileFormat.Words.Table.VerticalMerge.verticalMerge
+  fullName: FileFormat.Words.Table.VerticalMerge.verticalMerge
+  nameWithType: VerticalMerge.verticalMerge
