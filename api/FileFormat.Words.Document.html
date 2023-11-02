@@ -1,386 +1,1008 @@
 ﻿<!DOCTYPE html>
-<!--[if IE]><![endif]-->
 <html>
-  
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class Document
-   </title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class Document
-   ">
-    <meta name="generator" content="docfx 2.59.2.0">
-    
-    <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
-    <link rel="stylesheet" href="../styles/docfx.css">
-    <link rel="stylesheet" href="../styles/main.css">
-    <meta property="docfx:navrel" content="../toc.html">
-    <meta property="docfx:tocrel" content="toc.html">
-    
-    
-    
+      <title>Class Document
+ </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class Document
+ ">
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
   </head>
-  <body data-spy="scroll" data-target="#affix" data-offset="120">
-    <div id="wrapper">
-      <header>
-        
-        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              
-              <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.svg" alt="">
-              </a>
+
+  <script type="module" src="./../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
             </div>
-            <div class="collapse navbar-collapse" id="navbar">
-              <form class="navbar-form navbar-right" role="search" id="search">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
-                </div>
-              </form>
-            </div>
-          </div>
-        </nav>
-        
-        <div class="subnav navbar navbar-default">
-          <div class="container hide-when-search" id="breadcrumb">
-            <ul class="breadcrumb">
-              <li></li>
-            </ul>
           </div>
         </div>
-      </header>
-      <div role="main" class="container body-content hide-when-search">
-        
-        <div class="sidenav hide-when-search">
-          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
-          <div class="sidetoggle collapse" id="sidetoggle">
-            <div id="sidetoc"></div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
           </div>
-        </div>
-        <div class="article row grid-right">
-          <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="FileFormat.Words.Document">
-  
-  
-  <h1 id="FileFormat_Words_Document" data-uid="FileFormat.Words.Document" class="text-break">Class Document
-  </h1>
-  <div class="markdown level0 summary"><p>This class represents a Word document.</p>
-</div>
-  <div class="markdown level0 conceptual"></div>
-  <div class="inheritance">
-    <h5>Inheritance</h5>
-    <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">Document</span></div>
-      <div class="level2"><a class="xref" href="FileFormat.Words.Body.html">Body</a></div>
-  </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><span class="xref">System.IDisposable</span></div>
-  </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
-  </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="FileFormat.Words.html">FileFormat.Words</a></h6>
-  <h6><strong>Assembly</strong>: FileFormat.Words.dll</h6>
-  <h5 id="FileFormat_Words_Document_syntax">Syntax</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Document : IDisposable</code></pre>
-  </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  
-  
-  <a id="FileFormat_Words_Document__ctor_" data-uid="FileFormat.Words.Document.#ctor*"></a>
-  <h4 id="FileFormat_Words_Document__ctor" data-uid="FileFormat.Words.Document.#ctor">Document()</h4>
-  <div class="markdown level1 summary"><p>Instantiate a new instance of the Document class.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Document()</code></pre>
-  </div>
-  
-  
-  <a id="FileFormat_Words_Document__ctor_" data-uid="FileFormat.Words.Document.#ctor*"></a>
-  <h4 id="FileFormat_Words_Document__ctor_System_IO_Stream_" data-uid="FileFormat.Words.Document.#ctor(System.IO.Stream)">Document(Stream)</h4>
-  <div class="markdown level1 summary"><p>Create an object of the Document class that opens an existing Word document from a stream.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Document(Stream docStream)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.IO.Stream</span></td>
-        <td><span class="parametername">docStream</span></td>
-        <td><p>An object of the Stream class.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="FileFormat_Words_Document__ctor_" data-uid="FileFormat.Words.Document.#ctor*"></a>
-  <h4 id="FileFormat_Words_Document__ctor_System_String_" data-uid="FileFormat.Words.Document.#ctor(System.String)">Document(String)</h4>
-  <div class="markdown level1 summary"><p>Create an object of the Document class that opens an existing Word document from a file.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Document(string docName)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">docName</span></td>
-        <td><p>String value that represents the document name.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="fields">Fields
-  </h3>
-  
-  
-  <h4 id="FileFormat_Words_Document_wordDocument" data-uid="FileFormat.Words.Document.wordDocument">wordDocument</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected WordprocessingDocument wordDocument</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">DocumentFormat.OpenXml.Packaging.WordprocessingDocument</span></td>
-        <td><p>An object of the Parent Document class.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="properties">Properties
-  </h3>
-  
-  
-  <a id="FileFormat_Words_Document_BuiltinDocumentProperties_" data-uid="FileFormat.Words.Document.BuiltinDocumentProperties*"></a>
-  <h4 id="FileFormat_Words_Document_BuiltinDocumentProperties" data-uid="FileFormat.Words.Document.BuiltinDocumentProperties">BuiltinDocumentProperties</h4>
-  <div class="markdown level1 summary"><p>It returns custom built-in document properties.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public BuiltInDocumentProperties BuiltinDocumentProperties { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="FileFormat.Words.Properties.BuiltInDocumentProperties.html">BuiltInDocumentProperties</a></td>
-        <td><p>An object of document properties.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="methods">Methods
-  </h3>
-  
-  
-  <a id="FileFormat_Words_Document_Dispose_" data-uid="FileFormat.Words.Document.Dispose*"></a>
-  <h4 id="FileFormat_Words_Document_Dispose" data-uid="FileFormat.Words.Document.Dispose">Dispose()</h4>
-  <div class="markdown level1 summary"><p>This method releases unmanaged resources.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
-  </div>
-  
-  
-  <a id="FileFormat_Words_Document_Dispose_" data-uid="FileFormat.Words.Document.Dispose*"></a>
-  <h4 id="FileFormat_Words_Document_Dispose_System_Boolean_" data-uid="FileFormat.Words.Document.Dispose(System.Boolean)">Dispose(Boolean)</h4>
-  <div class="markdown level1 summary"><p>This method releases unmanaged resources.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void Dispose(bool disposing)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Boolean</span></td>
-        <td><span class="parametername">disposing</span></td>
-        <td><p>A boolean value.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="FileFormat_Words_Document_Save_" data-uid="FileFormat.Words.Document.Save*"></a>
-  <h4 id="FileFormat_Words_Document_Save_System_IO_Stream_" data-uid="FileFormat.Words.Document.Save(System.IO.Stream)">Save(Stream)</h4>
-  <div class="markdown level1 summary"><p>Invoke this method to save the document to a stream.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Save(Stream docStream)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.IO.Stream</span></td>
-        <td><span class="parametername">docStream</span></td>
-        <td><p>An object of the Stream class.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="FileFormat_Words_Document_Save_" data-uid="FileFormat.Words.Document.Save*"></a>
-  <h4 id="FileFormat_Words_Document_Save_System_String_" data-uid="FileFormat.Words.Document.Save(System.String)">Save(String)</h4>
-  <div class="markdown level1 summary"><p>Invoke this method to save the document to a file.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Save(string docName)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">docName</span></td>
-        <td><p>string value represents the document name.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <span class="xref">System.IDisposable</span>
-  </div>
-</article>
-          </div>
-          
-          <div class="hidden-sm col-md-2" role="complementary">
-            <div class="sideaffix">
-              <div class="contribution">
-                <ul class="nav">
-                </ul>
-              </div>
-              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-                <h5>In This Article</h5>
-                <div></div>
-              </nav>
-            </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
           </div>
         </div>
       </div>
-      
-      <footer>
-        <div class="grad-bottom"></div>
-        <div class="footer">
-          <div class="container">
-            <span class="pull-right">
-              <a href="#top">Back to top</a>
-            </span>
-            <span></span>
-            
-          </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
         </div>
-      </footer>
+
+        <article data-uid="FileFormat.Words.Document">
+
+
+
+  <h1 id="FileFormat_Words_Document" data-uid="FileFormat.Words.Document" class="text-break">
+    Class Document
+  
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="FileFormat.html">FileFormat</a>.<a class="xref" href="FileFormat.Words.html">Words</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>FileFormat.Words.Final.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Represents a document with structured elements.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class Document</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+      <div><span class="xref">Document</span></div>
+    </dd>
+  </dl>
+
+
+
+  <dl class="typelist derived">
+    <dt>Inherited Members</dt>
+    <dd>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
     </div>
-    
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
-    <script type="text/javascript" src="../styles/docfx.js"></script>
-    <script type="text/javascript" src="../styles/main.js"></script>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+  </dd></dl>
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="FileFormat_Words_Document__ctor_" data-uid="FileFormat.Words.Document.#ctor*"></a>
+
+  <h3 id="FileFormat_Words_Document__ctor" data-uid="FileFormat.Words.Document.#ctor">
+  Document()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="FileFormat.Words.Document.html">Document</a> class.
+This constructor creates a new, empty document.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Document()</code></pre>
+  </div>
+
+
+
+
+
+
+
+
+  <h4 class="section" id="FileFormat_Words_Document__ctor_examples">Examples</h4>
+  <pre><code class="lang-csharp">// Create a new, empty document
+Document Doc = new Document();
+// Initialize a new instance of body the empty document.
+Body body = new Body(doc);
+// Add paragraph wiht run
+Paragraph para = new Paragraph();
+para.AddRun(new FF.Run
+   {
+        Text = "First Run with Times New Roman Blue Color Bold",
+        FontFamily = "Times New Roman",
+        Color = FF.Colors.Blue,
+        Bold = true,
+        FontSize = 12
+    });
+// Append paragraph to the document
+body.AppendChild(para);
+// Save document to file.
+doc.Save("DocumentWithPara.docx");</code></pre>
+
+
+  <h4 class="section" id="FileFormat_Words_Document__ctor_remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>Use this constructor to create a new, blank document that you can populate with content.
+To work with an existing document, consider using the <a class="xref" href="FileFormat.Words.Document.html#FileFormat_Words_Document__ctor_System_String_">Document(string)</a> constructor.</p>
+</div>
+
+
+
+
+  <a id="FileFormat_Words_Document__ctor_" data-uid="FileFormat.Words.Document.#ctor*"></a>
+
+  <h3 id="FileFormat_Words_Document__ctor_System_IO_Stream_" data-uid="FileFormat.Words.Document.#ctor(System.IO.Stream)">
+  Document(Stream)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="FileFormat.Words.Document.html">Document</a> class by loading content from a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.stream">Stream</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Document(Stream stream)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>stream</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.stream">Stream</a></dt>
+    <dd><p>The input stream from which to load the document content.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a></dt>
+    <dd><p>Thrown if an error occurs while loading the document.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="FileFormat_Words_Document__ctor_" data-uid="FileFormat.Words.Document.#ctor*"></a>
+
+  <h3 id="FileFormat_Words_Document__ctor_System_String_" data-uid="FileFormat.Words.Document.#ctor(System.String)">
+  Document(string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="FileFormat.Words.Document.html">Document</a> class by loading content from a file specified by its filename.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Document(string filename)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>filename</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The path to the file from which to load the document content.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a></dt>
+    <dd><p>Thrown if an error occurs while loading the document.</p>
+</dd>
+  </dl>
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="FileFormat_Words_Document_ElementStyles_" data-uid="FileFormat.Words.Document.ElementStyles*"></a>
+
+  <h3 id="FileFormat_Words_Document_ElementStyles" data-uid="FileFormat.Words.Document.ElementStyles">
+  ElementStyles
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the element styles of the document.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ElementStyles ElementStyles { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="FileFormat.Words.IElements.ElementStyles.html">ElementStyles</a></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="FileFormat_Words_Document_GetElements_" data-uid="FileFormat.Words.Document.GetElements*"></a>
+
+  <h3 id="FileFormat_Words_Document_GetElements" data-uid="FileFormat.Words.Document.GetElements">
+  GetElements()
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Retrieves a list of existing elements from the internal data structure.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public List&lt;IElement&gt; GetElements()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.list-1">List</a>&lt;<a class="xref" href="FileFormat.Words.IElements.IElement.html">IElement</a>&gt;</dt>
+    <dd><p>A list of <a class="xref" href="FileFormat.Words.IElements.IElement.html">IElement</a> objects representing the existing elements.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <dl class="typelist seealso">
+    <dt>See Also</dt>
+    <dd>
+    <div><a class="xref" href="FileFormat.Words.IElements.IElement.html">IElement</a></div>
+    </dd>
+  </dl>
+
+
+  <a id="FileFormat_Words_Document_InsertAfter_" data-uid="FileFormat.Words.Document.InsertAfter*"></a>
+
+  <h3 id="FileFormat_Words_Document_InsertAfter_FileFormat_Words_IElements_IElement_FileFormat_Words_IElements_IElement_" data-uid="FileFormat.Words.Document.InsertAfter(FileFormat.Words.IElements.IElement,FileFormat.Words.IElements.IElement)">
+  InsertAfter(IElement, IElement)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Inserts an element after a specified element in the structure.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool InsertAfter(IElement newElement, IElement element)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>newElement</code> <a class="xref" href="FileFormat.Words.IElements.IElement.html">IElement</a></dt>
+    <dd><p>The element to be inserted.</p>
+</dd>
+    <dt><code>element</code> <a class="xref" href="FileFormat.Words.IElements.IElement.html">IElement</a></dt>
+    <dd><p>The element after which the new element should be inserted.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> if the new element is successfully inserted after the specified element; otherwise, <code>false</code>.
+If the specified element is not found, <code>false</code> is returned.
+If an error occurs during the insertion operation, a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> is thrown.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="FileFormat_Words_Document_InsertAfter_FileFormat_Words_IElements_IElement_FileFormat_Words_IElements_IElement__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method inserts the specified element after the provided element in the structure.
+The method attempts to locate the specified element by comparing their unique IDs.
+If the insertion operation is successful, the method returns <code>true&gt;</code>.
+If the specified element is not found, <code>false</code> is returned, and no changes are made to the structure.
+If an exception occurs during the insertion operation, the method attempts to restore the structure to its previous state
+and throws a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> with detailed error information.</p>
+</div>
+
+
+
+
+  <a id="FileFormat_Words_Document_InsertAfter_" data-uid="FileFormat.Words.Document.InsertAfter*"></a>
+
+  <h3 id="FileFormat_Words_Document_InsertAfter_FileFormat_Words_IElements_IElement_System_Int32_" data-uid="FileFormat.Words.Document.InsertAfter(FileFormat.Words.IElements.IElement,System.Int32)">
+  InsertAfter(IElement, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Inserts an element after a specified element in the structure by its unique ID.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool InsertAfter(IElement newElement, int ElementID)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>newElement</code> <a class="xref" href="FileFormat.Words.IElements.IElement.html">IElement</a></dt>
+    <dd><p>The element to be inserted.</p>
+</dd>
+    <dt><code>ElementID</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The unique ID of the element after which the new element should be inserted.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> if the new element is successfully inserted after the specified element; otherwise, <code>false</code>.
+If the specified element is not found, <code>false</code> is returned.
+If an error occurs during the insertion operation, a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> is thrown.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="FileFormat_Words_Document_InsertAfter_FileFormat_Words_IElements_IElement_System_Int32__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method inserts the specified element after the element with the provided unique ID in the structure.
+It is important to ensure that the specified element exists in the structure to determine the insertion point.
+If the insertion operation is successful, the method returns <code>true&gt;</code>.
+If the specified element is not found, <code>false</code> is returned, and no changes are made to the structure.
+If an exception occurs during the insertion operation, the method attempts to restore the structure to its previous state
+and throws a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> with detailed error information.</p>
+</div>
+
+
+
+
+  <a id="FileFormat_Words_Document_InsertBefore_" data-uid="FileFormat.Words.Document.InsertBefore*"></a>
+
+  <h3 id="FileFormat_Words_Document_InsertBefore_FileFormat_Words_IElements_IElement_FileFormat_Words_IElements_IElement_" data-uid="FileFormat.Words.Document.InsertBefore(FileFormat.Words.IElements.IElement,FileFormat.Words.IElements.IElement)">
+  InsertBefore(IElement, IElement)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Inserts an element before the specified reference element.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool InsertBefore(IElement newElement, IElement element)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>newElement</code> <a class="xref" href="FileFormat.Words.IElements.IElement.html">IElement</a></dt>
+    <dd><p>The element to be inserted.</p>
+</dd>
+    <dt><code>element</code> <a class="xref" href="FileFormat.Words.IElements.IElement.html">IElement</a></dt>
+    <dd><p>The reference element before which the new element should be inserted.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> if the new element is successfully inserted before the reference element; otherwise, <code>false</code>.
+If the reference element is not found in the structure, <code>false</code> is returned.
+If an error occurs during the insertion operation, a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> is thrown.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="FileFormat_Words_Document_InsertBefore_FileFormat_Words_IElements_IElement_FileFormat_Words_IElements_IElement__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method inserts the specified element before the provided reference element in the structure.
+The method attempts to locate the reference element and insert the new element before it.
+If the insertion operation is successful, the method returns <code>true&gt;</code>.
+If the reference element is not found, <code>false</code> is returned, and no changes are made to the structure.
+If an exception occurs during the insertion operation, the method attempts to restore the structure to its previous state
+and throws a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> with detailed error information.</p>
+</div>
+
+
+
+
+  <a id="FileFormat_Words_Document_InsertBefore_" data-uid="FileFormat.Words.Document.InsertBefore*"></a>
+
+  <h3 id="FileFormat_Words_Document_InsertBefore_FileFormat_Words_IElements_IElement_System_Int32_" data-uid="FileFormat.Words.Document.InsertBefore(FileFormat.Words.IElements.IElement,System.Int32)">
+  InsertBefore(IElement, int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Inserts an element before the element with the specified unique ID.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool InsertBefore(IElement newElement, int ElementID)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>newElement</code> <a class="xref" href="FileFormat.Words.IElements.IElement.html">IElement</a></dt>
+    <dd><p>The element to be inserted.</p>
+</dd>
+    <dt><code>ElementID</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The unique ID of the element before which the new element should be inserted.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> if the new element is successfully inserted before the specified element; otherwise, <code>false</code>.
+If the specified element with the provided ID is not found, <code>false</code> is returned.
+If an error occurs during the insertion operation, a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> is thrown.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="FileFormat_Words_Document_InsertBefore_FileFormat_Words_IElements_IElement_System_Int32__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method inserts the specified element before the element with the provided unique ID in the structure.
+The method attempts to locate the element with the specified ID and insert the new element before it.
+If the insertion operation is successful, the method returns <code>true&gt;</code>.
+If the element with the specified ID is not found, <code>false</code> is returned, and no changes are made to the structure.
+If an exception occurs during the insertion operation, the method attempts to restore the structure to its previous state
+and throws a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> with detailed error information.</p>
+</div>
+
+
+
+
+  <a id="FileFormat_Words_Document_Remove_" data-uid="FileFormat.Words.Document.Remove*"></a>
+
+  <h3 id="FileFormat_Words_Document_Remove_System_Int32_" data-uid="FileFormat.Words.Document.Remove(System.Int32)">
+  Remove(int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Removes the specified element with the given ElementID from the document.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Remove(int elementID)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>elementID</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The unique identifier of the element you want to remove.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> if the element is successfully removed; otherwise, <code>false</code> if the element is not found.
+Throws a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> if an exception occurs during the operation.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="FileFormat_Words_Document_Remove_System_Int32__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the specified element is not found in the document, this method returns <code>false</code>.
+If the removal of the element fails due to an exception, it rolls back the operation and reverts the document to its original state.
+The element is removed from the internal document structure and, if applicable, the underlying OOXML document.</p>
+</div>
+
+
+
+
+  <a id="FileFormat_Words_Document_RemoveAfter_" data-uid="FileFormat.Words.Document.RemoveAfter*"></a>
+
+  <h3 id="FileFormat_Words_Document_RemoveAfter_FileFormat_Words_IElements_IElement_" data-uid="FileFormat.Words.Document.RemoveAfter(FileFormat.Words.IElements.IElement)">
+  RemoveAfter(IElement)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Removes the element that follows a specified element in the structure.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool RemoveAfter(IElement element)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>element</code> <a class="xref" href="FileFormat.Words.IElements.IElement.html">IElement</a></dt>
+    <dd><p>The element whose follower should be removed.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> if the element following the specified element is successfully removed; otherwise, <code>false</code>.
+If the specified element is not found or if there is no element following it, <code>false</code> is returned.
+If an error occurs during the removal operation, a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> is thrown.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="FileFormat_Words_Document_RemoveAfter_FileFormat_Words_IElements_IElement__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method removes the element that comes after the specified element in the structure. It is essential to ensure that the
+specified element exists in the structure and has an element following it.
+If the removal operation is successful, the method returns <code>true</code>.
+If the element is not found or there is no element following it, <code>false</code> is returned, and no changes are made to the structure.
+If an exception occurs during the removal operation, the method attempts to restore the structure to its previous state
+and throws a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> with detailed error information.</p>
+</div>
+
+
+
+
+  <a id="FileFormat_Words_Document_RemoveAfter_" data-uid="FileFormat.Words.Document.RemoveAfter*"></a>
+
+  <h3 id="FileFormat_Words_Document_RemoveAfter_System_Int32_" data-uid="FileFormat.Words.Document.RemoveAfter(System.Int32)">
+  RemoveAfter(int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Removes the element that follows a specified element in the structure by its unique ID.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool RemoveAfter(int ElementID)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>ElementID</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The unique ID of the element whose follower should be removed.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> if the element following the specified element is successfully removed; otherwise, <code>false</code>.
+If the specified element is not found or if there is no element following it, <code>false</code> is returned.
+If an error occurs during the removal operation, a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> is thrown.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="FileFormat_Words_Document_RemoveAfter_System_Int32__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method removes the element that comes after the specified element with the provided unique ID in the structure.
+It is essential to ensure that the specified element exists in the structure and has an element following it.
+If the removal operation is successful, the method returns <code>true</code>.
+If the element is not found or there is no element following it, <code>false</code> is returned, and no changes are made to the structure.
+If an exception occurs during the removal operation, the method attempts to restore the structure to its previous state
+and throws a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> with detailed error information.</p>
+</div>
+
+
+
+
+  <a id="FileFormat_Words_Document_RemoveBefore_" data-uid="FileFormat.Words.Document.RemoveBefore*"></a>
+
+  <h3 id="FileFormat_Words_Document_RemoveBefore_FileFormat_Words_IElements_IElement_" data-uid="FileFormat.Words.Document.RemoveBefore(FileFormat.Words.IElements.IElement)">
+  RemoveBefore(IElement)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Removes the element that precedes the specified element in the document.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool RemoveBefore(IElement element)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>element</code> <a class="xref" href="FileFormat.Words.IElements.IElement.html">IElement</a></dt>
+    <dd><p>The element after which you want to remove the preceding element.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> if the preceding element is successfully removed; otherwise, <code>false</code> if the element is not found.
+Throws a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> if an exception occurs during the operation.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="FileFormat_Words_Document_RemoveBefore_FileFormat_Words_IElements_IElement__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the specified element is not found in the document, this method returns <code>false</code>.
+If the removal of the preceding element fails due to an exception, it rolls back the operation and reverts the document to its original state.
+The preceding element is removed from the internal document structure and, if applicable, the underlying OOXML document.</p>
+</div>
+
+
+
+
+  <a id="FileFormat_Words_Document_RemoveBefore_" data-uid="FileFormat.Words.Document.RemoveBefore*"></a>
+
+  <h3 id="FileFormat_Words_Document_RemoveBefore_System_Int32_" data-uid="FileFormat.Words.Document.RemoveBefore(System.Int32)">
+  RemoveBefore(int)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Removes the element that precedes the specified element with the given ElementID in the document.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool RemoveBefore(int ElementID)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>ElementID</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The unique identifier of the element after which you want to remove the preceding element.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> if the preceding element is successfully removed; otherwise, <code>false</code> if the element is not found.
+Throws a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> if an exception occurs during the operation.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="FileFormat_Words_Document_RemoveBefore_System_Int32__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>If the specified element is not found in the document, this method returns <code>false</code>.
+If the removal of the preceding element fails due to an exception, it rolls back the operation and reverts the document to its original state.
+The preceding element is removed from the internal document structure and, if applicable, the underlying OOXML document.</p>
+</div>
+
+
+
+
+  <a id="FileFormat_Words_Document_Save_" data-uid="FileFormat.Words.Document.Save*"></a>
+
+  <h3 id="FileFormat_Words_Document_Save_System_IO_Stream_" data-uid="FileFormat.Words.Document.Save(System.IO.Stream)">
+  Save(Stream)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Saves the document to the specified <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.stream">Stream</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Save(Stream stream)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>stream</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.stream">Stream</a></dt>
+    <dd><p>The stream to which the document will be saved.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a></dt>
+    <dd><p>Thrown if an error occurs while saving the document.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="FileFormat_Words_Document_Save_" data-uid="FileFormat.Words.Document.Save*"></a>
+
+  <h3 id="FileFormat_Words_Document_Save_System_String_" data-uid="FileFormat.Words.Document.Save(System.String)">
+  Save(string)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Saves the document to a file specified by its filename.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Save(string filename)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>filename</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></dt>
+    <dd><p>The path to the file where the document will be saved.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h4 class="section">Exceptions</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a></dt>
+    <dd><p>Thrown if an error occurs while saving the document.</p>
+</dd>
+  </dl>
+
+
+
+  <a id="FileFormat_Words_Document_Update_" data-uid="FileFormat.Words.Document.Update*"></a>
+
+  <h3 id="FileFormat_Words_Document_Update_FileFormat_Words_IElements_IElement_" data-uid="FileFormat.Words.Document.Update(FileFormat.Words.IElements.IElement)">
+  Update(IElement)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Updates an existing element in the structure.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Update(IElement element)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>element</code> <a class="xref" href="FileFormat.Words.IElements.IElement.html">IElement</a></dt>
+    <dd><p>The updated element to replace the existing one.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> if the element is successfully updated; otherwise, <code>false</code>.
+If the element is not found in the structure, <code>false</code> is returned.
+If an error occurs during the update operation, a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> is thrown.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="FileFormat_Words_Document_Update_FileFormat_Words_IElements_IElement__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method updates an existing element within the structure based on the element's unique identifier.
+It locates the element in the structure and replaces it with the updated element.
+If the update operation is successful, the method returns <code>true&gt;</code>.
+If the element is not found in the structure, <code>false</code> is returned, and no changes are made to the structure.
+If an exception occurs during the update operation, the method attempts to restore the structure to its previous state
+and throws a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> with detailed error information.</p>
+</div>
+
+
+
+
+  <a id="FileFormat_Words_Document_Update_" data-uid="FileFormat.Words.Document.Update*"></a>
+
+  <h3 id="FileFormat_Words_Document_Update_System_Int32_FileFormat_Words_IElements_IElement_" data-uid="FileFormat.Words.Document.Update(System.Int32,FileFormat.Words.IElements.IElement)">
+  Update(int, IElement)
+  
+  </h3>
+
+  <div class="markdown level1 summary"><p>Updates an existing element in the structure.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Update(int elementID, IElement element)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>elementID</code> <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></dt>
+    <dd><p>The unique identifier of the element to be updated.</p>
+</dd>
+    <dt><code>element</code> <a class="xref" href="FileFormat.Words.IElements.IElement.html">IElement</a></dt>
+    <dd><p>The updated element to replace the existing one.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></dt>
+    <dd><p><code>true</code> if the element is successfully updated; otherwise, <code>false</code>.
+If the element with the specified ID is not found in the structure, <code>false</code> is returned.
+If the elements' IDs do not match, a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> is thrown.
+If an error occurs during the update operation, a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> is thrown.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+  <h4 class="section" id="FileFormat_Words_Document_Update_System_Int32_FileFormat_Words_IElements_IElement__remarks">Remarks</h4>
+  <div class="markdown level1 remarks"><p>This method updates an existing element within the structure based on the provided element's unique identifier.
+It verifies that the element to be updated has the same ID as the specified element ID.
+If the IDs match, the method attempts to locate the element in the structure and replace it with the updated element.
+If the update operation is successful, the method returns <code>true&gt;</code>.
+If the element with the specified ID is not found, <code>false</code> is returned, and no changes are made to the structure.
+If the provided element's ID does not match the specified element ID, a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> is thrown.
+If an exception occurs during the update operation, the method attempts to restore the structure to its previous state
+and throws a <a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a> with detailed error information.</p>
+</div>
+
+
+
+
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+
+    <footer class="border-top">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>
