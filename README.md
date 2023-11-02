@@ -34,12 +34,9 @@ the existing documents programmatically. This .NET library is user friendly and 
 
 This Open-Source .NET library offers the following features:
 
- - <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/">FileFormat.Words</a> offers empty Word document creation as well as with the content. Developers can
-   open existing Word document from a file & stream.
- - This Open-Source API lets you add <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/api/FileFormat.Words.Paragraph.html">Paragraphs</a> to the document. Developers can make the text Bold, Italic, and can set the various props such as alignment, style and more.
- - Developers can add <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/api/FileFormat.Words.Table.Table.html">Tables</a> using this Open-Source .NET API. There are many features offered by the <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/api/FileFormat.Words.Table.html">Table namespace</a> such as creating tables, setting table border style, and setting table width.
-   In addition, developers can read tables along with all the props(i.e. rows, columns and more) from an existing Word document, and can add/update/remove rows and cells. Further, it lets you edit text inside table cells & more.
- - The <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/api/FileFormat.Words.Image.html">Image</a> class lets you add images with custom props into a Word document. 
+ - Create a word document from scratch.
+ - Load an existing word document.
+ - Perform insert, update, remove and append operations.
 
 ## Getting Started With FileFormat.Words For .NET
 
