@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>API System Architecture and Design Patterns </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="API System Architecture and Design Patterns ">
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+  </head>
+
+  <script type="module" src="./../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="api-system-architecture-and-design-patterns">API System Architecture and Design Patterns</h1>
+
+<h2 id="introduction">Introduction</h2>
+<p>FileFormat.Words is a C# Word Document API. The system architecture offers a robust and flexible framework for creating, loading, and manipulating Word documents using C# code. This architecture relies on a set of design patterns that enable efficient document processing while ensuring a user-friendly experience. In this article, we will explore the design patterns used in this architecture and how they contribute to the system's overall effectiveness.</p>
+<h3 id="facade-pattern">Facade Pattern</h3>
+<p>At the heart of the Word Document C# API architecture is the <code>FileFormat.Words.Document</code> class. This class acts as a facade, providing a unified and straightforward interface for users to interact with Word documents. It encapsulates the complexities of working with internal classes, making document creation and modification accessible to developers. This design pattern simplifies the user experience and shields them from the intricacies of the underlying implementation.</p>
+<h3 id="custom-objects-pattern">Custom Objects Pattern</h3>
+<p>The architecture employs custom objects, collectively known as <code>FileFormat.Words.IElements</code>, to represent the various components of a Word document, such as paragraphs, images, and tables. These custom elements mirror the document's structure and serve as a data structure for data transfer to and from OpenXML objects. This pattern enhances user-friendliness, as it provides a higher-level interface for users to interact with the content of Word documents. It abstracts away the complexities of dealing with raw OpenXML, making it easier to work with document content.</p>
+<h3 id="bridge-pattern">Bridge Pattern</h3>
+<p>The internal <code>OpenXML.Words.Document</code> class plays a crucial role in bridging the gap between the custom document elements in <code>FileFormat.Words</code> and the OpenXML-based Word document. It serves as the bridge by providing operations for loading existing Word documents into OpenXML and creating new documents from scratch. This design pattern decouples the custom elements from the low-level OpenXML representation, enabling seamless synchronization between the two. It simplifies the process of document creation and modification by acting as an intermediary.</p>
+<h3 id="static-class-pattern-for-existing-document">Static Class Pattern (For Existing Document)</h3>
+<p>The <code>OpenXML.Words.Data.OOXMLDocData</code> class, marked as internal and static, leverages static methods to perform operations like inserting, updating, and removing elements within an existing OpenXML-based Word document. This design pattern is particularly useful when dealing with documents that already exist and need modification. It promotes efficiency and reusability of code by eliminating the need to create multiple instances of the class. It receives synchronization instructions from the <code>FileFormat.Words.Document</code> class, ensuring that changes made to custom objects are accurately reflected in the OpenXML document. The static class pattern optimizes resource usage and streamlines document processing for existing documents.</p>
+<h3 id="template-method-pattern-for-new-document">Template Method Pattern (For New Document)</h3>
+<p>The architecture benefits from predefined templates stored in the <code>OpenXML.Templates</code> namespace. These templates, created using OpenXML SDK Productivity Tools, offer essential structures and customization options for document metadata. When creating new Word documents from scratch within the <code>OpenXML.Words.Document</code> class, the template method pattern is applied. It defines the skeleton of the document creation process, allowing developers to customize document properties and metadata as needed. This pattern simplifies the creation of standardized documents and ensures consistency in document structure for new documents.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The Word Document C# API system architecture employs several design patterns to deliver a powerful yet user-friendly experience for developers working with Word documents in C#. The combination of facade, custom objects, bridge, static classes, and template methods simplifies document processing, abstracts complexity, and promotes efficiency. These design patterns are the foundation of an architecture that streamlines the creation, modification, and customization of Word documents, making it a valuable resource for developers in need of document automation and manipulation capabilities.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+
+    <footer class="border-top">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -2,9 +2,9 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Word Document C# API System Outlines </title>
+      <title>C# Word Document API - FileFormat.Words Docs </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Word Document C# API System Outlines ">
+      <meta name="title" content="C# Word Document API - FileFormat.Words Docs ">
       
       <link rel="icon" href="favicon.ico">
       <link rel="stylesheet" href="public/docfx.min.css">
@@ -79,53 +79,14 @@
         </div>
 
         <article data-uid="">
-<h3 id="word-document-c-api-system-outlines">Word Document C# API System Outlines</h3>
+<h1 id="c-word-document-api---fileformatwords-docs">C# Word Document API - FileFormat.Words Docs</h1>
 
-<p>The following outlines provide an overview of the internal namespaces and classes, including their complexities. While the internal structure is intricate, the public APIs are designed to be straightforward and user-friendly.</p>
-<p><strong>Please refer to the <a href="api/index.html">API Reference</a> to explore the public interfaces in detail.</strong></p>
-<h4 id="fileformatwords-namespace">FileFormat.Words Namespace</h4>
-<ul>
-<li><strong>Document Class</strong>
-<ul>
-<li>Provides the primary interface for users to create, load, and modify Word documents.</li>
-<li>Acts as a facade for interaction with internal classes in the OpenXML.Words, OpenXML.Words.Data, and OpenXML.Templates namespaces.</li>
-</ul>
-</li>
-</ul>
-<h4 id="fileformatwordsielements-custom-objects">FileFormat.Words.IElements (Custom Objects)</h4>
-<ul>
-<li>Custom elements, including Paragraphs, Images, Tables, etc., that mirror the structure of a Word document.</li>
-<li>Serve as a data structure for transferring data to and from OpenXML objects.</li>
-<li>Provides a user-friendly interface to API users for interacting with Word document content.</li>
-</ul>
-<h4 id="openxmlwords-namespace">OpenXML.Words Namespace</h4>
-<ul>
-<li><strong>Document Class (Internal)</strong>
-<ul>
-<li>Provides operations for loading an existing Word document into OpenXML and creating a new Word document from scratch.</li>
-<li>Serves as a bridge between the custom document elements in FileFormat.Words and the OpenXML-based Word document.</li>
-<li>Sets the WordProcessing package for OpenXML.Words.Data.OOXMLDocData to enable synchronization.</li>
-<li>Utilizes templates from the OpenXML.Templates namespace when creating new documents.</li>
-</ul>
-</li>
-</ul>
-<h4 id="openxmlwordsdata-namespace">OpenXML.Words.Data Namespace</h4>
-<ul>
-<li><strong>OOXMLDocData Class (Internal, Static)</strong>
-<ul>
-<li>Performs static operations to insert, update, and remove elements within the OpenXML-based Word document.</li>
-<li>Receives synchronization instructions from the FileFormat.Words.Document class.</li>
-<li>Ensures changes made to custom objects are reflected in the OpenXML document.</li>
-</ul>
-</li>
-</ul>
-<h4 id="openxmltemplates-namespace">OpenXML.Templates Namespace</h4>
-<ul>
-<li>Provides pre-defined templates created using OpenXML SDK Productivity Tools.</li>
-<li>Includes classes for core properties and custom properties, offering document metadata and customization capabilities.</li>
-<li>Templates are utilized when creating new Word documents from scratch within the OpenXML.Words.Document class.</li>
-</ul>
-<p>This extended architecture encompasses the use of templates and properties from the OpenXML.Templates namespace, enriching the document creation process by providing pre-defined structures and metadata customization options for newly created documents. The FileFormat.Words.Document class remains the central interface for users, orchestrating interactions with various internal components from multiple namespaces.</p>
+<h2 id="api-reference">API Reference</h2>
+<p>FileFormat.Words is an Open Source Word Document C# API to simplify the creation, loading, and manipulation of Word documents, making it an invaluable tool for document automation and customization.</p>
+<p>Please refer to the <a href="api/index.html">API Reference</a> to explore the public interfaces in detail.</p>
+<h2 id="articles">Articles</h2>
+<p>The system architecture relies on a set of <a href="articles/Design.html">design patterns</a> that enable efficient document processing while ensuring a user-friendly experience. In this section, we will explore the system architecture and usage of API details in different scenarios.</p>
+<p>Please refer to the <a href="articles/intro.html">Articles</a> to explore further.</p>
 
 </article>
 

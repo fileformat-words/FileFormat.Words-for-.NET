@@ -1,7 +1,17 @@
 {
-  "source_base_path": "/Users/muhammadsabir/Projects/docfx_project",
+  "source_base_path": "/Users/muhammadsabir/Projects/docfx_project/23.10.0/docfx_project",
   "xrefmap": "xrefmap.yml",
   "files": [
+    {
+      "type": "Conceptual",
+      "source_relative_path": "README.md",
+      "output": {
+        ".html": {
+          "relative_path": "README.html"
+        }
+      },
+      "version": ""
+    },
     {
       "type": "ManagedReference",
       "source_relative_path": "api/FileFormat.Words.Body.yml",
@@ -203,36 +213,9 @@
       "version": ""
     },
     {
-      "type": "ManagedReference",
-      "source_relative_path": "api/OpenXML.Templates.CoreProperties.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/OpenXML.Templates.CoreProperties.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/OpenXML.Templates.CustomProperties.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/OpenXML.Templates.CustomProperties.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/OpenXML.Templates.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/OpenXML.Templates.html"
-        }
-      },
-      "version": ""
-    },
-    {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
       "type": "Conceptual",
       "source_relative_path": "api/index.md",
       "output": {
@@ -251,6 +234,16 @@
         },
         ".json": {
           "relative_path": "api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/Design.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/Design.html"
         }
       },
       "version": ""
