@@ -10,7 +10,9 @@ For a more detailed understanding of our system architecture, design patterns, a
 - The primary interface for creating, loading, and modifying Word documents.
 - Serves as a facade for interacting with internal classes in the OpenXML.Words, OpenXML.Words.Data, and OpenXML.Templates namespaces.
 
-### FileFormat.Words.IElements (Custom Objects)
+## FileFormat.Words.IElements Namespace
+
+### FileFormat.Words.IElement (Common Interface for all custom elements)
 - Custom elements, such as Paragraphs, Images, and Tables, that mimic Word document structure.
 - Act as a data structure for seamless data transfer to and from OpenXML objects.
 - Offers a user-friendly interface for interacting with Word document content.
