@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Complexities of OpenXML SDK </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Complexities of OpenXML SDK ">
+      
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      
+      
+      
+      
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+  </head>
+
+  <script type="module" src="./../public/docfx.min.js"></script>
+
+  <script>
+    const theme = localStorage.getItem('theme') || 'auto'
+    document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+  </script>
+
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" style="margin-top: -.65em; margin-left: -.8em" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="complexities-of-openxml-sdk">Complexities of OpenXML SDK</h1>
+
+<p>The OpenXML SDK (Software Development Kit) is a powerful tool for working with Microsoft Office files, particularly for manipulating Word documents in a programmatic way. It allows developers to create, modify, and analyze documents in the Open XML format used by Microsoft Word. While the SDK offers a wide range of capabilities, it comes with certain complexities that developers must be aware of to ensure their documents are correctly structured and behave as expected. In this article, we will explore some of the intricacies and challenges associated with using the OpenXML SDK, and how to overcome them.</p>
+<h2 id="1-font-order-matters">1. Font Order Matters</h2>
+<p>One of the subtleties of working with fonts in OpenXML is the order in which font properties are appended to the run properties. If you append the font to the run properties before any other font property, Microsoft Word may ignore your font settings and use the default font (typically Calibri). To avoid this issue, make sure to set the font properties after other font-related properties have been defined within the run properties.</p>
+<h2 id="2-tablegrid-placement">2. TableGrid Placement</h2>
+<p>Tables are a fundamental part of many Word documents. When using OpenXML to create or modify tables, it's essential to be mindful of the order in which you append the <code>TableGrid</code> to the <code>TableProperties</code>. If you place the <code>TableGrid</code> before any other table properties, the grid may not be recognized. To address this, ensure that you define the <code>TableGrid</code> before appending other table properties.</p>
+<h2 id="3-table-properties-placement">3. Table Properties Placement</h2>
+<p>The placement of table properties can significantly impact how Word interprets your document. If you append the <code>TableProperties</code> after adding the table, row properties, or cell properties, Microsoft Word might ignore these XML elements. To avoid this issue, make sure to define the <code>TableProperties</code> before other related elements, such as rows and cells.</p>
+<h2 id="4-sequence-matters">4. Sequence Matters</h2>
+<p>The OpenXML SDK is a collection of various XML elements that can be used to create Word documents. One of the most significant complexities is that the SDK does not validate the structure. It allows users to append elements in any sequence they choose. However, this flexibility can lead to issues. For example, appending a child via the OpenXML SDK may place it at the end after the section, potentially resulting in a corrupted document.</p>
+<h2 id="overcoming-the-challenges">Overcoming the Challenges</h2>
+<p>To work effectively with the OpenXML SDK, developers need to understand the valid sequences that Microsoft Word can recognize and understand. Failing to follow these sequences can result in unpredictable document behavior. In some cases, Word may attempt to correct the document based on its default behavior, but in the worst cases, the document may become corrupted.</p>
+<p>One approach to mitigating these complexities is to use a wrapper or library that enforces the correct document structure. Tools like <a href="index.html">FileFormat.Words</a> provide a higher-level API that simplifies the process of working with OpenXML and ensures that documents adhere to the expected structure.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>In summary, the OpenXML SDK is a valuable resource for working with Word documents, especially for complex tasks. It can load intricate Word documents correctly. However, when creating new documents or updating existing ones, developers must be mindful of the valid append sequences to achieve the desired results. Using a wrapper library like <a href="index.html">FileFormat.Words</a> or understanding Word's expectations for document structure can help streamline the development process and avoid potential pitfalls. With the right knowledge and tools, the OpenXML SDK can be a powerful ally in creating and manipulating Word documents programmatically.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+
+    <footer class="border-top">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>Made with <a href="https://dotnet.github.io/docfx">docfx</a></span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

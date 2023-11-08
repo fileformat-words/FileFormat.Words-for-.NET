@@ -240,20 +240,40 @@
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "articles/Design.md",
+      "source_relative_path": "articles/complexities.md",
       "output": {
         ".html": {
-          "relative_path": "articles/Design.html"
+          "relative_path": "articles/complexities.html"
         }
       },
       "version": ""
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "articles/intro.md",
+      "source_relative_path": "articles/design.md",
       "output": {
         ".html": {
-          "relative_path": "articles/intro.html"
+          "relative_path": "articles/design.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/introopenxmlsdk.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/introopenxmlsdk.html"
         }
       },
       "version": ""
