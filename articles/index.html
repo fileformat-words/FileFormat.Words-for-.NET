@@ -81,10 +81,41 @@
         <article data-uid="">
 <h1 id="understanding-c-word-api---fileformatwords-for-net">Understanding C# Word API - FileFormat.Words for .NET</h1>
 
-<p>FileFormat.Words for .NET is a an Open Source API that empowers developers to work with Word documents in their .NET applications. With a user-friendly API, it simplifies the creation, loading, and manipulation of Word documents, making it an invaluable tool for document automation and customization.</p>
+<h2 id="overview">Overview</h2>
+<p>FileFormat.Words for .NET is a an <a href="https://github.com/fileformat-words/FileFormat.Words-for-.NET">Open Source API</a> that empowers developers to work with Word documents in their .NET applications. With a user-friendly API, it simplifies the creation, loading, and manipulation of Word documents, making it an invaluable tool for document automation and customization.</p>
 <p>Whether you need to generate reports, automate document generation, extract data from Word documents, or perform advanced formatting tasks, FileFormat.Words provides the tools and capabilities you require. It abstracts the complexities of working with Word documents, allowing developers to focus on their application logic rather than the intricacies of document processing.</p>
+<h2 id="system-requirements">System Requirements</h2>
+<p>To use this software, ensure your system meets the following requirements:</p>
+<ul>
+<li><strong>.NET Core 3.1 and above:</strong> The application is built on the .NET Core framework, specifically targeting version 3.1 and newer. At minimum, ensure you have .NET Core installed on your machine before proceeding.
+<ul>
+<li><strong>Installation Instructions for .NET Core 3.1:</strong> For detailed instructions on installing .NET Core 3.1, visit <a href="https://dotnet.microsoft.com/en-us/download/dotnet/3.1">Microsoft's .NET Download page</a>.</li>
+<li><strong>Compatibility Note:</strong> API is compatible with later .NET Framework versions starting .NET Core 3.1.</li>
+</ul>
+</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<p>FileFormat.Words is available as NuGet Package and can be installed in one of the below ways. Choose the installation method that best fits your workflow and project requirements.</p>
+<h3 id="install-via-nuget-console">Install via Nuget Console</h3>
+<p>To install <code>FileFormat.Words</code> to the current directory using the Nuget Console, ensure you have the Nuget CLI installed. Execute the following command:</p>
+<pre><code class="lang-bash">nuget install FileFormat.Words ./OutputDir
+</code></pre>
+<h3 id="install-via-package-manager">Install via Package Manager</h3>
+<ul>
+<li>Open the Package Manager Console in Visual Studio (<strong>Tools</strong> &gt; <strong>NuGet Package Manager</strong> &gt; <strong>Package Manager Console</strong>).</li>
+<li>Run the following command to install <code>FileFormat.Words</code>:</li>
+</ul>
+<pre><code class="lang-bash">Install-Package FileFormat.Words
+</code></pre>
+<h3 id="install-from-within-visual-studio">Install from within Visual Studio</h3>
+<ul>
+<li>Open Visual Studio.</li>
+<li>Go to <strong>Tools</strong> &gt; <strong>NuGet Package Manager</strong> &gt; <strong>Manage NuGet Packages</strong> for Solution.</li>
+<li>In the <strong>Browse</strong> tab, search for FileFormat.Words.</li>
+<li>Select the desired version and click &quot;Install&quot; to add it to your project.</li>
+</ul>
+<h2 id="topics">Topics</h2>
 <p>In this section, we'll explore the key features and capabilities of FileFormat.Words for .NET, and how it can enhance your document-related tasks in your .NET projects.</p>
-<h2 id="topics-in-this-section">Topics in this section:</h2>
 <ul>
 <li><a href="design.html">FileFormat.Words Design Patterns</a></li>
 </ul>

@@ -82,19 +82,90 @@
 <h1 id="complexities-of-openxml-sdk">Complexities of OpenXML SDK</h1>
 
 <p>The OpenXML SDK (Software Development Kit) is a powerful tool for working with Microsoft Office files, particularly for manipulating Word documents in a programmatic way. It allows developers to create, modify, and analyze documents in the Open XML format used by Microsoft Word. While the SDK offers a wide range of capabilities, it comes with certain complexities that developers must be aware of to ensure their documents are correctly structured and behave as expected. In this article, we will explore some of the intricacies and challenges associated with using the OpenXML SDK, and how to overcome them.</p>
-<h2 id="1-font-order-matters">1. Font Order Matters</h2>
-<p>One of the subtleties of working with fonts in OpenXML is the order in which font properties are appended to the run properties. If you append the font to the run properties before any other font property, Microsoft Word may ignore your font settings and use the default font (typically Calibri). To avoid this issue, make sure to set the font properties after other font-related properties have been defined within the run properties.</p>
-<h2 id="2-tablegrid-placement">2. TableGrid Placement</h2>
-<p>Tables are a fundamental part of many Word documents. When using OpenXML to create or modify tables, it's essential to be mindful of the order in which you append the <code>TableGrid</code> to the <code>TableProperties</code>. If you place the <code>TableGrid</code> before any other table properties, the grid may not be recognized. To address this, ensure that you define the <code>TableGrid</code> before appending other table properties.</p>
-<h2 id="3-table-properties-placement">3. Table Properties Placement</h2>
-<p>The placement of table properties can significantly impact how Word interprets your document. If you append the <code>TableProperties</code> after adding the table, row properties, or cell properties, Microsoft Word might ignore these XML elements. To avoid this issue, make sure to define the <code>TableProperties</code> before other related elements, such as rows and cells.</p>
-<h2 id="4-sequence-matters">4. Sequence Matters</h2>
-<p>The OpenXML SDK is a collection of various XML elements that can be used to create Word documents. One of the most significant complexities is that the SDK does not validate the structure. It allows users to append elements in any sequence they choose. However, this flexibility can lead to issues. For example, appending a child via the OpenXML SDK may place it at the end after the section, potentially resulting in a corrupted document.</p>
+<h2 id="sequence-matters">Sequence Matters</h2>
+<p>The OpenXML SDK is a collection of various XML elements that can be used to create Word documents. One of the most significant complexities is that the SDK does not validate the structure. It allows users to append elements in any sequence they choose. However, this flexibility can lead to issues. For example, appending a child to the <code>Body</code> via OpenXML SDK may place it at the end after the section (represented as <code>SectionProperties</code> in OpenXML SDK), potentialy resulting in a corrupted document.</p>
+<h3 id="example-wrong-element-append">Example: Wrong Element Append</h3>
+<pre><code class="lang-csharp">// Wrong Append to Body
+Paragraph paragraph = new Paragraph();
+ParagraphProperties paragraphProperties = new ParagraphProperties();
+paragraph.Append(paragraphProperties);
+
+Body body = mainDocumentPart.Document.Body;
+body.AppendChild(paragraph);
+</code></pre>
+<h3 id="example-correct-element-append">Example: Correct Element Append</h3>
+<pre><code class="lang-csharp">// Correct Append to Body
+Paragraph paragraph = new Paragraph();
+ParagraphProperties paragraphProperties = new ParagraphProperties();
+paragraph.Append(paragraphProperties);
+
+Body body = mainDocumentPart.Document.Body;
+var sectionPropertiesList = body.Elements&lt;WP.SectionProperties&gt;().ToList();
+if (sectionPropertiesList.Any())
+{
+   var lastSectionProperties = sectionPropertiesList.Last();
+   body.InsertBefore(paragraph, lastSectionProperties);
+}                       
+</code></pre>
+<h2 id="fontfamily-placement">FontFamily Placement</h2>
+<p>In OpenXML, the sequence in which you define <code>FontFamily</code> is crucial. Placing <code>FontFamily</code> in <code>RunProperties</code> before any other XML element is vital. If <code>FontFamily</code> is appended after other font attributes, Microsoft Word might overlook the specified <code>FontFamily</code> and default to its standard font (usually Calibri). To prevent this, ensure 'FontFamily' defined in <code>RunFonts</code> is added to <code>RunProperties</code> before any other font-related XML elements within <code>RunProperties</code>.</p>
+<h3 id="example-wrong-fontfamily-placement">Example: Wrong FontFamily Placement</h3>
+<pre><code class="lang-csharp">// Wrong FontFamily Placement
+var wpRunWrong = new WP.Run();
+var runPropertiesWrong = new WP.RunProperties();
+var colorWrong = new WP.Color { Val = &quot;#0000FF&quot; };
+runPropertiesWrong.Append(colorWrong);
+var runFontWrong = new WP.RunFonts { Ascii = &quot;Arial&quot; };
+runPropertiesWrong.Append(runFontWrong);
+// Add other font properties as needed
+</code></pre>
+<h3 id="example-correct-fontfamily-placement">Example: Correct FontFamily Placement</h3>
+<pre><code class="lang-csharp">// Correct FontFamily Placement
+var wpRunCorrect = new WP.Run();
+var runPropertiesCorrect = new WP.RunProperties();
+var runFontCorrect = new WP.RunFonts { Ascii = &quot;Arial&quot; };
+runPropertiesCorrect.Append(runFontCorrect);
+var colorCorrect = new WP.Color { Val = &quot;#0000FF&quot; };
+runPropertiesCorrect.Append(colorCorrect);
+// Add other font properties as needed
+</code></pre>
+<h2 id="3-tableproperties-placement">3. TableProperties Placement</h2>
+<p>The positioning of table properties is crucial for proper document interpretation in Word. If you append TableProperties after adding the table, row properties, or cell properties, Microsoft Word might overlook these XML elements. To avoid this issue, it is essential to define TableProperties before other related elements, such as rows and cells.</p>
+<h3 id="example-wrong-tableproperties-placement">Example: Wrong TableProperties Placement</h3>
+<pre><code class="lang-csharp">// Wrong Table Properties Placement
+Table tableWrong = new Table();
+TableProperties tablePropertiesWrong = new TableProperties();
+TableRow tableRowWrong = new TableRow();
+TableRowProperties tableRowPropertiesWrong = new TableRowProperties();
+TableCell tableCellWrong = new TableCell();
+TableCellProperties tableCellPropertiesWrong = new TableCellProperties();
+
+tableCellWrong.Append(tableCellPropertiesWrong);
+tableRowWrong.Append(tableRowPropertiesWrong);
+tableRowWrong.Append(tableCellWrong);
+tableWrong.Append(tableRowWrong);
+tableWrong.Append(tablePropertiesWrong);
+</code></pre>
+<h3 id="example-correct-tableproperties-placement">Example: Correct TableProperties Placement</h3>
+<pre><code class="lang-csharp">// Correct Table Properties Placement
+Table tableCorrect = new Table();
+TableProperties tablePropertiesCorrect = new TableProperties();
+TableRow tableRowCorrect = new TableRow();
+TableRowProperties tableRowPropertiesCorrect = new TableRowProperties();
+TableCell tableCellCorrect = new TableCell();
+TableCellProperties tableCellPropertiesCorrect = new TableCellProperties();
+
+tableCellCorrect.Append(tableCellPropertiesCorrect);
+tableRowCorrect.Append(tableRowPropertiesCorrect);
+tableRowCorrect.Append(tableCellCorrect);
+tableCorrect.Append(tablePropertiesCorrect);
+tableCorrect.Append(tableRowCorrect);
+</code></pre>
 <h2 id="overcoming-the-challenges">Overcoming the Challenges</h2>
 <p>To work effectively with the OpenXML SDK, developers need to understand the valid sequences that Microsoft Word can recognize and understand. Failing to follow these sequences can result in unpredictable document behavior. In some cases, Word may attempt to correct the document based on its default behavior, but in the worst cases, the document may become corrupted.</p>
 <p>One approach to mitigating these complexities is to use a wrapper or library that enforces the correct document structure. Tools like <a href="index.html">FileFormat.Words</a> provide a higher-level API that simplifies the process of working with OpenXML and ensures that documents adhere to the expected structure.</p>
 <h2 id="conclusion">Conclusion</h2>
-<p>In summary, the OpenXML SDK is a valuable resource for working with Word documents, especially for complex tasks. It can load intricate Word documents correctly. However, when creating new documents or updating existing ones, developers must be mindful of the valid append sequences to achieve the desired results. Using a wrapper library like <a href="index.html">FileFormat.Words</a> or understanding Word's expectations for document structure can help streamline the development process and avoid potential pitfalls. With the right knowledge and tools, the OpenXML SDK can be a powerful ally in creating and manipulating Word documents programmatically.</p>
+<p>In summary, the OpenXML SDK is a valuable resource for working with Word documents, especially for complex tasks. It can load intricate Word documents correctly. However, when creating new documents or updating existing ones, developers must be mindful of the valid append sequences to achieve the desired results. Using <a href="https://www.nuget.org/packages/FileFormat.Words">FileFormat.Words</a> or understanding Word's expectations for document structure can help streamline the development process and avoid potential pitfalls. With the right knowledge and tools, the OpenXML SDK can be a powerful ally in creating and manipulating Word documents programmatically.</p>
 
 </article>
 
