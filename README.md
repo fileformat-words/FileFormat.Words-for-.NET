@@ -12,7 +12,7 @@
 
 ## What does this project do?
 
-FileFormat.Words for .NET is an [open-source API](https://github.com/fileformat-words/FileFormat.Words-for-.NET) designed to streamline the process of working with Microsoft Word documents. The API wraps various open-source engines, including the OpenXML SDK, to provide a unified and user-friendly interface for creating, loading, and modifying Word documents. Whether you're building applications that generate reports, automate document workflows, or enhance document management systems, [Project Name] aims to simplify the integration of MS Word document functionality.
+FileFormat.Words for .NET is an [open-source API](https://github.com/fileformat-words/FileFormat.Words-for-.NET) designed to streamline the process of working with Microsoft Word documents. The API wraps various open-source engines, including the OpenXML SDK, to provide a unified and user-friendly interface for creating, loading, and modifying Word documents. Whether you're building applications that generate reports, automate document workflows, or enhance document management systems, FileFormat.Words for .NET aims to simplify the integration of MS Word document functionality.
 
 ## Why is this project useful?
 
@@ -46,7 +46,7 @@ If you need assistance or have questions, you can reach out in the following way
 
 - **GitHub Issues:** Open a [GitHub issue](https://github.com/fileformat-words/FileFormat.Words-for-.NET/issues) to report bugs, suggest enhancements, or seek help.
 
-- **Community:** Join our community on [https://forum.fileformat.com/c/word-processing/5] to connect with other developers and discuss [Project Name].
+- **Community:** Join [our community](https://forum.fileformat.com/c/word-processing/5) to connect with other developers and discuss FileFormat.Words for .NET.
 
 ## License
 
