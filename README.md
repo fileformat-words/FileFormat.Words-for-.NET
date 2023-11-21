@@ -1,4 +1,4 @@
-# Project Name
+# Project
 
 [FileFormat.Words for .NET](https://github.com/fileformat-words/FileFormat.Words-for-.NET) - A versatile API for creating, loading, and modifying MS Word documents.
 
