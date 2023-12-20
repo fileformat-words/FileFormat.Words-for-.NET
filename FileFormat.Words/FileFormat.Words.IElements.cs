@@ -10,7 +10,7 @@ namespace FileFormat.Words.IElements
         /// <summary>
         /// Gets the unique identifier of the element.
         /// </summary>
-        int ElementID { get; }
+        int ElementId { get; }
     }
 
     /// <summary>
@@ -21,7 +21,7 @@ namespace FileFormat.Words.IElements
         /// <summary>
         /// Gets the unique identifier of the paragraph.
         /// </summary>
-        public int ElementID { get; internal set; }
+        public int ElementId { get; internal set; }
 
         /// <summary>
         /// Gets or sets the text content of the paragraph.
@@ -122,23 +122,23 @@ namespace FileFormat.Words.IElements
     /// </summary>
     public class Run
     {
-        private string text;
-
+        private string _text;
         /// <summary>
         /// Gets or sets the text content of the run.
         /// </summary>
         public string Text
         {
-            get => text;
+            
+            get => _text;
             set
             {
-                text = value;
+                _text = value;
                 if (ParentParagraph != null)
                 {
                     ParentParagraph.UpdateText();
                 }
             }
-        }
+    }
 
         /// <summary>
         /// Gets or sets the font family of the run.
@@ -287,7 +287,7 @@ namespace FileFormat.Words.IElements
         /// <summary>
         /// Gets the unique identifier of the image.
         /// </summary>
-        public int ElementID { get; internal set; }
+        public int ElementId { get; internal set; }
 
         /// <summary>
         /// Gets or sets the binary image data.
@@ -312,7 +312,7 @@ namespace FileFormat.Words.IElements
         /// <summary>
         /// Gets the unique identifier of the table.
         /// </summary>
-        public int ElementID { get; internal set; }
+        public int ElementId { get; internal set; }
 
         /// <summary>
         /// Gets or sets the table style.
@@ -349,18 +349,18 @@ namespace FileFormat.Words.IElements
             Rows = new List<Row>();
             Column = new Column();
 
-            for (int i = 0; i < rows; i++)
+            for (var i = 0; i < rows; i++)
             {
-                Row row = new Row();
+                var row = new Row();
                 row.Cells = new List<Cell>();
 
-                for (int j = 0; j < columns; j++)
+                for (var j = 0; j < columns; j++)
                 {
                     var cellContent = "";
                     var paragraph = new Paragraph();
                     paragraph.AddRun(new Run { Text = cellContent });
 
-                    Cell cell = new Cell { Paragraphs = new List<Paragraph> { paragraph } };
+                    var cell = new Cell { Paragraphs = new List<Paragraph> { paragraph } };
                     row.Cells.Add(cell);
                 }
 
@@ -433,7 +433,7 @@ namespace FileFormat.Words.IElements
         /// <summary>
         /// Gets the unique identifier of the section.
         /// </summary>
-        public int ElementID { get; internal set; }
+        public int ElementId { get; internal set; }
 
         /// <summary>
         /// Gets the page size properties for the section.
@@ -523,7 +523,7 @@ namespace FileFormat.Words.IElements
         /// <summary>
         /// Gets the unique identifier of the unknown element.
         /// </summary>
-        public int ElementID { get; internal set; }
+        public int ElementId { get; internal set; }
 
         internal Unknown()
         {

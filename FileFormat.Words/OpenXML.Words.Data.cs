@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using DF = DocumentFormat.OpenXml;
 using PKG = DocumentFormat.OpenXml.Packaging;
 using WP = DocumentFormat.OpenXml.Wordprocessing;
@@ -9,117 +10,148 @@ using System.Linq;
 
 namespace OpenXML.Words.Data
 {
-    internal static class OOXMLDocData
+    internal class OoxmlDocData
     {
-        private static PKG.WordprocessingDocument staticDoc;
-        private static Document ooxmlDoc;// = new Document();
-        private static readonly object lockObject = new object(); // Lock object
+        //private static ConcurrentBag<PKG.WordprocessingDocument> _staticDocBag = new ConcurrentBag<PKG.WordprocessingDocument>();
+        //private static readonly List<PKG.WordprocessingDocument> _staticDocs = new List<PKG.WordprocessingDocument>();
+        private static ConcurrentDictionary<int, PKG.WordprocessingDocument> _staticDocDict =
+            new ConcurrentDictionary<int, PKG.WordprocessingDocument>();
+        private static int _staticDocCount = 0;
+        private OwDocument _ooxmlDoc;
+        private readonly object _lockObject = new object();
 
-        internal static void SetPKG(PKG.WordprocessingDocument doc)
+        private OoxmlDocData(PKG.WordprocessingDocument doc)
         {
-            lock (lockObject)
+            lock (_lockObject)
             {
-                try
-                {
-                    staticDoc = doc;
-                    ooxmlDoc = new Document();
-                }
-                catch(Exception ex)
-                {
-                    string errorMessage = ConstructMessage(ex, "Set OOXML Package");
-                    throw new FileFormatException(errorMessage, ex);
-                }
+                _ooxmlDoc = OwDocument.CreateInstance();
+                //_staticDocBag.Add(doc);
+                //_staticDocs.Add(doc);
+                _staticDocCount++;
+                _staticDocDict.TryAdd(_staticDocCount,doc);
             }
         }
 
-        internal static string ConstructMessage(Exception Ex, string Operation)
+        private OoxmlDocData()
         {
-            return $"Error in Operation {Operation} at OpenXML.Words: {Ex.Message} \n Inner Exception: {Ex.InnerException?.Message ?? "N/A"}";
-        }
-
-        internal static void Insert(FF.IElement newElement, int position)
-        {
-            lock (lockObject)
+            lock (_lockObject)
             {
-                List<DF.OpenXmlElement> originalElements =
-                    new List<DF.OpenXmlElement>
-                    (staticDoc.MainDocumentPart.Document.Body.Elements().ToList());
-
-                try
-                {
-                    if (newElement is FF.Paragraph ffPara)
-                    {
-                        WP.Paragraph wpPara = ooxmlDoc.CreateParagraph(ffPara);
-                        var elements = staticDoc.MainDocumentPart.Document.Body.Elements();
-                        elements.ElementAt(position).InsertBeforeSelf(wpPara);
-                    }
-                    else if (newElement is FF.Table ffTable)
-                    {
-                        WP.Table wpTable = ooxmlDoc.CreateTable(ffTable);
-                        var elements = staticDoc.MainDocumentPart.Document.Body.Elements();
-                        elements.ElementAt(position).InsertBeforeSelf(wpTable);
-                    }
-                    else if (newElement is FF.Image ffImage)
-                    {
-                        WP.Paragraph wpImage = ooxmlDoc.CreateImage(ffImage, staticDoc.MainDocumentPart);
-                        var elements = staticDoc.MainDocumentPart.Document.Body.Elements();
-                        elements.ElementAt(position).InsertBeforeSelf(wpImage);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Rollback changes by restoring the original elements
-                    staticDoc.MainDocumentPart.Document.Body.RemoveAllChildren();
-                    staticDoc.MainDocumentPart.Document.Body.Append(originalElements);
-                    string errorMessage = ConstructMessage(ex, "Remove OOXML Element(s)"); 
-                    throw new FileFormatException(errorMessage, ex);
-                }
+                _ooxmlDoc = OwDocument.CreateInstance();
             }
         }
 
-        internal static void Update(FF.IElement newElement, int position)
+        internal static OoxmlDocData CreateInstance(PKG.WordprocessingDocument doc)
         {
-            lock (lockObject) // Lock for thread safety
+            return new OoxmlDocData(doc);
+        }
+        internal static OoxmlDocData CreateInstance()
+        {
+            return new OoxmlDocData();
+        }
+
+
+        internal static string ConstructMessage(Exception ex, string operation)
+        {
+            return $"Error in operation {operation} at OpenXML.Words.Data : {ex.Message} \n Inner Exception: {ex.InnerException?.Message ?? "N/A"}";
+        }
+
+        internal void Insert(FF.IElement newElement, int position,Document doc)
+        {
+            lock (_lockObject)
             {
-                List<DF.OpenXmlElement> originalElements =
-                    new List<DF.OpenXmlElement>
-                    (staticDoc.MainDocumentPart.Document.Body.Elements().ToList());
+                /**
+                if (!_staticDocBag.TryPeek(out PKG.WordprocessingDocument staticDoc))
+                {
+                    throw new FileFormatException("No Package is available", new InvalidOperationException());
+                }
+                **/
+                
+                //Console.WriteLine("sss : " + doc.GetInstanceInfo());
+                //var staticDoc = _staticDocs[instance];
+
+                //_staticDocDict.TryGetValue(instance,out PKG.WordprocessingDocument staticDoc);
+                _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out PKG.WordprocessingDocument staticDoc);
+
+                if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null",new NullReferenceException());
+                
+                var enumerable = staticDoc.MainDocumentPart.Document.Body.Elements().ToList();
+                var originalElements = new List<DF.OpenXmlElement>(enumerable);
+
+                var elements = staticDoc.MainDocumentPart.Document.Body.Elements();
+
                 try
                 {
-                    if (newElement is FF.Paragraph ffPara)
+                    switch (newElement)
                     {
-                        WP.Paragraph wpPara = ooxmlDoc.CreateParagraph(ffPara);
-                        var elements = staticDoc.MainDocumentPart.Document.Body.Elements();
+                        case FF.Paragraph ffPara:
+                            var wpPara = _ooxmlDoc.CreateParagraph(ffPara);
+                            elements.ElementAt(position).InsertBeforeSelf(wpPara);
+                            break;
 
-                        if (position >= 0) //&& position < elements.Count)
-                        {
-                            var existingElement = elements.ElementAt(position);
-                            existingElement.Remove(); // Remove the existing paragraph
-                            elements.ElementAt(position).InsertBeforeSelf(wpPara); // Insert the updated paragraph
-                        }
-                    }
-                    else if (newElement is FF.Table ffTable)
-                    {
-                        WP.Table wpTable = ooxmlDoc.CreateTable(ffTable);
-                        var elements = staticDoc.MainDocumentPart.Document.Body.Elements();
-
-                        if (position >= 0)// && position < elements.Count)
-                        {
-                            var existingElement = elements.ElementAt(position);
-                            existingElement.Remove();
+                        case FF.Table ffTable:
+                            var wpTable = _ooxmlDoc.CreateTable(ffTable);
                             elements.ElementAt(position).InsertBeforeSelf(wpTable);
-                        }
-                    }
-                    else if (newElement is FF.Image ffImage)
-                    {
-                        WP.Paragraph wpImage = ooxmlDoc.CreateImage(ffImage, staticDoc.MainDocumentPart);
-                        var elements = staticDoc.MainDocumentPart.Document.Body.Elements();
+                            break;
 
-                        if (position >= 0) //&& position < elements.Count)
-                        {
-                            var existingElement = elements.ElementAt(position);
-                            existingElement.Remove();
+                        case FF.Image ffImage:
+                            var wpImage = _ooxmlDoc.CreateImage(ffImage, staticDoc.MainDocumentPart);
                             elements.ElementAt(position).InsertBeforeSelf(wpImage);
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Rollback changes by restoring the original elements
+                    staticDoc.MainDocumentPart.Document.Body.RemoveAllChildren();
+                    staticDoc.MainDocumentPart.Document.Body.Append(originalElements);
+                    var errorMessage = ConstructMessage(ex, "Remove OOXML Element(s)");
+                    throw new FileFormatException(errorMessage, ex);
+                }
+            }
+        }
+
+        internal void Update(FF.IElement newElement, int position,Document doc)
+        {
+            lock (_lockObject) 
+            {
+                /**
+                if (!_staticDocBag.TryPeek(out PKG.WordprocessingDocument staticDoc))
+                {
+                    throw new FileFormatException("No Package is available", new InvalidOperationException());
+                }**/
+
+                //var staticDoc = _staticDocs[instance];
+
+                //_staticDocDict.TryGetValue(instance, out PKG.WordprocessingDocument staticDoc);
+                _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out PKG.WordprocessingDocument staticDoc);
+
+                if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
+                
+                var enumerable = staticDoc.MainDocumentPart.Document.Body.Elements().ToList();
+                var originalElements = new List<DF.OpenXmlElement>(enumerable);
+                
+                try
+                {
+                    if (position >= 0)
+                    {
+                        var elements = staticDoc.MainDocumentPart.Document.Body.Elements();
+                        elements.ElementAt(position).Remove();
+                        var enumerable1 = elements.ToList();
+                        var existingElement = enumerable1.ElementAt(position);
+                        switch (newElement)
+                        {
+                            case FF.Paragraph ffPara:
+                                var wpPara = _ooxmlDoc.CreateParagraph(ffPara);
+                                enumerable1.ElementAt(position).InsertBeforeSelf(wpPara);
+                                break;
+                            case FF.Table ffTable:
+                                var wpTable = _ooxmlDoc.CreateTable(ffTable);
+                                enumerable1.ElementAt(position).InsertBeforeSelf(wpTable);
+                                break;
+                            case FF.Image ffImage:
+                                var wpImage = _ooxmlDoc.CreateImage(ffImage, staticDoc.MainDocumentPart);
+                                enumerable1.ElementAt(position).InsertBeforeSelf(wpImage);
+                                break;
                         }
                     }
                 }
@@ -128,20 +160,33 @@ namespace OpenXML.Words.Data
                     // Rollback changes by restoring the original elements
                     staticDoc.MainDocumentPart.Document.Body.RemoveAllChildren();
                     staticDoc.MainDocumentPart.Document.Body.Append(originalElements);
-
-                    string errorMessage = ConstructMessage(ex, "Update OOXML Element(s)");
+                    var errorMessage = ConstructMessage(ex, "Update OOXML Element(s)");
                     throw new FileFormatException(errorMessage, ex);
                 }
             }
         }
 
-        internal static void Remove(int position)
+        internal void Remove(int position,Document doc)
         {
-            lock (lockObject) // Lock for thread safety
+            lock (_lockObject) 
             {
-                List<DF.OpenXmlElement> originalElements =
-                    new List<DF.OpenXmlElement>
-                    (staticDoc.MainDocumentPart.Document.Body.Elements().ToList());
+                /**
+                if (!_staticDocBag.TryPeek(out PKG.WordprocessingDocument staticDoc))
+                {
+                    throw new FileFormatException("No Package is available", new InvalidOperationException());
+                }**/
+
+
+                //var staticDoc = _staticDocs[instance];
+
+                //_staticDocDict.TryGetValue(instance, out PKG.WordprocessingDocument staticDoc);
+                _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out PKG.WordprocessingDocument staticDoc);
+
+                if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
+
+                var enumerable = staticDoc.MainDocumentPart.Document.Body.Elements().ToList();
+                var originalElements = new List<DF.OpenXmlElement>(enumerable);
+
                 try
                 {
                     var elements = staticDoc.MainDocumentPart.Document.Body.Elements();
@@ -152,101 +197,129 @@ namespace OpenXML.Words.Data
                     // Rollback changes by restoring the original elements
                     staticDoc.MainDocumentPart.Document.Body.RemoveAllChildren();
                     staticDoc.MainDocumentPart.Document.Body.Append(originalElements);
-
-                    string errorMessage = ConstructMessage(ex, "Remove OOXML Element(s)");
+                    var errorMessage = ConstructMessage(ex, "Remove OOXML Element(s)");
                     throw new FileFormatException(errorMessage, ex);
                 }
             }
         }
 
-        internal static void Append(FF.IElement newElement)
+        internal void Append(FF.IElement newElement,Document doc)
         {
-            lock (lockObject) // Lock for thread safety
+            lock (_lockObject) 
             {
-                List<DF.OpenXmlElement> originalElements =
-                    new List<DF.OpenXmlElement>
-                    (staticDoc.MainDocumentPart.Document.Body.Elements().ToList());
+                /**
+                if (!_staticDocBag.TryPeek(out PKG.WordprocessingDocument staticDoc))
+                {
+                    throw new FileFormatException("No Package is available", new InvalidOperationException());
+                }**/
+
+                //var staticDoc = _staticDocs[instance];
+
+                //_staticDocDict.TryGetValue(instance, out PKG.WordprocessingDocument staticDoc);
+
+                _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out PKG.WordprocessingDocument staticDoc);
+
+                if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
+
+                var enumerable = staticDoc.MainDocumentPart.Document.Body.Elements().ToList();
+                var originalElements = new List<DF.OpenXmlElement>(enumerable);
+
+                var sectionPropertiesList = staticDoc.MainDocumentPart.Document.Body.Elements<WP.SectionProperties>().ToList();
+                WP.SectionProperties lastSectionProperties = null;
+                if (sectionPropertiesList.Any()) lastSectionProperties = sectionPropertiesList.Last();
+
                 try
                 {
-                    //Document ooxmlDoc = new Document();
-                    if (newElement is FF.Paragraph ffPara)
+                    switch (newElement)
                     {
-                        WP.Paragraph wpPara = ooxmlDoc.CreateParagraph(ffPara);
-                        var sectionPropertiesList = staticDoc.MainDocumentPart.Document.Body.Elements<WP.SectionProperties>().ToList();//staticDoc.MainDocumentPart.Document.Body.Append(wpPara);
-                        if (sectionPropertiesList.Any())
-                        {
-                            // Select the last SectionProperties element, which represents the last section.
-                            var lastSectionProperties = sectionPropertiesList.Last();
-                            staticDoc.MainDocumentPart.Document.Body.InsertBefore(wpPara, lastSectionProperties);
-                            //return lastSectionProperties;
-                        }
-                        else
-                        {
-                            staticDoc.MainDocumentPart.Document.Body.Append(wpPara);
-                        }
+                        case FF.Paragraph ffPara:
+                            var wpPara = _ooxmlDoc.CreateParagraph(ffPara);
+                            if (lastSectionProperties != null) staticDoc.MainDocumentPart.Document.Body.InsertBefore(wpPara, lastSectionProperties);
+                            else staticDoc.MainDocumentPart.Document.Body.Append(wpPara);
+                            break;
+                        case FF.Table ffTable:
+                            var wpTable = _ooxmlDoc.CreateTable(ffTable);
+                            if (lastSectionProperties != null) staticDoc.MainDocumentPart.Document.Body.InsertBefore(wpTable, lastSectionProperties);
+                            else staticDoc.MainDocumentPart.Document.Body.Append(wpTable);
+                            break;
+                        case FF.Image ffImage:
+                            var wpImage = _ooxmlDoc.CreateImage(ffImage, staticDoc.MainDocumentPart);
+                            if (lastSectionProperties != null) staticDoc.MainDocumentPart.Document.Body.InsertBefore(wpImage, lastSectionProperties);
+                            else staticDoc.MainDocumentPart.Document.Body.Append(wpImage);
+                            break;
                     }
-                    else if (newElement is FF.Table ffTable)
-                    {
-                        WP.Table wpTable = ooxmlDoc.CreateTable(ffTable);
-                        var sectionPropertiesList = staticDoc.MainDocumentPart.Document.Body.Elements<WP.SectionProperties>().ToList();//staticDoc.MainDocumentPart.Document.Body.Append(wpPara);
-                        if (sectionPropertiesList.Any())
-                        {
-                            // Select the last SectionProperties element, which represents the last section.
-                            var lastSectionProperties = sectionPropertiesList.Last();
-                            staticDoc.MainDocumentPart.Document.Body.InsertBefore(wpTable, lastSectionProperties);
-                            //return lastSectionProperties;
-                        }
-                        else
-                        {
-                            staticDoc.MainDocumentPart.Document.Body.Append(wpTable);
-                        }
-                    }
-                    else if (newElement is FF.Image ffImage)
-                    {
-                        WP.Paragraph wpImage = ooxmlDoc.CreateImage(ffImage, staticDoc.MainDocumentPart);
-                        var sectionPropertiesList = staticDoc.MainDocumentPart.Document.Body.Elements<WP.SectionProperties>().ToList();//staticDoc.MainDocumentPart.Document.Body.Append(wpPara);
-                        if (sectionPropertiesList.Any())
-                        {
-                            // Select the last SectionProperties element, which represents the last section.
-                            var lastSectionProperties = sectionPropertiesList.Last();
-                            staticDoc.MainDocumentPart.Document.Body.InsertBefore(wpImage, lastSectionProperties);
-                            //return lastSectionProperties;
-                        }
-                        else
-                        {
-                            staticDoc.MainDocumentPart.Document.Body.Append(wpImage);
-                        }
-                    }
+
                 }
                 catch (Exception ex)
                 {
                     // Rollback changes by restoring the original elements
                     staticDoc.MainDocumentPart.Document.Body.RemoveAllChildren();
                     staticDoc.MainDocumentPart.Document.Body.Append(originalElements);
-                    string errorMessage = ConstructMessage(ex, "Append OOXML Element(s)");
+                    var errorMessage = ConstructMessage(ex, "Append OOXML Element(s)");
                     throw new FileFormatException(errorMessage, ex);
                 }
             }
         }
 
-        internal static void Save(System.IO.Stream stream)
+        internal void Save(System.IO.Stream stream, Document doc)
         {
-            lock (lockObject) // Lock for thread safety
+            lock (_lockObject) 
             {
                 try
                 {
-                    //ooxmlDoc.CreateProperties(staticDoc);
+                    /**
+                    if (!_staticDocBag.TryPeek(out PKG.WordprocessingDocument staticDoc))
+                    {
+                        throw new FileFormatException("No Package is available", new InvalidOperationException());
+                    }**/
+
+
+                    //var staticDoc = _staticDocs[instance];
+
+                    //_staticDocDict.TryGetValue(instance, out PKG.WordprocessingDocument staticDoc);
+
+                    _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out PKG.WordprocessingDocument staticDoc);
+
+                    //_ooxmlDoc.CreateProperties(_staticDoc);
                     staticDoc.Clone(stream);
-                    staticDoc.Dispose();
-                    ooxmlDoc = null;
+                    //_staticDoc.Dispose();
+                    //_ooxmlDoc = null;
                 }
                 catch (Exception ex)
                 {
-                    string errorMessage = ConstructMessage(ex, "Save OOXML Document");
+                    var errorMessage = ConstructMessage(ex, "Save OOXML OWDocument");
                     throw new FileFormatException(errorMessage, ex);
                 }
             }
         }
-    }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+
+                // Dispose of managed resources (if any)
+                /**
+                if (_staticDocBag != null)
+                {
+                    while (_staticDocBag.TryTake(out var staticDoc))
+                    {
+                        if (staticDoc == null) continue;
+                        staticDoc.Dispose();
+                    }
+                }
+                **/
+
+                if (_ooxmlDoc == null) return;
+                _ooxmlDoc.Dispose();
+                _ooxmlDoc = null;
+            }
+            // Dispose of unmanaged resources
+        }
+    }
 }

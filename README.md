@@ -1,53 +1,53 @@
-# Word Document C# API System Outlines
+# FileFormat.Words for .NET
 
-This documentation provides an in-depth overview of the internal namespaces and classes, unveiling the intricacies behind our Word Document C# API system. While the internal structure is complex, we've designed the public APIs to be straightforward and user-friendly, making Word document manipulation a seamless experience.
+[FileFormat.Words for .NET](https://github.com/fileformat-words/FileFormat.Words-for-.NET) - A versatile API for creating, loading, and modifying MS Word documents.
 
-For a more detailed understanding of our system architecture, design patterns, and public interfaces, please visit the [Articles Section](https://fileformat-words.github.io/FileFormat.Words-for-.NET/).
+## Table of Contents
 
-## FileFormat.Words Namespace
+- [What does this project do?](#what-does-this-project-do)
+- [Why is this project useful?](#why-is-this-project-useful)
+- [How do I get started?](#how-do-i-get-started)
+- [Where can I get more help, if I need it?](#where-can-i-get-more-help-if-i-need-it)
+- [License](#license)
 
-### Document Class
-- The primary interface for creating, loading, and modifying Word documents.
-- Serves as a facade for interacting with internal classes in the OpenXML.Words, OpenXML.Words.Data, and OpenXML.Templates namespaces.
+## What does this project do?
 
-## FileFormat.Words.IElements Namespace
+FileFormat.Words for .NET is an [open-source API](https://github.com/fileformat-words/FileFormat.Words-for-.NET) designed to streamline the process of working with Microsoft Word documents. The API wraps various open-source engines, including the OpenXML SDK, to provide a unified and user-friendly interface for creating, loading, and modifying Word documents. Whether you're building applications that generate reports, automate document workflows, or enhance document management systems, FileFormat.Words for .NET aims to simplify the integration of MS Word document functionality.
 
-### FileFormat.Words.IElement (Common Interface for all custom elements)
-- Custom elements, such as Paragraphs, Images, and Tables, that mimic Word document structure.
-- Act as a data structure for seamless data transfer to and from OpenXML objects.
-- Offers a user-friendly interface for interacting with Word document content.
+## Why is this project useful?
 
-## OpenXML.Words Namespace
+- **Versatility:** FileFormat.Words for .NET supports a range of operations, making it versatile for different use cases, such as document generation, template management, and content manipulation.
 
-### Document Class (Internal)
-- Facilitates loading existing Word documents into OpenXML and creating new documents from scratch.
-- Acts as a bridge between custom document elements in FileFormat.Words and OpenXML-based Word documents.
-- Sets the WordProcessing package for OpenXML.Words.Data.OOXMLDocData to enable synchronization.
-- Utilizes templates from the OpenXML.Templates namespace for creating new documents.
+- **Interoperability:** By leveraging established open-source engines like the OpenXML SDK, this API ensures compatibility with Microsoft Word standards, fostering seamless interoperability.
 
-## OpenXML.Words.Data Namespace
+- **Open Source:** Being an open-source project, FileFormat.Words for .NET encourages collaboration and contributions from the community. Developers can tailor the API to their specific needs and contribute enhancements for the benefit of all.
 
-### OOXMLDocData Class (Internal, Static)
-- Employs static operations for inserting, updating, and removing elements in an OpenXML-based Word document.
-- Receives synchronization instructions from the FileFormat.Words.Document class.
-- Guarantees changes made to custom objects are accurately reflected in the OpenXML document.
+## How do I get started?
 
-## OpenXML.Templates Namespace
+To get started with FileFormat.Words for .NET, follow these steps:
 
-- Offers pre-defined templates created using OpenXML SDK Productivity Tools.
-- Comprises classes for core properties and custom properties, enhancing document metadata and customization.
-- Templates come into play when creating new Word documents from scratch within the OpenXML.Words.Document class.
+1. **Installation:**
+   - Clone the repository to your local machine. OR
+   - Install via [Nuget](https://www.nuget.org/packages/FileFormat.Words).
+   - For more information, please check out [Installation](https://fileformat-words.github.io/FileFormat.Words-for-.NET/articles/index.html#installation).
 
-This extended architecture leverages templates and properties from the OpenXML.Templates namespace, enriching the document creation process with pre-defined structures and metadata customization options for newly created documents. The FileFormat.Words.Document class remains the central interface for users, orchestrating interactions with various internal components across multiple namespaces.
+2. **Usage:**
+   - Explore the [documentation](https://fileformat-words.github.io/FileFormat.Words-for-.NET/).
+   - Check out the [examples](https://github.com/fileformat-words-gists/FileFormat.Words-for-.NET/) for sample code snippets to kickstart your integration.
 
-## API Reference
-- [API Reference](https://fileformat-words.github.io/FileFormat.Words-for-.NET/api/index.html) - In-depth information about public interfaces and usage.
+3. **Contribution:**
+   - If you find issues or have improvements, feel free to open a [GitHub issue](https://github.com/fileformat-words/FileFormat.Words-for-.NET/issues) or submit a [pull request](https://github.com/fileformat-words/FileFormat.Words-for-.NET/pulls).
 
-## Technical Docs
-- [Articles](https://fileformat-words.github.io/FileFormat.Words-for-.NET/articles/intro.html) - Comprehensive insights into the system architecture, design patterns, and API usage in different scenarios.
+## Where can I get more help, if I need it?
 
-# Installation
-- Install-Package FileFormat.Words
+If you need assistance or have questions, you can reach out in the following ways:
 
-# System Requirements
-- .NET Core 3.1 and above
+- **Documentation:** Refer to the [documentation](https://fileformat-words.github.io/FileFormat.Words-for-.NET) for detailed information on API usage and features.
+
+- **GitHub Issues:** Open a [GitHub issue](https://github.com/fileformat-words/FileFormat.Words-for-.NET/issues) to report bugs, suggest enhancements, or seek help.
+
+- **Community:** Join [our community](https://forum.fileformat.com/c/word-processing/5) to connect with other developers and discuss FileFormat.Words for .NET.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/fileformat-words/FileFormat.Words-for-.NET/blob/main/LICENSE) file for details.

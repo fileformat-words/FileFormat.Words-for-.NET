@@ -4,6 +4,7 @@ using IO = System.IO;
 using OOXML = OpenXML.Words;
 using OWD = OpenXML.Words.Data;
 using FileFormat.Words.IElements;
+using System.Threading;
 
 namespace FileFormat.Words
 {
@@ -25,17 +26,21 @@ namespace FileFormat.Words
     /// <summary>
     /// Represents a document with structured elements.
     /// </summary>
-    public class Document
+    public class Document : IDisposable
     {
-        private List<IElement> lstStructure;
-        /// <summary>
-        /// Gets the element styles of the document.
-        /// </summary>
-        public ElementStyles ElementStyles { get; internal set; }
-        private OOXML.Document ooxmlDoc;
-        private bool isNew = true;
-        private int OriginalSize = 0;
-        private IO.MemoryStream ms; //= new IO.MemoryStream();
+        private List<IElement> _lstStructure;
+        private ElementStyles _elementStyles;// { get; internal set; }
+        private OOXML.OwDocument _ooxmlDoc;
+        private bool _isNew = true;
+        //private static List<int> _instances = new List<int>();
+        //private static int _instanceNumber = 0;
+        //private int _instance = 0;
+        private static Lazy<List<int>> _instances = new Lazy<List<int>>(() => new List<int>()); 
+        private static int _instanceNumber = 0;
+        private int _instance = 0;
+        private int _originalSize = 0;
+        private IO.MemoryStream _ms; //= new IO.MemoryStream();
+        private readonly object _lockObject = new object(); // Lock object
         /// <summary>
         /// Initializes a new instance of the <see cref="Document"/> class.
         /// This constructor creates a new, empty document.
@@ -68,12 +73,22 @@ namespace FileFormat.Words
         /// </example>
         public Document()
         {
-            isNew = true;
-            ms = new IO.MemoryStream();
-            lstStructure = new List<IElement>();
-            ooxmlDoc = new OOXML.Document();
-            ElementStyles = ooxmlDoc.LoadStyles();
-            ooxmlDoc = null;
+            lock (_lockObject)
+            {
+                try
+                {
+                    _isNew = true;
+                    _ms = new IO.MemoryStream();
+                    _lstStructure = new List<IElement>();
+                    _ooxmlDoc = OOXML.OwDocument.CreateInstance();
+                    _elementStyles = _ooxmlDoc.LoadStyles();
+                }
+                catch (Exception ex)
+                {
+                    var errorMessage = ConstructMessage(ex, "Initializing OWDocument");
+                    throw new FileFormatException(errorMessage, ex);
+                }
+            }
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="Document"/> class by loading content from a file specified by its filename.
@@ -84,24 +99,29 @@ namespace FileFormat.Words
         /// </exception>
         public Document(string filename)
         {
-            try
+            lock (_lockObject)
             {
-                isNew = false;
-                ms = new IO.MemoryStream();
-                using (IO.FileStream fs = new IO.FileStream(filename, IO.FileMode.Open))
+                try
                 {
-                    fs.CopyTo(ms);
+                    _isNew = false;
+                    _instance = Interlocked.Increment(ref _instanceNumber);
+                    _instances.Value.Add(_instance);
+                    _ms = new IO.MemoryStream();
+                    using (var fs = new IO.FileStream(filename, IO.FileMode.Open))
+                    {
+                        fs.CopyTo(_ms);
+                    }
+
+                    _ooxmlDoc = OOXML.OwDocument.CreateInstance();
+                    _lstStructure = _ooxmlDoc.LoadDocument(_ms);
+                    _elementStyles = _ooxmlDoc.LoadStyles();
+                    _originalSize = _lstStructure.Count;
                 }
-                ooxmlDoc = new OOXML.Document();
-                lstStructure = ooxmlDoc.LoadDocument(ms);
-                ElementStyles = ooxmlDoc.LoadStyles();
-                OriginalSize = lstStructure.Count;
-                ooxmlDoc = null;
-            }
-            catch(Exception ex)
-            {
-                string errorMessage = ConstructMessage(ex, "Loading Document");
-                throw new FileFormatException(errorMessage, ex);
+                catch (Exception ex)
+                {
+                    var errorMessage = ConstructMessage(ex, "Loading Document from file");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
         /// <summary>
@@ -113,21 +133,25 @@ namespace FileFormat.Words
         /// </exception>
         public Document(IO.Stream stream)
         {
-            try
+            lock (_lockObject)
             {
-                isNew = false;
-                ms = new IO.MemoryStream();
-                stream.CopyTo(ms);
-                ooxmlDoc = new OOXML.Document();
-                lstStructure = ooxmlDoc.LoadDocument(ms);
-                ElementStyles = ooxmlDoc.LoadStyles();
-                OriginalSize = lstStructure.Count;
-                ooxmlDoc = null;
-            }
-            catch (Exception ex)
-            {
-                string errorMessage = ConstructMessage(ex, "Loading Document");
-                throw new FileFormatException(errorMessage, ex);
+                try
+                {
+                    _isNew = false;
+                    _instance = Interlocked.Increment(ref _instanceNumber);
+                    _instances.Value.Add(_instance);
+                    _ms = new IO.MemoryStream();
+                    stream.CopyTo(_ms);
+                    _ooxmlDoc = OOXML.OwDocument.CreateInstance();
+                    _lstStructure = _ooxmlDoc.LoadDocument(_ms);
+                    _elementStyles = _ooxmlDoc.LoadStyles();
+                    _originalSize = _lstStructure.Count;
+                }
+                catch (Exception ex)
+                {
+                    var errorMessage = ConstructMessage(ex, "Loading Document from stream");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
         /// <summary>
@@ -139,35 +163,31 @@ namespace FileFormat.Words
         /// </exception>
         public void Save(string filename)
         {
-            try
+            lock (_lockObject)
             {
-                if (!isNew)
+                try
                 {
-                    using (IO.FileStream fs = new IO.FileStream(filename, IO.FileMode.Create))
+                    if (!_isNew)
                     {
-                        OWD.OOXMLDocData.Save(fs);
+                        using var fs = new IO.FileStream(filename, IO.FileMode.Create);
+                        OWD.OoxmlDocData.CreateInstance().Save(fs,this);
                     }
-                    lstStructure = null;
-                    ms.Dispose();
+                    else
+                    {
+                        _ooxmlDoc = OOXML.OwDocument.CreateInstance();
+                        _ooxmlDoc.CreateDocument(_lstStructure);
+                        using var fs = new IO.FileStream(filename, IO.FileMode.Create);
+                        _ooxmlDoc.SaveDocument(fs);
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    ooxmlDoc = new OOXML.Document();
-                    ooxmlDoc.CreateDocument(lstStructure);
-                    using (IO.FileStream fs = new IO.FileStream(filename, IO.FileMode.Create))
-                    {
-                        ooxmlDoc.SaveDocument(fs);
-                    }
-                    lstStructure = null;
-                    ms.Dispose();
+                    var errorMessage = ConstructMessage(ex, "Saving Document to file");
+                    throw new FileFormatException(errorMessage, ex);
                 }
-            }
-            catch (Exception ex)
-            {
-                string errorMessage = ConstructMessage(ex, "Saving Document");
-                throw new FileFormatException(errorMessage, ex);
             }
         }
+
         /// <summary>
         /// Saves the document to the specified <see cref="System.IO.Stream"/>.
         /// </summary>
@@ -177,33 +197,38 @@ namespace FileFormat.Words
         /// </exception>
         public void Save(IO.Stream stream)
         {
-            try
+            lock (_lockObject)
             {
-                if (!isNew)
+                try
                 {
-                    OWD.OOXMLDocData.Save(stream);
-                    lstStructure = null;
-                    ms.Dispose();
+                    if (!_isNew)
+                    {
+                        OWD.OoxmlDocData.CreateInstance().Save(stream,this);
+                    }
+                    else
+                    {
+                        _ooxmlDoc = OOXML.OwDocument.CreateInstance();
+                        _ooxmlDoc.CreateDocument(_lstStructure);
+                        _ooxmlDoc.SaveDocument(stream);
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    ooxmlDoc = new OOXML.Document();
-                    ooxmlDoc.CreateDocument(lstStructure);
-                    ooxmlDoc.SaveDocument(stream);
-                    lstStructure = null;
-                    ms.Dispose();
+                    var errorMessage = ConstructMessage(ex, "Saving Document to stream");
+                    throw new FileFormatException(errorMessage, ex);
                 }
-            }
-            catch (Exception ex)
-            {
-                string errorMessage = ConstructMessage(ex, "Saving Document");
-                throw new FileFormatException(errorMessage, ex);
             }
         }
-        private string ConstructMessage(Exception Ex, string Operation)
+        private string ConstructMessage(Exception ex, string operation)
         {
-            return $"Error in Operation {Operation} at FileFormat.Words: {Ex.Message} \n Inner Exception: {Ex.InnerException?.Message ?? "N/A"}";
+            return $"Error in Operation {operation} at FileFormat.Words: {ex.Message} \n Inner Exception: {ex.InnerException?.Message ?? "N/A"}";
         }
+
+        internal int GetInstanceInfo()
+        {
+            return _instance;
+        }
+
         /// <summary>
         /// Retrieves a list of existing elements from the internal data structure.
         /// </summary>
@@ -213,7 +238,14 @@ namespace FileFormat.Words
         /// <seealso cref="IElement"/>
         public List<IElement> GetElements()
         {
-            return lstStructure;
+            return _lstStructure;
+        }
+        /// <summary>
+        /// Gets the element styles of the document.
+        /// </summary>
+        public ElementStyles GetElementStyles()
+        {
+            return _elementStyles;
         }
         /// <summary>
         /// Updates an existing element in the structure.
@@ -234,29 +266,38 @@ namespace FileFormat.Words
         /// </remarks>
         public bool Update(IElement element)
         {
-            int position = lstStructure.FindIndex(e => e.ElementID == element.ElementID);
-            if (position < 0)
+            lock (_lockObject)
             {
-                return false;
-            }
-            IElement backupElement = element;
-            try
-            {
-                lstStructure[position] = element;
-                if (!isNew) OWD.OOXMLDocData.Update(element, position);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                lstStructure[position] = backupElement;
-                string errorMessage = ConstructMessage(ex,"Update");
-                throw new FileFormatException(errorMessage, ex);
+                if (_lstStructure == null)
+                {
+                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                }
+
+                var position = _lstStructure.FindIndex(e => e.ElementId == element.ElementId);
+                if (position < 0)
+                {
+                    return false;
+                }
+
+                var backupElement = element;
+                try
+                {
+                    _lstStructure[position] = element;
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Update(element, position,this);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    _lstStructure[position] = backupElement;
+                    var errorMessage = ConstructMessage(ex, "Update");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
         /// <summary>
         /// Updates an existing element in the structure.
         /// </summary>
-        /// <param name="elementID">The unique identifier of the element to be updated.</param>
+        /// <param name="elementId">The unique identifier of the element to be updated.</param>
         /// <param name="element">The updated element to replace the existing one.</param>
         /// <returns>
         ///   <c>true</c> if the element is successfully updated; otherwise, <c>false</c>.
@@ -274,30 +315,40 @@ namespace FileFormat.Words
         /// If an exception occurs during the update operation, the method attempts to restore the structure to its previous state
         /// and throws a <see cref="FileFormatException"/> with detailed error information.
         /// </remarks>
-        public bool Update(int elementID, IElement element)
+        public bool Update(int elementId, IElement element)
         {
-            if(elementID != element.ElementID)
+            lock (_lockObject)
             {
-                Exception ex = new Exception("The elements mismatch: Update is only available for same element");
-                throw new FileFormatException(ex.Message, ex);
-            }
-            int position = lstStructure.FindIndex(e => e.ElementID == elementID);
-            if (position < 0)
-            {
-                return false;
-            }
-            IElement backupElement = element;
-            try
-            {
-                lstStructure[position] = element;
-                if (!isNew) OWD.OOXMLDocData.Update(element, position);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                lstStructure[position] = backupElement;
-                string errorMessage = ConstructMessage(ex, "Update");
-                throw new FileFormatException(errorMessage, ex);
+                if (_lstStructure == null)
+                {
+                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                }
+
+                if (elementId != element.ElementId)
+                {
+                    var ex = new Exception("The elements mismatch: Update is only available for same element");
+                    throw new FileFormatException(ex.Message,new InvalidOperationException());
+                }
+
+                var position = _lstStructure.FindIndex(e => e.ElementId == elementId);
+                if (position < 0)
+                {
+                    return false;
+                }
+
+                var backupElement = element;
+                try
+                {
+                    _lstStructure[position] = element;
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Update(element, position,this);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    _lstStructure[position] = backupElement;
+                    var errorMessage = ConstructMessage(ex, "Update");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
         /// <summary>
@@ -306,121 +357,181 @@ namespace FileFormat.Words
         /// <param name="newElement">The element to be inserted.</param>
         /// <param name="element">The reference element before which the new element should be inserted.</param>
         /// <returns>
-        ///   <c>true</c> if the new element is successfully inserted before the reference element; otherwise, <c>false</c>.
-        ///   If the reference element is not found in the structure, <c>false</c> is returned.
+        ///   The unique identifier <see cref="IElement.ElementId"/> of inserted element if the new element is successfully inserted before the reference element.
+        ///   If the reference element is not found in the structure, -1 is returned.
         ///   If an error occurs during the insertion operation, a <see cref="FileFormatException"/> is thrown.
         /// </returns>
         /// <remarks>
         /// This method inserts the specified element before the provided reference element in the structure.
         /// The method attempts to locate the reference element and insert the new element before it.
-        /// If the insertion operation is successful, the method returns <c>true></c>.
-        /// If the reference element is not found, <c>false</c> is returned, and no changes are made to the structure.
+        /// If the insertion operation is successful, the method returns <see cref="IElement.ElementId"/> of the inserted element.
+        /// If the reference element is not found, -1 is returned, and no changes are made to the structure.
         /// If an exception occurs during the insertion operation, the method attempts to restore the structure to its previous state
         /// and throws a <see cref="FileFormatException"/> with detailed error information.
         /// </remarks>
-        public bool InsertBefore(IElement newElement, IElement element)
+        public int InsertBefore(IElement newElement, IElement element)
         {
-            int position = lstStructure.FindIndex(e => e.ElementID == element.ElementID);
-            if(position < 0)
+            lock (_lockObject)
             {
-                return false;
-            }
-            int newElementID = OriginalSize + 1;
-            
-            if (newElement is Paragraph para) { para.ElementID = newElementID; }
-            else if (newElement is Table table) { table.ElementID = newElementID; }
-            else if (newElement is Image image) { image.ElementID = newElementID; }
-            try
-            {
-                lstStructure.Insert(position, newElement);
-                if (!isNew) OWD.OOXMLDocData.Insert(newElement, position);
-                OriginalSize++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                lstStructure.RemoveAt(position);
-                string errorMessage = ConstructMessage(ex, "InsertBefore");
-                throw new FileFormatException(errorMessage, ex);
+                if (_lstStructure == null)
+                {
+                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                }
+
+                var position = _lstStructure.FindIndex(e => e.ElementId == element.ElementId);
+                if (position < 0)
+                {
+                    return -1;
+                }
+
+                var newElementId = _originalSize + 1;
+
+                switch (newElement)
+                {
+                    case Paragraph para:
+                        para.ElementId = newElementId;
+                        break;
+                    case Table table:
+                        table.ElementId = newElementId;
+                        break;
+                    case Image image:
+                        image.ElementId = newElementId;
+                        break;
+                }
+
+                try
+                {
+                    _lstStructure.Insert(position, newElement);
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Insert(newElement, position,this);
+                    _originalSize++;
+                    return newElementId;
+                }
+                catch (Exception ex)
+                {
+                    _lstStructure.RemoveAt(position);
+                    var errorMessage = ConstructMessage(ex, "InsertBefore");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
         /// <summary>
         /// Inserts an element before the element with the specified unique ID.
         /// </summary>
         /// <param name="newElement">The element to be inserted.</param>
-        /// <param name="ElementID">The unique ID of the element before which the new element should be inserted.</param>
+        /// <param name="elementId">The unique ID of the element before which the new element should be inserted.</param>
         /// <returns>
-        ///   <c>true</c> if the new element is successfully inserted before the specified element; otherwise, <c>false</c>.
-        ///   If the specified element with the provided ID is not found, <c>false</c> is returned.
+        ///   The unique identifier <see cref="IElement.ElementId"/> of the inserted element if the new element is successfully inserted before the specified element.
+        ///   If the specified element with the provided ID is not found, -1 is returned.
         ///   If an error occurs during the insertion operation, a <see cref="FileFormatException"/> is thrown.
         /// </returns>
         /// <remarks>
         /// This method inserts the specified element before the element with the provided unique ID in the structure.
         /// The method attempts to locate the element with the specified ID and insert the new element before it.
-        /// If the insertion operation is successful, the method returns <c>true></c>.
-        /// If the element with the specified ID is not found, <c>false</c> is returned, and no changes are made to the structure.
+        /// If the insertion operation is successful, the method returns <see cref="IElement.ElementId"/> of the inserted element.
+        /// If the element with the specified ID is not found, -1 is returned, and no changes are made to the structure.
         /// If an exception occurs during the insertion operation, the method attempts to restore the structure to its previous state
         /// and throws a <see cref="FileFormatException"/> with detailed error information.
         /// </remarks>
-        public bool InsertBefore(IElement newElement, int ElementID)
+        public int InsertBefore(IElement newElement, int elementId)
         {
-            int position = lstStructure.FindIndex(e => e.ElementID == ElementID);
-            if (position < 0) return false;
-            int newElementID = OriginalSize + 1;
-            if (newElement is Paragraph para) { para.ElementID = newElementID; }
-            else if (newElement is Table table) { table.ElementID = newElementID; }
-            else if (newElement is Image image) { image.ElementID = newElementID; }
-            try
+            lock (_lockObject)
             {
-                lstStructure.Insert(position, newElement);
-                if (!isNew) OWD.OOXMLDocData.Insert(newElement, position);
-                OriginalSize++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                lstStructure.RemoveAt(position);
-                string errorMessage = ConstructMessage(ex, "InsertBefore");
-                throw new FileFormatException(errorMessage, ex);
+                if (_lstStructure == null)
+                {
+                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                }
+
+                var position = _lstStructure.FindIndex(e => e.ElementId == elementId);
+                if (position < 0) return -1;
+                var newElementId = _originalSize + 1;
+                switch (newElement)
+                {
+                    case Paragraph para:
+                        para.ElementId = newElementId;
+                        break;
+                    case Table table:
+                        table.ElementId = newElementId;
+                        break;
+                    case Image image:
+                        image.ElementId = newElementId;
+                        break;
+                }
+
+                try
+                {
+                    _lstStructure.Insert(position, newElement);
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Insert(newElement, position,this);
+                    _originalSize++;
+                    return newElementId;
+                }
+                catch (Exception ex)
+                {
+                    _lstStructure.RemoveAt(position);
+                    var errorMessage = ConstructMessage(ex, "InsertBefore");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
-        internal void Append(IElement newElement)
+        internal int Append(IElement newElement)
         {
-            int newElementID = OriginalSize + 1;
-            if (newElement is Paragraph para) { para.ElementID = newElementID; }
-            else if (newElement is Table table) { table.ElementID = newElementID; }
-            else if (newElement is Image image) { image.ElementID = newElementID; }
-            int originalCount = lstStructure.Count;
-            try
+            lock (_lockObject)
             {
-                if (lstStructure.Count > 0 && lstStructure[originalCount - 1] is Section section)
+                if (_lstStructure == null)
                 {
-                    InsertBefore(newElement, section.ElementID);
+                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
                 }
-                else
+
+                //Console.WriteLine($"Number of Elements in List: {_lstStructure.Count}");
+                var newElementId = _originalSize + 1;
+                switch (newElement)
                 {
-                    lstStructure.Add(newElement);
-                    if (!isNew) OWD.OOXMLDocData.Append(newElement);
+                    //Console.WriteLine(_lstStructure.Count);
+                    case Paragraph para:
+                        para.ElementId = newElementId;
+                        break;
+                    case Table table:
+                        table.ElementId = newElementId;
+                        break;
+                    case Image image:
+                        image.ElementId = newElementId;
+                        break;
                 }
-                
-                OriginalSize++;
-            }
-            catch (Exception ex)
-            {
-                // Determine which element caused the exception and remove it
-                if (lstStructure.Count > originalCount)
+
+                var originalCount = _lstStructure.Count;
+                try
                 {
-                    if (lstStructure[originalCount - 1] is Section section)
+                    if (_lstStructure.Count > 0 && _lstStructure[originalCount - 1] is Section section)
                     {
-                        RemoveBefore(section.ElementID);
+                        InsertBefore(newElement, section.ElementId);
                     }
                     else
                     {
-                        lstStructure.RemoveAt(originalCount - 1); // Corrected index
+                        _lstStructure.Add(newElement);
+                        if (!_isNew) OWD.OoxmlDocData.CreateInstance().Append(newElement, this);
                     }
+                    
+                    //Console.WriteLine("Hello + " + _instance);
+                    _originalSize++;
+                    return newElementId;
                 }
-                string errorMessage = ConstructMessage(ex, "Append");
-                throw new FileFormatException(errorMessage, ex);
+                catch (Exception ex)
+                {
+                    // Determine which element caused the exception and remove it
+                    if (_lstStructure.Count > originalCount)
+                    {
+                        if (_lstStructure[originalCount - 1] is Section section)
+                        {
+                            RemoveBefore(section.ElementId);
+                        }
+                        else
+                        {
+                            _lstStructure.RemoveAt(originalCount - 1); // Corrected index
+                        }
+                    }
+
+                    var errorMessage = ConstructMessage(ex, "Append");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
         /// <summary>
@@ -429,78 +540,113 @@ namespace FileFormat.Words
         /// <param name="newElement">The element to be inserted.</param>
         /// <param name="element">The element after which the new element should be inserted.</param>
         /// <returns>
-        ///   <c>true</c> if the new element is successfully inserted after the specified element; otherwise, <c>false</c>.
-        ///   If the specified element is not found, <c>false</c> is returned.
+        ///   The unique identifier <see cref="IElement.ElementId"/> if the new element is successfully inserted after the specified element.
+        ///   If the specified element is not found, -1 is returned.
         ///   If an error occurs during the insertion operation, a <see cref="FileFormatException"/> is thrown.
         /// </returns>
         /// <remarks>
         /// This method inserts the specified element after the provided element in the structure.
         /// The method attempts to locate the specified element by comparing their unique IDs.
-        /// If the insertion operation is successful, the method returns <c>true></c>.
-        /// If the specified element is not found, <c>false</c> is returned, and no changes are made to the structure.
+        /// If the insertion operation is successful, the method returns <see cref="IElement.ElementId"/> of the inserted element.
+        /// If the specified element is not found, -1 is returned, and no changes are made to the structure.
         /// If an exception occurs during the insertion operation, the method attempts to restore the structure to its previous state
         /// and throws a <see cref="FileFormatException"/> with detailed error information.
         /// </remarks>
-        public bool InsertAfter(IElement newElement, IElement element)
+        public int InsertAfter(IElement newElement, IElement element)
         {
-            int position = lstStructure.FindIndex(e => e.ElementID == element.ElementID);
-            if (position < 0) return false;
-            int newElementID = OriginalSize + 1;
-            if (newElement is Paragraph para) { para.ElementID = newElementID; }
-            else if (newElement is Table table) { table.ElementID = newElementID; }
-            else if (newElement is Image image) { image.ElementID = newElementID; }
-            try
+            lock (_lockObject)
             {
-                lstStructure.Insert(position + 1, newElement);
-                if (!isNew) OWD.OOXMLDocData.Insert(newElement, position + 1);
-                OriginalSize++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                lstStructure.RemoveAt(position+1);
-                string errorMessage = ConstructMessage(ex, "InsertAfter");
-                throw new FileFormatException(errorMessage, ex);
+                if (_lstStructure == null)
+                {
+                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                }
+
+                var position = _lstStructure.FindIndex(e => e.ElementId == element.ElementId);
+                if (position < 0) return -1;
+                var newElementId = _originalSize + 1;
+                switch (newElement)
+                {
+                    case Paragraph para:
+                        para.ElementId = newElementId;
+                        break;
+                    case Table table:
+                        table.ElementId = newElementId;
+                        break;
+                    case Image image:
+                        image.ElementId = newElementId;
+                        break;
+                }
+
+                try
+                {
+                    _lstStructure.Insert(position + 1, newElement);
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Insert(newElement, position + 1,this);
+                    _originalSize++;
+                    return newElementId;
+                }
+                catch (Exception ex)
+                {
+                    _lstStructure.RemoveAt(position + 1);
+                    var errorMessage = ConstructMessage(ex, "InsertAfter");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
         /// <summary>
         /// Inserts an element after a specified element in the structure by its unique ID.
         /// </summary>
         /// <param name="newElement">The element to be inserted.</param>
-        /// <param name="ElementID">The unique ID of the element after which the new element should be inserted.</param>
+        /// <param name="elementId">The unique ID of the element after which the new element should be inserted.</param>
         /// <returns>
-        ///   <c>true</c> if the new element is successfully inserted after the specified element; otherwise, <c>false</c>.
-        ///   If the specified element is not found, <c>false</c> is returned.
+        ///   The unique identifier <see cref="IElement.ElementId"/> of the inserted element if the new element is successfully inserted after the specified element.
+        ///   If the specified element is not found, -1 is returned.
         ///   If an error occurs during the insertion operation, a <see cref="FileFormatException"/> is thrown.
         /// </returns>
         /// <remarks>
         /// This method inserts the specified element after the element with the provided unique ID in the structure.
         /// It is important to ensure that the specified element exists in the structure to determine the insertion point.
-        /// If the insertion operation is successful, the method returns <c>true></c>.
-        /// If the specified element is not found, <c>false</c> is returned, and no changes are made to the structure.
+        /// If the insertion operation is successful, the method returns <see cref="IElement.ElementId"/> of the inserted element.
+        /// If the specified element is not found, -1 is returned, and no changes are made to the structure.
         /// If an exception occurs during the insertion operation, the method attempts to restore the structure to its previous state
         /// and throws a <see cref="FileFormatException"/> with detailed error information.
         /// </remarks>
-        public bool InsertAfter(IElement newElement, int ElementID)
+        public int InsertAfter(IElement newElement, int elementId)
         {
-            int position = lstStructure.FindIndex(e => e.ElementID == ElementID);
-            if(position < 0) return false;
-            int newElementID = OriginalSize + 1;
-            if (newElement is Paragraph para) { para.ElementID = newElementID; }
-            else if (newElement is Table table) { table.ElementID = newElementID; }
-            else if (newElement is Image image) { image.ElementID = newElementID; }
-            try
+            lock (_lockObject)
             {
-                lstStructure.Insert(position + 1, newElement);
-                if (!isNew) OWD.OOXMLDocData.Insert(newElement, position + 1);
-                OriginalSize++;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                lstStructure.RemoveAt(position+1);
-                string errorMessage = ConstructMessage(ex, "InsertAfter");
-                throw new FileFormatException(errorMessage, ex);
+                if (_lstStructure == null)
+                {
+                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                }
+                var position = _lstStructure.FindIndex(e => e.ElementId == elementId);
+                if (position < 0) return -1;
+                var newElementId = _originalSize + 1;
+                switch (newElement)
+                {
+                    case Paragraph para:
+                        para.ElementId = newElementId;
+                        break;
+                    case Table table:
+                        table.ElementId = newElementId;
+                        break;
+                    case Image image:
+                        image.ElementId = newElementId;
+                        break;
+                }
+
+                try
+                {
+                    _lstStructure.Insert(position + 1, newElement);
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Insert(newElement, position + 1,this);
+                    _originalSize++;
+                    return newElementId;
+                }
+                catch (Exception ex)
+                {
+                    _lstStructure.RemoveAt(position + 1);
+                    var errorMessage = ConstructMessage(ex, "InsertAfter");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
         /// <summary>
@@ -522,29 +668,37 @@ namespace FileFormat.Words
         /// </remarks>
         public bool RemoveAfter(IElement element)
         {
-            int position = lstStructure.FindIndex(e => e.ElementID == element.ElementID);
-            if (position >= 0 && position < lstStructure.Count - 1)
+            lock (_lockObject)
             {
-                IElement backupElement = lstStructure[position + 1];
-                try
+                if (_lstStructure == null)
                 {
-                    lstStructure.RemoveAt(position + 1);
-                    if (!isNew) OWD.OOXMLDocData.Remove(position + 1);
-                    return true;
+                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
                 }
-                catch (Exception ex)
+                var position = _lstStructure.FindIndex(e => e.ElementId == element.ElementId);
+                if (position >= 0 && position < _lstStructure.Count - 1)
                 {
-                    lstStructure.Insert(position + 1, backupElement);
-                    string errorMessage = ConstructMessage(ex, "RemoveAfter");
-                    throw new FileFormatException(errorMessage, ex);
+                    var backupElement = _lstStructure[position + 1];
+                    try
+                    {
+                        _lstStructure.RemoveAt(position + 1);
+                        if (!_isNew) OWD.OoxmlDocData.CreateInstance().Remove(position + 1,this);
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        _lstStructure.Insert(position + 1, backupElement);
+                        var errorMessage = ConstructMessage(ex, "RemoveAfter");
+                        throw new FileFormatException(errorMessage, ex);
+                    }
                 }
+
+                return false;
             }
-            return false;
         }
         /// <summary>
         /// Removes the element that follows a specified element in the structure by its unique ID.
         /// </summary>
-        /// <param name="ElementID">The unique ID of the element whose follower should be removed.</param>
+        /// <param name="elementId">The unique ID of the element whose follower should be removed.</param>
         /// <returns>
         ///   <c>true</c> if the element following the specified element is successfully removed; otherwise, <c>false</c>.
         ///   If the specified element is not found or if there is no element following it, <c>false</c> is returned.
@@ -558,62 +712,83 @@ namespace FileFormat.Words
         /// If an exception occurs during the removal operation, the method attempts to restore the structure to its previous state
         /// and throws a <see cref="FileFormatException"/> with detailed error information.
         /// </remarks>
-        public bool RemoveAfter(int ElementID)
+        public bool RemoveAfter(int elementId)
         {
-            int position = lstStructure.FindIndex(e => e.ElementID == ElementID);
-            if (position >= 0 && position < lstStructure.Count - 1)
+            lock (_lockObject)
             {
-                IElement backupElement = lstStructure[position+1];
-                try
+                if (_lstStructure == null)
                 {
-                    lstStructure.RemoveAt(position + 1);
-                    if (!isNew) OWD.OOXMLDocData.Remove(position + 1);
-                    return true;
+                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
                 }
-                catch (Exception ex)
+
+                var position = _lstStructure.FindIndex(e => e.ElementId == elementId);
+                if (position >= 0 && position < _lstStructure.Count - 1)
                 {
-                    lstStructure.Insert(position + 1, backupElement);
-                    string errorMessage = ConstructMessage(ex, "RemoveAfter");
-                    throw new FileFormatException(errorMessage, ex);
+                    var backupElement = _lstStructure[position + 1];
+                    try
+                    {
+                        _lstStructure.RemoveAt(position + 1);
+                        if (!_isNew) OWD.OoxmlDocData.CreateInstance().Remove(position + 1,this);
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        _lstStructure.Insert(position + 1, backupElement);
+                        var errorMessage = ConstructMessage(ex, "RemoveAfter");
+                        throw new FileFormatException(errorMessage, ex);
+                    }
                 }
+
+                return false;
             }
-            return false;
         }
         /// <summary>
-        /// Removes the element that precedes the specified element in the document.
+        /// Removes the element that precedes the specified <paramref name="element"/> from the collection.
+        /// If the specified <paramref name="element"/> is not found or is the first element in the collection, no removal occurs.
         /// </summary>
-        /// <param name="element">The element after which you want to remove the preceding element.</param>
+        /// <remarks>
+        /// The method searches for the element with the specified <paramref name="element"/> identifier and removes
+        /// the element that immediately precedes it in the collection. If the specified <paramref name="element"/>
+        /// is not found or is the first element in the collection, no removal occurs, and the method returns -1.
+        /// In case of success, it returns the <see cref="IElement.ElementId"/> of removed element.
+        /// If the removal of the preceding element fails due to an exception, it rolls back the operation and reverts the document to its original state.
+        /// </remarks>
+        /// <param name="element">The element whose predecessor should be removed.</param>
         /// <returns>
         ///   <c>true</c> if the preceding element is successfully removed; otherwise, <c>false</c> if the element is not found.
         ///   Throws a <see cref="FileFormatException"/> if an exception occurs during the operation.
         /// </returns>
-        /// <remarks>
-        /// If the specified element is not found in the document, this method returns <c>false</c>.
-        /// If the removal of the preceding element fails due to an exception, it rolls back the operation and reverts the document to its original state.
-        /// The preceding element is removed from the internal document structure and, if applicable, the underlying OOXML document.
-        /// </remarks>
+        /// <seealso cref="IElement.ElementId"/>
         public bool RemoveBefore(IElement element)
         {
-            int position = lstStructure.FindIndex(e => e.ElementID == element.ElementID);
-            if (position <= 0) return false;
-            IElement backupElement = element;
-            try
+            lock (_lockObject)
             {
-                lstStructure.RemoveAt(position - 1);
-                if (!isNew) OWD.OOXMLDocData.Remove(position - 1);
-                return true;
-            }
-            catch(Exception ex)
-            {
-                lstStructure.Insert(position - 1, backupElement);
-                string errorMessage = ConstructMessage(ex, "RemoveBefore");
-                throw new FileFormatException(errorMessage, ex);
+                if (_lstStructure == null)
+                {
+                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                }
+
+                var position = _lstStructure.FindIndex(e => e.ElementId == element.ElementId);
+                if (position <= 0) return false;
+                var backupElement = element;
+                try
+                {
+                    _lstStructure.RemoveAt(position - 1);
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Remove(position - 1,this);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    _lstStructure.Insert(position - 1, backupElement);
+                    var errorMessage = ConstructMessage(ex, "RemoveBefore");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
         /// <summary>
         /// Removes the element that precedes the specified element with the given ElementID in the document.
         /// </summary>
-        /// <param name="ElementID">The unique identifier of the element after which you want to remove the preceding element.</param>
+        /// <param name="elementId">The unique identifier of the element after which you want to remove the preceding element.</param>
         /// <returns>
         ///   <c>true</c> if the preceding element is successfully removed; otherwise, <c>false</c> if the element is not found.
         ///   Throws a <see cref="FileFormatException"/> if an exception occurs during the operation.
@@ -623,28 +798,36 @@ namespace FileFormat.Words
         /// If the removal of the preceding element fails due to an exception, it rolls back the operation and reverts the document to its original state.
         /// The preceding element is removed from the internal document structure and, if applicable, the underlying OOXML document.
         /// </remarks>
-        public bool RemoveBefore(int ElementID)
+        public bool RemoveBefore(int elementId)
         {
-            int position = lstStructure.FindIndex(e => e.ElementID == ElementID);
-            if (position <= 0) return false;
-            IElement backupElement = lstStructure[position];
-            try
+            lock (_lockObject)
             {
-                lstStructure.RemoveAt(position - 1);
-                if (!isNew) OWD.OOXMLDocData.Remove(position - 1);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                lstStructure.Insert(position - 1, backupElement);
-                string errorMessage = ConstructMessage(ex, "RemoveBefore");
-                throw new FileFormatException(errorMessage, ex);
+                if (_lstStructure == null)
+                {
+                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                }
+
+                var position = _lstStructure.FindIndex(e => e.ElementId == elementId);
+                if (position <= 0) return false;
+                var backupElement = _lstStructure[position];
+                try
+                {
+                    _lstStructure.RemoveAt(position - 1);
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Remove(position - 1,this);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    _lstStructure.Insert(position - 1, backupElement);
+                    var errorMessage = ConstructMessage(ex, "RemoveBefore");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
         /// <summary>
         /// Removes the specified element with the given ElementID from the document.
         /// </summary>
-        /// <param name="elementID">The unique identifier of the element you want to remove.</param>
+        /// <param name="elementId">The unique identifier of the element you want to remove.</param>
         /// <returns>
         ///   <c>true</c> if the element is successfully removed; otherwise, <c>false</c> if the element is not found.
         ///   Throws a <see cref="FileFormatException"/> if an exception occurs during the operation.
@@ -654,23 +837,59 @@ namespace FileFormat.Words
         /// If the removal of the element fails due to an exception, it rolls back the operation and reverts the document to its original state.
         /// The element is removed from the internal document structure and, if applicable, the underlying OOXML document.
         /// </remarks>
-        public bool Remove(int elementID)
+        public bool Remove(int elementId)
         {
-            int position = lstStructure.FindIndex(e => e.ElementID == elementID);
-            if (position < 0) return false;
-            IElement backupElement = lstStructure[position];
-            try
+            lock (_lockObject)
             {
-                lstStructure.RemoveAt(position);
-                if (!isNew) OWD.OOXMLDocData.Remove(position);
-                return true;
+                if (_lstStructure == null)
+                {
+                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                }
+
+                var position = _lstStructure.FindIndex(e => e.ElementId == elementId);
+                if (position < 0) return false;
+                var backupElement = _lstStructure[position];
+                try
+                {
+                    _lstStructure.RemoveAt(position);
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Remove(position,this);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    _lstStructure.Insert(position, backupElement);
+                    var errorMessage = ConstructMessage(ex, "Remove");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
-            catch(Exception ex)
+        }
+        /// <summary>
+        /// Dispose off all managed and unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                lstStructure.Insert(position, backupElement);
-                string errorMessage = ConstructMessage(ex, "Remove");
-                throw new FileFormatException(errorMessage, ex);
+                // Dispose of managed resources (if any)
+                if (_lstStructure != null) _lstStructure = null;
+                if (_elementStyles != null) _elementStyles =null;
+                if (_ooxmlDoc != null)
+                {
+                    _ooxmlDoc.Dispose();
+                    _ooxmlDoc=null;
+                }
+                OWD.OoxmlDocData.CreateInstance().Dispose();
             }
+            // Dispose of unmanaged resources
+            if (_ms == null) return;
+            _ms.Dispose();
+            _ms = null;
         }
     }
     /// <summary>
@@ -678,6 +897,7 @@ namespace FileFormat.Words
     /// </summary>
     public class Body
     {
+        private readonly object _lockObject = new object();
         /// <summary>
         /// Gets the list of paragraphs in the body.
         /// </summary>
@@ -701,41 +921,52 @@ namespace FileFormat.Words
         /// <param name="doc">The parent document containing the body.</param>
         public Body(Document doc)
         {
-
-            Paragraphs = new List<Paragraph>();
-            Tables = new List<Table>();
-            Images = new List<Image>();
-            Sections = new List<Section>();
-            foreach (IElement element in doc.GetElements())
+            lock (_lockObject)
             {
-                if (element is Paragraph)
+                Paragraphs = new List<Paragraph>();
+                Tables = new List<Table>();
+                Images = new List<Image>();
+                Sections = new List<Section>();
+                foreach (var element in doc.GetElements())
                 {
-                    Paragraphs.Add((Paragraph)element);
+                    if (element is Paragraph)
+                    {
+                        Paragraphs.Add((Paragraph)element);
+                    }
+
+                    if (element is Table)
+                    {
+                        Tables.Add((Table)element);
+                    }
+
+                    if (element is Image)
+                    {
+                        Images.Add((Image)element);
+                    }
+
+                    if (element is Section section)
+                    {
+                        Sections.Add(section);
+                    }
                 }
-                if (element is Table)
-                {
-                    Tables.Add((Table)element);
-                }
-                if (element is Image)
-                {
-                    Images.Add((Image)element);
-                }
-                if (element is Section section)
-                {
-                    Sections.Add(section);
-                }
+
+                Doc = doc;
             }
-            Doc = doc;
         }
         /// <summary>
         /// Appends a child element to the body.
         /// </summary>
         /// <param name="element">The element to append to the body.</param>
-        public void AppendChild(IElement element)
+        /// <returns>
+        /// The unique identifier <see cref="IElement.ElementId"/> of the appended element.
+        /// </returns>
+        public int AppendChild(IElement element)
         {
-            Doc.Append(element);
+            lock (_lockObject)
+            {
+                return Doc.Append(element);
+            }
         }
     }
-
 }
 

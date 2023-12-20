@@ -14,80 +14,85 @@ using OT = OpenXML.Templates;
 
 namespace OpenXML.Words
 {
-    internal class Document
+    internal class OwDocument
     {
-        private PKG.WordprocessingDocument pkgDocument;
-        private WP.Body wpBody;
-        private MemoryStream ms;
-        PKG.MainDocumentPart mainPart;
-
-        internal Document()
+        private PKG.WordprocessingDocument _pkgDocument;
+        private WP.Body _wpBody;
+        private MemoryStream _ms;
+        private PKG.MainDocumentPart _mainPart;
+        private readonly object _lockObject = new object();
+        private OwDocument()
         {
-            try
+            lock (_lockObject)
             {
-                ms = new MemoryStream();
-                pkgDocument = PKG.WordprocessingDocument.Create(ms, DF.WordprocessingDocumentType.Document, true);
-                mainPart = pkgDocument.AddMainDocumentPart();
-                mainPart.Document = new WP.Document();
-                OT.DefaultTemplate tmp = new OT.DefaultTemplate();
-                tmp.CreateMainDocumentPart(mainPart);
-                CreateProperties(pkgDocument);
-            }
-            catch(Exception ex)
-            {
-                string errorMessage = OWD.OOXMLDocData.ConstructMessage(ex, "Initialize OOXML Element(s)");
-                throw new FileFormatException(errorMessage, ex);
+                try
+                {
+                    _ms = new MemoryStream();
+                    _pkgDocument = PKG.WordprocessingDocument.Create(_ms, DF.WordprocessingDocumentType.Document, true);
+                    _mainPart = _pkgDocument.AddMainDocumentPart();
+                    _mainPart.Document = new WP.Document();
+                    var tmp = new OT.DefaultTemplate();
+                    tmp.CreateMainDocumentPart(_mainPart);
+                    CreateProperties(_pkgDocument);
+                }
+                catch (Exception ex)
+                {
+                    var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Initialize OOXML Element(s)");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
+
+        public static OwDocument CreateInstance()
+        {
+            return new OwDocument(); 
+        }
+
         internal void CreateDocument(List<FF.IElement> lst)
         {
             try
             {
-                /**pkgDocument = PKG.WordprocessingDocument.Create(ms, DF.WordprocessingDocumentType.Document, true);
-                mainPart = pkgDocument.AddMainDocumentPart();
-                mainPart.Document = new WP.Document();
-                OT.GenerateStructure tmp = new OT.GenerateStructure();
-                tmp.CreateMainDocumentPart(mainPart);
-                CreateProperties(pkgDocument);**/
-                wpBody = mainPart.Document.Body;
-                WP.SectionProperties sectionProperties = wpBody.Elements<WP.SectionProperties>().FirstOrDefault();
-                int sequence = 1;
+                _wpBody = _mainPart.Document.Body;
+                if (_wpBody == null)
+                    throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
+                var sectionProperties = _wpBody.Elements<WP.SectionProperties>().FirstOrDefault();
                 foreach (var element in lst)
                 {
-                    if (element is FF.Paragraph ffP)
+                    switch (element)
                     {
-                        var para = CreateParagraph(ffP);
-                        wpBody.InsertBefore(para, sectionProperties);
-                        sequence++;
-                    }
-                    if (element is FF.Image ffImg)
-                    {
-                        var para = CreateImage(ffImg, mainPart);
-                        wpBody.InsertBefore(para, sectionProperties);
-                        sequence++;
-                    }
-                    if (element is FF.Table ffTable)
-                    {
-                        var table = CreateTable(ffTable);
-                        wpBody.InsertBefore(table, sectionProperties);
-                        sequence++;
+                        case FF.Paragraph ffP:
+                        {
+                            var para = CreateParagraph(ffP);
+                            _wpBody.InsertBefore(para, sectionProperties);
+                            break;
+                        }
+                        case FF.Image ffImg:
+                        {
+                            var para = CreateImage(ffImg, _mainPart);
+                            _wpBody.InsertBefore(para, sectionProperties);
+                            break;
+                        }
+                        case FF.Table ffTable:
+                        {
+                            var table = CreateTable(ffTable);
+                            _wpBody.InsertBefore(table, sectionProperties);
+                            break;
+                        }
                     }
                 }
             }
             catch(Exception ex)
             {
-                string errorMessage = OWD.OOXMLDocData.ConstructMessage(ex, "Create OOXML Element(s)");
+                var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Create OOXML Element(s)");
                 throw new FileFormatException(errorMessage, ex);
             }
         }
 
         internal void CreateProperties(PKG.WordprocessingDocument pkgDocument)
         {
-            // Access the core properties part
             var corePart = pkgDocument.CoreFilePropertiesPart;
             if (corePart != null)
             {
-                // Delete the core properties part
                 pkgDocument.DeletePart(corePart);
             }
             var customPart = pkgDocument.CustomFilePropertiesPart;
@@ -95,605 +100,668 @@ namespace OpenXML.Words
             {
                 pkgDocument.DeletePart(customPart);
             }
-            OT.CoreProperties coreProperties = new OT.CoreProperties();
-            Dictionary<string, string> dictCoreProp = new Dictionary<string, string>();
-            dictCoreProp["Title"] = "Newly Created Document";
-            dictCoreProp["Subject"] = "WordProcessing Document Generation";
-            dictCoreProp["Keywords"] = "DOCX";
-            dictCoreProp["Description"] = "A WordProcessing Document Created from Scratch.";
-            dictCoreProp["Creator"] = "FileFormat.Words";
-            DateTime currentTime = System.DateTime.UtcNow;
+            var coreProperties = new OT.CoreProperties();
+            var dictCoreProp = new Dictionary<string, string>
+            {
+                ["Title"] = "Newly Created OWDocument",
+                ["Subject"] = "WordProcessing OWDocument Generation",
+                ["Keywords"] = "DOCX",
+                ["Description"] = "A WordProcessing OWDocument Created from Scratch.",
+                ["Creator"] = "FileFormat.Words"
+            };
+            var currentTime = System.DateTime.UtcNow;
             dictCoreProp["Created"] = currentTime.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ");
             dictCoreProp["Modified"] = currentTime.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ");
             coreProperties.CreateCoreFilePropertiesPart(pkgDocument.AddCoreFilePropertiesPart(), dictCoreProp);
-            OT.CustomProperties customProperties = new OT.CustomProperties();
+            var customProperties = new OT.CustomProperties();
             customProperties.CreateExtendedFilePropertiesPart(pkgDocument.AddExtendedFilePropertiesPart());
         }
 
         internal WP.Paragraph CreateParagraph(FF.Paragraph ffP)
         {
-            try
+            lock (_lockObject)
             {
-                var wpParagraph = new WP.Paragraph();
-
-                if (ffP.Style != null)
+                try
                 {
-                    WP.ParagraphProperties paragraphProperties = new WP.ParagraphProperties();
-                    WP.ParagraphStyleId paragraphStyleId = new WP.ParagraphStyleId { Val = ffP.Style };
-                    paragraphProperties.Append(paragraphStyleId);
-                    wpParagraph.Append(paragraphProperties);
-                }
+                    var wpParagraph = new WP.Paragraph();
 
-                foreach (var ffR in ffP.Runs)
-                {
-                    var wpRun = new WP.Run();
-
-                    var runProperties = new WP.RunProperties();
-
-                    if (ffR.FontFamily != null)
+                    if (ffP.Style != null)
                     {
-                        var runFont = new WP.RunFonts
+                        var paragraphProperties = new WP.ParagraphProperties();
+                        var paragraphStyleId = new WP.ParagraphStyleId { Val = ffP.Style };
+                        paragraphProperties.Append(paragraphStyleId);
+                        wpParagraph.Append(paragraphProperties);
+                    }
+
+                    foreach (var ffR in ffP.Runs)
+                    {
+                        var wpRun = new WP.Run();
+
+                        var runProperties = new WP.RunProperties();
+
+                        if (ffR.FontFamily != null)
                         {
-                            Ascii = ffR.FontFamily,
-                            HighAnsi = ffR.FontFamily,
-                            ComplexScript = ffR.FontFamily,
-                            EastAsia = ffR.FontFamily
-                        };
-                        runProperties.Append(runFont);
+                            var runFont = new WP.RunFonts
+                            {
+                                Ascii = ffR.FontFamily,
+                                HighAnsi = ffR.FontFamily,
+                                ComplexScript = ffR.FontFamily,
+                                EastAsia = ffR.FontFamily
+                            };
+                            runProperties.Append(runFont);
+                        }
+
+                        if (ffR.Color != null)
+                        {
+                            var color = new WP.Color { Val = ffR.Color };
+                            runProperties.Append(color);
+                        }
+
+                        if (ffR.FontSize > 0)
+                        {
+                            var fontSize = new WP.FontSize { Val = (ffR.FontSize * 2).ToString() };
+                            runProperties.Append(fontSize);
+                        }
+
+                        if (ffR.Bold)
+                        {
+                            runProperties.Append(new WP.Bold() { Val = new DF.OnOffValue(true) });
+                        }
+
+                        if (ffR.Italic)
+                        {
+                            runProperties.Append(new WP.Italic());
+                        }
+
+                        if (ffR.Underline)
+                        {
+                            var underline = new WP.Underline { Val = WP.UnderlineValues.Single };
+                            runProperties.Append(underline);
+                        }
+
+                        var text = new WP.Text(ffR.Text);
+                        wpRun.Append(runProperties, text);
+                        wpParagraph.AppendChild(wpRun);
                     }
 
-                    if (ffR.Color != null)
-                    {
-                        var color = new WP.Color { Val = ffR.Color };
-                        runProperties.Append(color);
-                    }
-
-                    if (ffR.FontSize > 0)
-                    {
-                        var fontSize = new WP.FontSize { Val = (ffR.FontSize *2).ToString() };
-                        runProperties.Append(fontSize);
-                    }
-
-                    if (ffR.Bold)
-                    {
-                        runProperties.Append(new WP.Bold() { Val = new DF.OnOffValue(true) });
-                    }
-
-                    if (ffR.Italic)
-                    {
-                        runProperties.Append(new WP.Italic());
-                    }
-
-                    if (ffR.Underline)
-                    {
-                        var underline = new WP.Underline { Val = WP.UnderlineValues.Single };
-                        runProperties.Append(underline);
-                    }
-
-                    var text = new WP.Text(ffR.Text);
-                    wpRun.Append(runProperties, text);
-                    wpParagraph.AppendChild(wpRun);
+                    return wpParagraph;
                 }
-                return wpParagraph;
-            }
-            catch(Exception ex)
-            {
-                string errorMessage = OWD.OOXMLDocData.ConstructMessage(ex, "Create Paragraph");
-                throw new FileFormatException(errorMessage, ex);
+                catch (Exception ex)
+                {
+                    var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Create Paragraph");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
 
         internal WP.Table CreateTable(FF.Table ffTable)
         {
-            try
+            lock (_lockObject)
             {
-                int rows = ffTable.Rows.Count;
-                int cols = ffTable.Rows[0].Cells.Count;
-
-                WP.Table wpTable = new WP.Table(
-                    new WP.TableProperties(
-                    new WP.TableStyle() { Val = ffTable.Style } // Specify the TableStyle ID you want to apply
-                    )
-                );
-                WP.TableGrid tableGrid = new WP.TableGrid();
-                for (var i = 0; i < cols; i++)
+                try
                 {
-                    if (ffTable.Column.Width > 0)
-                        tableGrid.Append(new WP.GridColumn { Width = ffTable.Column.Width.ToString() });
-                    else
-                        tableGrid.Append(new WP.GridColumn());
-                }
-                wpTable.Append(tableGrid);
+                    var rows = ffTable.Rows.Count;
+                    var cols = ffTable.Rows[0].Cells.Count;
 
-                for (var i = 0; i < rows; i++)
-                {
-                    WP.TableRow wpRow = new WP.TableRow();
-
-                    for (var j = 0; j < cols; j++)
+                    var wpTable = new WP.Table(
+                        new WP.TableProperties(
+                            new WP.TableStyle() { Val = ffTable.Style } // Specify the TableStyle ID you want to apply
+                        )
+                    );
+                    var tableGrid = new WP.TableGrid();
+                    for (var i = 0; i < cols; i++)
                     {
-                        WP.TableCell wpCell = new WP.TableCell();
-                        FF.Cell ffCell = ffTable.Rows[i].Cells[j];
-                        foreach (FF.Paragraph ffPara in ffCell.Paragraphs)
-                        {
-                            wpCell.Append(CreateParagraph(ffPara));
-                        }
-                        wpRow.Append(wpCell);
+                        if (ffTable.Column.Width > 0)
+                            tableGrid.Append(new WP.GridColumn { Width = ffTable.Column.Width.ToString() });
+                        else
+                            tableGrid.Append(new WP.GridColumn());
                     }
-                    wpTable.Append(wpRow);
+
+                    wpTable.Append(tableGrid);
+
+                    for (var i = 0; i < rows; i++)
+                    {
+                        var wpRow = new WP.TableRow();
+
+                        for (var j = 0; j < cols; j++)
+                        {
+                            var wpCell = new WP.TableCell();
+                            var ffCell = ffTable.Rows[i].Cells[j];
+                            foreach (var ffPara in ffCell.Paragraphs)
+                            {
+                                wpCell.Append(CreateParagraph(ffPara));
+                            }
+
+                            wpRow.Append(wpCell);
+                        }
+
+                        wpTable.Append(wpRow);
+                    }
+
+                    return wpTable;
                 }
-                return wpTable;
-            }
-            catch(Exception ex)
-            {
-                string errorMessage = OWD.OOXMLDocData.ConstructMessage(ex, "Create Table");
-                throw new FileFormatException(errorMessage, ex);
+                catch (Exception ex)
+                {
+                    var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Create Table");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
 
-        internal WP.Paragraph CreateImage(FF.Image ffIMG,PKG.MainDocumentPart mainPart)
+        internal WP.Paragraph CreateImage(FF.Image ffImg,PKG.MainDocumentPart mainPart)
         {
-            try
+            lock (_lockObject)
             {
-                byte[] imageBytes = ffIMG.ImageData;
-                PKG.ImagePart imagePart = mainPart.AddImagePart(PKG.ImagePartType.Png);
-                using (Stream partStream = imagePart.GetStream())
+                try
                 {
-                    partStream.Write(imageBytes, 0, imageBytes.Length); // Write the image bytes to the partStream
-                }
-                float dpi = 96; // The DPI of the image (you may need to adjust this value)
-                int widthInPixels;
-                int heightInPixels;
-                if (ffIMG.Width > 500 || ffIMG.Height > 500)
-                {
-                    widthInPixels = 500;
-                    heightInPixels = 500;
-                }
-                else if(ffIMG.Width == 0 || ffIMG.Height == 300)
-                {
-                    widthInPixels = 500;
-                    heightInPixels = 500;
-                }
-                else
-                {
-                    widthInPixels = ffIMG.Width;
-                    heightInPixels = ffIMG.Height;
-                }
-                float widthInInches = widthInPixels / dpi ;
-                float heightInInches = heightInPixels / dpi;
+                    var imageBytes = ffImg.ImageData;
+                    var imagePart = mainPart.AddImagePart(PKG.ImagePartType.Png);
+                    using (var partStream = imagePart.GetStream())
+                    {
+                        partStream.Write(imageBytes, 0, imageBytes.Length); // Write the image bytes to the partStream
+                    }
 
-                long widthInEMU = (long)(widthInInches * 914400);
-                long heightInEMU = (long)(heightInInches * 914400);
-                //long widthInEMU = (long)widthInInches;
-                //long heightInEMU = (long)heightInInches;
+                    float dpi = 96; // The DPI of the image (you may need to adjust this value)
+                    //int widthInPixels;
+                    //int heightInPixels;
+                    const int maxDimension = 500;
 
-                // Define the reference of the image.
-                var element =
-                     new WP.Drawing(
-                         new DW.Inline(
-                             //new DW.Extent() { Cx = ffIMG.Width*9525 , Cy = ffIMG.Height*9525 },
-                             new DW.Extent() { Cx = widthInEMU, Cy = heightInEMU },
-                             new DW.EffectExtent()
-                             {
-                                 LeftEdge = 0L,
-                                 TopEdge = 0L,
-                                 RightEdge = 0L,
-                                 BottomEdge = 0L
-                             },
-                             new DW.DocProperties()
-                             {
-                                 Id = (DF.UInt32Value)1U,
-                                 Name = "Picture 1"
-                             },
-                             new DW.NonVisualGraphicFrameDrawingProperties(
-                                 new A.GraphicFrameLocks() { NoChangeAspect = true }),
-                             new A.Graphic(
-                                 new A.GraphicData(
-                                     new PIC.Picture(
-                                         new PIC.NonVisualPictureProperties(
-                                             new PIC.NonVisualDrawingProperties()
-                                             {
-                                                 Id = (DF.UInt32Value)0U,
-                                                 Name = "New Bitmap Image.jpg"
-                                             },
-                                             new PIC.NonVisualPictureDrawingProperties()),
-                                         new PIC.BlipFill(
-                                             new A.Blip(
-                                                 new A.BlipExtensionList(
-                                                     new A.BlipExtension()
-                                                     {
-                                                         Uri =
-                                                            "{28A0092B-C50C-407E-A947-70E740481C1C}"
-                                                     })
-                                             )
-                                             {
-                                                 Embed = mainPart.GetIdOfPart(imagePart),
-                                                 CompressionState =
-                                                 A.BlipCompressionValues.Print
-                                             },
-                                             new A.Stretch(
-                                                 new A.FillRectangle())),
-                                         new PIC.ShapeProperties(
-                                             new A.Transform2D(
-                                                 new A.Offset() { X = 0L, Y = 0L },
-                                                 //new A.Extents() { Cx = ffIMG.Width*9525, Cy = ffIMG.Height*9525 }
-                                                 new A.Extents() { Cx = widthInEMU, Cy = heightInEMU }),
-                                             new A.PresetGeometry(
-                                                 new A.AdjustValueList()
-                                             )
-                                             { Preset = A.ShapeTypeValues.Rectangle }))
-                                 )
-                                 { Uri = "http://schemas.openxmlformats.org/drawingml/2006/picture" })
-                         )
-                         {
-                             DistanceFromTop = (DF.UInt32Value)0U,
-                             DistanceFromBottom = (DF.UInt32Value)0U,
-                             DistanceFromLeft = (DF.UInt32Value)0U,
-                             DistanceFromRight = (DF.UInt32Value)0U,
-                             EditId = "50D07946"
-                         });
-                return new WP.Paragraph(new WP.Run(element));
-            }
-            catch(Exception ex)
-            {
-                string errorMessage = OWD.OOXMLDocData.ConstructMessage(ex, "Create Image");
-                throw new FileFormatException(errorMessage, ex);
+                    var widthInPixels = (ffImg.Width > 0 && ffImg.Width <= maxDimension) ? ffImg.Width : maxDimension;
+                    var heightInPixels = (ffImg.Height > 0 && ffImg.Height <= maxDimension) ? ffImg.Height : maxDimension;
+
+                    var widthInInches = widthInPixels / dpi;
+                    var heightInInches = heightInPixels / dpi;
+
+                    var widthInEmu = (long)(widthInInches * 914400);
+                    var heightInEmu = (long)(heightInInches * 914400);
+                    //long widthInEMU = (long)widthInInches;
+                    //long heightInEMU = (long)heightInInches;
+
+                    // Define the reference of the image.
+                    var element =
+                        new WP.Drawing(
+                            new DW.Inline(
+                                //new DW.Extent() { Cx = ffIMG.Width*9525 , Cy = ffIMG.Height*9525 },
+                                new DW.Extent() { Cx = widthInEmu, Cy = heightInEmu },
+                                new DW.EffectExtent()
+                                {
+                                    LeftEdge = 0L,
+                                    TopEdge = 0L,
+                                    RightEdge = 0L,
+                                    BottomEdge = 0L
+                                },
+                                new DW.DocProperties()
+                                {
+                                    Id = (DF.UInt32Value)1U,
+                                    Name = "Picture 1"
+                                },
+                                new DW.NonVisualGraphicFrameDrawingProperties(
+                                    new A.GraphicFrameLocks() { NoChangeAspect = true }),
+                                new A.Graphic(
+                                    new A.GraphicData(
+                                            new PIC.Picture(
+                                                new PIC.NonVisualPictureProperties(
+                                                    new PIC.NonVisualDrawingProperties()
+                                                    {
+                                                        Id = (DF.UInt32Value)0U,
+                                                        Name = "New Bitmap Image.jpg"
+                                                    },
+                                                    new PIC.NonVisualPictureDrawingProperties()),
+                                                new PIC.BlipFill(
+                                                    new A.Blip(
+                                                        new A.BlipExtensionList(
+                                                            new A.BlipExtension()
+                                                            {
+                                                                Uri =
+                                                                    "{28A0092B-C50C-407E-A947-70E740481C1C}"
+                                                            })
+                                                    )
+                                                    {
+                                                        Embed = mainPart.GetIdOfPart(imagePart),
+                                                        CompressionState =
+                                                            A.BlipCompressionValues.Print
+                                                    },
+                                                    new A.Stretch(
+                                                        new A.FillRectangle())),
+                                                new PIC.ShapeProperties(
+                                                    new A.Transform2D(
+                                                        new A.Offset() { X = 0L, Y = 0L },
+                                                        //new A.Extents() { Cx = ffIMG.Width*9525, Cy = ffIMG.Height*9525 }
+                                                        new A.Extents() { Cx = widthInEmu, Cy = heightInEmu }),
+                                                    new A.PresetGeometry(
+                                                            new A.AdjustValueList()
+                                                        )
+                                                        { Preset = A.ShapeTypeValues.Rectangle }))
+                                        )
+                                        { Uri = "http://schemas.openxmlformats.org/drawingml/2006/picture" })
+                            )
+                            {
+                                DistanceFromTop = (DF.UInt32Value)0U,
+                                DistanceFromBottom = (DF.UInt32Value)0U,
+                                DistanceFromLeft = (DF.UInt32Value)0U,
+                                DistanceFromRight = (DF.UInt32Value)0U,
+                                EditId = "50D07946"
+                            });
+                    return new WP.Paragraph(new WP.Run(element));
+                }
+                catch (Exception ex)
+                {
+                    var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Create Image");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
 
         internal List<FF.IElement> LoadDocument(Stream stream)
         {
-            try
+            lock (_lockObject)
             {
-                /**
-                using (var fs = new FileStream(filename, FileMode.Open))
+                try
                 {
-                    fs.CopyTo(ms);
-                }**/
-                //stream.CopyTo(ms);
+                    _pkgDocument = PKG.WordprocessingDocument.Open(stream, true);
 
-                pkgDocument = PKG.WordprocessingDocument.Open(stream, true);
+                    if (_pkgDocument.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
 
-                OWD.OOXMLDocData.SetPKG(pkgDocument);
+                    OWD.OoxmlDocData.CreateInstance(_pkgDocument);
 
-                mainPart = pkgDocument.MainDocumentPart;
-                wpBody = pkgDocument.MainDocumentPart.Document.Body;
+                    _mainPart = _pkgDocument.MainDocumentPart;
+                    _wpBody = _pkgDocument.MainDocumentPart.Document.Body;
 
-                int sequence = 1;
-                var lstelement = new List<FF.IElement>();
+                    var sequence = 1;
+                    var elements = new List<FF.IElement>();
 
-                foreach (var element in wpBody.Elements())
-                {
-                    if (element is WP.Paragraph wpPara)
+                    foreach (var element in _wpBody.Elements())
                     {
-                        bool drawingFound = false;
-                        foreach (var drawing in wpPara.Descendants<WP.Drawing>())
+                        switch (element)
                         {
-                            FF.Image image = LoadImage(drawing, sequence);
-                            if (image != null)
+                            case WP.Paragraph wpPara:
                             {
-                                lstelement.Add(LoadImage(drawing, sequence));
-                                sequence++;
-                                drawingFound = true;
+                                var drawingFound = false;
+                                foreach (var drawing in wpPara.Descendants<WP.Drawing>())
+                                {
+                                    var image = LoadImage(drawing, sequence);
+                                    if (image != null)
+                                    {
+                                        elements.Add(LoadImage(drawing, sequence));
+                                        sequence++;
+                                        drawingFound = true;
+                                    }
+                                    else
+                                    {
+                                        elements.Add(new FF.Unknown { ElementId = sequence });
+                                        sequence++;
+                                        drawingFound = true;
+                                    }
+                                }
+
+                                if (!drawingFound)
+                                {
+                                    elements.Add(LoadParagraph(wpPara, sequence));
+                                    sequence++;
+                                }
+
+                                break;
                             }
-                            else
+                            case WP.Drawing drawing:
                             {
-                                lstelement.Add(new FF.Unknown { ElementID = sequence });
-                                sequence++;
-                                drawingFound = true;
+                                var image = LoadImage(drawing, sequence);
+                                if (image != null)
+                                {
+                                    elements.Add(LoadImage(drawing, sequence));
+                                    sequence++;
+                                }
+                                else
+                                {
+                                    elements.Add(new FF.Unknown { ElementId = sequence });
+                                    sequence++;
+                                }
+
+                                break;
                             }
-                        }
-                        if (!drawingFound)
-                        {
-                            lstelement.Add(LoadParagraph(wpPara, sequence));
-                            sequence++;
-                        }
-                    }
-                    else if (element is WP.Drawing drawing)
-                    {
-                        FF.Image image = LoadImage(drawing, sequence);
-                        if (image != null)
-                        {
-                            lstelement.Add(LoadImage(drawing, sequence));
-                            sequence++;
-                        }
-                        else
-                        {
-                            lstelement.Add(new FF.Unknown { ElementID = sequence });
-                            sequence++;
+                            case WP.Table wpTable:
+                                elements.Add(LoadTable(wpTable, sequence));
+                                sequence++;
+                                break;
+                            case WP.SectionProperties wpSection:
+                                elements.Add(LoadSection(wpSection, sequence));
+                                sequence++;
+                                break;
+                            default:
+                                elements.Add(new FF.Unknown { ElementId = sequence });
+                                sequence++;
+                                break;
                         }
                     }
-                    else if (element is WP.Table wpTable)
-                    {
-                        lstelement.Add(LoadTable(wpTable, sequence));
-                        sequence++;
-                    }
-                    else if (element is WP.SectionProperties wpSection)
-                    {
-                        lstelement.Add(LoadSection(wpSection, sequence));
-                        sequence++;
-                    }
-                    else
-                    {
-                        lstelement.Add(new FF.Unknown { ElementID = sequence });
-                        sequence++;
-                    }
+
+                    return elements;
                 }
-                return lstelement;
-            }
-            catch(Exception ex)
-            {
-                string errorMessage = OWD.OOXMLDocData.ConstructMessage(ex, "Load OOXML Elements");
-                throw new FileFormatException(errorMessage, ex);
+                catch (Exception ex)
+                {
+                    var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load OOXML Elements");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
 
-        internal FF.Paragraph LoadParagraph(WP.Paragraph wpPara, int ID)
+        internal FF.Paragraph LoadParagraph(WP.Paragraph wpPara, int id)
         {
-            try
+            lock (_lockObject)
             {
-                var ffP = new FF.Paragraph { ElementID = ID };
-
-                WP.ParagraphProperties paraProps = wpPara.GetFirstChild<WP.ParagraphProperties>();
-                if (paraProps != null)
+                try
                 {
-                    WP.ParagraphStyleId paraStyleId = paraProps.Elements<WP.ParagraphStyleId>().FirstOrDefault();
-                    if (paraStyleId != null)
+                    var ffP = new FF.Paragraph { ElementId = id };
+
+                    var paraProps = wpPara.GetFirstChild<WP.ParagraphProperties>();
+                    if (paraProps != null)
                     {
-                        ffP.Style = paraStyleId.Val.Value;
+                        var paraStyleId = paraProps.Elements<WP.ParagraphStyleId>().FirstOrDefault();
+                        if (paraStyleId != null)
+                        {
+                            if (paraStyleId.Val != null) ffP.Style = paraStyleId.Val.Value;
+                        }
                     }
-                }
 
-                var runs = wpPara.Elements<WP.Run>();
-                var lstR = new List<FF.Run>();
+                    var runs = wpPara.Elements<WP.Run>();
 
-                foreach (var wpR in runs)
-                {
-                    int? fontSize = wpR.RunProperties?.FontSize?.Val != null ? int.Parse(wpR.RunProperties.FontSize.Val) : (int?)null;
-                    if (fontSize != null) fontSize /= 2;
-                    var ffR = new FF.Run
+                    foreach (var wpR in runs)
                     {
-                        Text = wpR.InnerText,
-                        FontFamily = wpR.RunProperties?.RunFonts?.Ascii ?? null,
-                        FontSize = fontSize ?? 0,//int.Parse(wpR.RunProperties?.FontSize?.Val ?? null),
-                        Color = wpR.RunProperties?.Color?.Val ?? null,
-                        Bold = (wpR.RunProperties != null && wpR.RunProperties.Bold != null),
-                        Italic = (wpR.RunProperties != null && wpR.RunProperties.Italic != null),
-                        Underline = (wpR.RunProperties != null && wpR.RunProperties.Underline != null)
-                    };
-                    ffP.AddRun(ffR);
+                        var fontSize = wpR.RunProperties?.FontSize?.Val != null
+                            ? int.Parse(wpR.RunProperties.FontSize.Val)
+                            : (int?)null;
+                        if (fontSize != null) fontSize /= 2;
+                        var ffR = new FF.Run
+                        {
+                            Text = wpR.InnerText,
+                            FontFamily = wpR.RunProperties?.RunFonts?.Ascii ?? null,
+                            FontSize = fontSize ?? 0, //int.Parse(wpR.RunProperties?.FontSize?.Val ?? null),
+                            Color = wpR.RunProperties?.Color?.Val ?? null,
+                            Bold = (wpR.RunProperties != null && wpR.RunProperties.Bold != null),
+                            Italic = (wpR.RunProperties != null && wpR.RunProperties.Italic != null),
+                            Underline = (wpR.RunProperties != null && wpR.RunProperties.Underline != null)
+                        };
+                        ffP.AddRun(ffR);
+                    }
+
+                    return ffP;
                 }
-                return ffP;
-            }
-            catch(Exception ex)
-            {
-                string errorMessage = OWD.OOXMLDocData.ConstructMessage(ex, "Load Paragraph");
-                throw new FileFormatException(errorMessage, ex);
+                catch (Exception ex)
+                {
+                    var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load Paragraph");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
 
         internal FF.Image LoadImage(WP.Drawing drawing, int sequence)
         {
-            try
+            lock (_lockObject)
             {
-                FF.Image image;
-                foreach (A.Blip blip in drawing.Descendants<A.Blip>())
+                try
                 {
-                    if (blip != null)
+                    foreach (var blip in drawing.Descendants<A.Blip>())
                     {
-                        DW.Extent extent = drawing.Inline.Extent;
-
-                        if (extent != null)
+                        if (blip != null)
                         {
+                            var extent = drawing.Inline.Extent;
 
-                            int dpi = 96; // Replace with your image's DPI
-
-                            int widthInPixels = (int)(extent.Cx / (914400 / dpi));
-                            int heightInPixels = (int)(extent.Cy / (914400 / dpi));
-
-                            PKG.ImagePart imagePart = mainPart.GetPartById(blip.Embed) as PKG.ImagePart;
-                            if (imagePart != null)
+                            if (extent != null)
                             {
-                                using (Stream stream = imagePart.GetStream())
-                                {
-                                    image = new FF.Image();
-                                    image.ElementID = sequence;
-                                    byte[] imageBytes;
-                                    using (MemoryStream memoryStream = new MemoryStream())
-                                    {
-                                        stream.CopyTo(memoryStream);
-                                        imageBytes = memoryStream.ToArray();
-                                    }
-                                    image.ImageData = imageBytes;
+                                var dpi = 96; // Replace with your image's DPI
 
-                                    image.Height = heightInPixels;
-                                    image.Width = widthInPixels;
-                                    return image;
+                                var widthInPixels = (int)(extent.Cx / (914400 / dpi));
+                                var heightInPixels = (int)(extent.Cy / (914400 / dpi));
+
+                                var imagePart = _mainPart.GetPartById(blip.Embed) as PKG.ImagePart;
+                                if (imagePart == null) continue;
+                                using var stream = imagePart.GetStream();
+                                var image = new FF.Image
+                                {
+                                    ElementId = sequence
+                                };
+                                byte[] imageBytes;
+                                using (var memoryStream = new MemoryStream())
+                                {
+                                    stream.CopyTo(memoryStream);
+                                    imageBytes = memoryStream.ToArray();
                                 }
+
+                                image.ImageData = imageBytes;
+
+                                image.Height = heightInPixels;
+                                image.Width = widthInPixels;
+                                return image;
                             }
                         }
+
                     }
 
+                    return null;
                 }
-                return null;
-            }
-            catch(Exception ex)
-            {
-                string errorMessage = OWD.OOXMLDocData.ConstructMessage(ex, "Load Image");
-                throw new FileFormatException(errorMessage, ex);
+                catch (Exception ex)
+                {
+                    var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load Image");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
 
-        internal FF.Table LoadTable(WP.Table wpTable,int ID)
+        internal FF.Table LoadTable(WP.Table wpTable,int id)
         {
-            try
+            lock (_lockObject)
             {
-                List<FF.Row> lstffRows = new List<FF.Row>();
-                foreach (WP.TableRow wpRow in wpTable.Elements<WP.TableRow>())
+                try
                 {
-                    FF.Row ffRow = new FF.Row();
-                    ffRow.Cells = new List<FF.Cell>();
-                    foreach (WP.TableCell wpCell in wpRow.Elements<WP.TableCell>())
+                    var ffRows = new List<FF.Row>();
+                    foreach (var wpRow in wpTable.Elements<WP.TableRow>())
                     {
-                        List<FF.Paragraph> ffParas = new List<FF.Paragraph>();
-                        foreach (WP.Paragraph paragraph in wpCell.Elements<WP.Paragraph>())
+                        var ffRow = new FF.Row
                         {
-                            ffParas.Add(LoadParagraph(paragraph, 0));
+                            Cells = new List<FF.Cell>()
+                        };
+                        foreach (var wpCell in wpRow.Elements<WP.TableCell>())
+                        {
+                            var ffParas = new List<FF.Paragraph>();
+                            foreach (var paragraph in wpCell.Elements<WP.Paragraph>())
+                            {
+                                ffParas.Add(LoadParagraph(paragraph, 0));
+                            }
+
+                            var ffCell = new FF.Cell { Paragraphs = ffParas };
+                            ffRow.Cells.Add(ffCell);
                         }
-                        FF.Cell ffCell = new FF.Cell { Paragraphs = ffParas };
-                        ffRow.Cells.Add(ffCell);
+
+                        ffRows.Add(ffRow);
                     }
-                    lstffRows.Add(ffRow);
-                }
-                FF.Table ffTable = new FF.Table();
-                ffTable.Rows = lstffRows;
-                ffTable.ElementID = ID;
-                WP.TableGrid tableGrid = wpTable.Elements<WP.TableGrid>().FirstOrDefault();
-                if (tableGrid != null)
-                {
-                    WP.GridColumn gridColumn = tableGrid.Elements<WP.GridColumn>().FirstOrDefault();
-                    ffTable.Column.Width = Convert.ToInt32(gridColumn.Width);
-                }
-                var tableProperties = wpTable.Descendants<WP.TableProperties>().FirstOrDefault();
-                if (tableProperties != null)
-                {
+
+                    var ffTable = new FF.Table
+                    {
+                        Rows = ffRows,
+                        ElementId = id
+                    };
+                    var tableGrid = wpTable.Elements<WP.TableGrid>().FirstOrDefault();
+                    if (tableGrid != null)
+                    {
+                        var gridColumn = tableGrid.Elements<WP.GridColumn>().FirstOrDefault();
+                        ffTable.Column.Width = Convert.ToInt32(gridColumn.Width);
+                    }
+
+                    var tableProperties = wpTable.Descendants<WP.TableProperties>().FirstOrDefault();
+                    if (tableProperties == null) return ffTable;
                     var tableStyle = tableProperties.TableStyle;
                     if (tableStyle != null)
                     {
                         ffTable.Style = tableStyle.Val;
                     }
+
+                    return ffTable;
                 }
-                return ffTable;
-            }
-            catch(Exception ex)
-            {
-                string errorMessage = OWD.OOXMLDocData.ConstructMessage(ex, "Load Table");
-                throw new FileFormatException(errorMessage, ex);
+                catch (Exception ex)
+                {
+                    var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load Table");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
 
-        internal FF.Section LoadSection(WP.SectionProperties sectPr,int ID)
+        internal FF.Section LoadSection(WP.SectionProperties sectPr,int id)
         {
-            try
+            lock (_lockObject)
             {
-                FF.Section section = new FF.Section();
-                section.ElementID = ID;
-                if (sectPr != null)
+                try
                 {
-                    WP.PageSize pageSize = sectPr.Elements<WP.PageSize>().FirstOrDefault();
-                    if (pageSize != null)
+                    var section = new FF.Section
                     {
-                        section.PageSize = new FF.PageSize
+                        ElementId = id
+                    };
+                    if (sectPr != null)
+                    {
+                        var pageSize = sectPr.Elements<WP.PageSize>().FirstOrDefault();
+                        if (pageSize != null)
                         {
-                            Height = int.Parse(pageSize.Height),
-                            Width = int.Parse(pageSize.Width),
-                            Orientation = pageSize.Orient,
-                        };
+                            section.PageSize = new FF.PageSize
+                            {
+                                Height = int.Parse(pageSize.Height),
+                                Width = int.Parse(pageSize.Width),
+                                Orientation = pageSize.Orient,
+                            };
+                        }
+
+                        var pageMargin = sectPr.Elements<WP.PageMargin>().FirstOrDefault();
+                        if (pageMargin != null)
+                        {
+                            section.PageMargin = new FF.PageMargin
+                            {
+                                Top = int.Parse(pageMargin.Top),
+                                Right = int.Parse(pageMargin.Right),
+                                Bottom = int.Parse(pageMargin.Bottom),
+                                Left = int.Parse(pageMargin.Left),
+                                Header = int.Parse(pageMargin.Header),
+                                Footer = int.Parse(pageMargin.Footer),
+                            };
+                        }
                     }
 
-                    WP.PageMargin pageMargin = sectPr.Elements<WP.PageMargin>().FirstOrDefault();
-                    if (pageMargin != null)
-                    {
-                        section.PageMargin = new FF.PageMargin
-                        {
-                            Top = int.Parse(pageMargin.Top),
-                            Right = int.Parse(pageMargin.Right),
-                            Bottom = int.Parse(pageMargin.Bottom),
-                            Left = int.Parse(pageMargin.Left),
-                            Header = int.Parse(pageMargin.Header),
-                            Footer = int.Parse(pageMargin.Footer),
-                        };
-                    }
+                    return section;
                 }
-
-                return section;
-            }
-            catch(Exception ex)
-            {
-                string errorMessage = OWD.OOXMLDocData.ConstructMessage(ex, "Load Section");
-                throw new FileFormatException(errorMessage, ex);
+                catch (Exception ex)
+                {
+                    var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load Section");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
         }
 
         internal FF.ElementStyles LoadStyles()
         {
-            try
+            lock (_lockObject)
             {
-                FF.ElementStyles elementStyles = new FF.ElementStyles();
-                var themePart = mainPart.ThemePart;
-                if (themePart != null)
+                try
                 {
-                    var theme = themePart.Theme;
-                    foreach (var fontScheme in theme.Elements())
+                    var elementStyles = new FF.ElementStyles();
+                    var themePart = _mainPart.ThemePart;
+                    if (themePart != null)
                     {
-                        foreach (var latinFont in fontScheme.Descendants<A.LatinFont>())
+                        var theme = themePart.Theme;
+                        foreach (var fontScheme in theme.Elements())
                         {
-                            elementStyles.ThemeFonts.Add(latinFont.Typeface);
-                        }
-                    }
-                    foreach (var fontScheme in theme.Elements())
-                    {
-                        var fonts = fontScheme.Descendants<A.SupplementalFont>();
-
-                        foreach (var font in fonts)
-                        {
-                            if (font.Typeface != null)
+                            foreach (var latinFont in fontScheme.Descendants<A.LatinFont>())
                             {
-                                elementStyles.ThemeFonts.Add(font.Typeface);
+                                elementStyles.ThemeFonts.Add(latinFont.Typeface);
+                            }
+                        }
+
+                        foreach (var fontScheme in theme.Elements())
+                        {
+                            var fonts = fontScheme.Descendants<A.SupplementalFont>();
+
+                            foreach (var font in fonts)
+                            {
+                                if (font.Typeface != null)
+                                {
+                                    elementStyles.ThemeFonts.Add(font.Typeface);
+                                }
                             }
                         }
                     }
-                }
-                var fontTablePart = mainPart.FontTablePart;
-                if (fontTablePart != null)
-                {
-                    var fontTable = fontTablePart.Fonts.Elements<WP.Font>();
 
-                    foreach (var font in fontTable)
+                    var fontTablePart = _mainPart.FontTablePart;
+                    if (fontTablePart != null)
                     {
-                        elementStyles.TableFonts.Add(font.Name);
-                    }
-                }
-                var styleDefinitionsPart = mainPart.StyleDefinitionsPart;
+                        var fontTable = fontTablePart.Fonts.Elements<WP.Font>();
 
-                if (styleDefinitionsPart != null)
-                {
-                    WP.Styles styles = styleDefinitionsPart.Styles;
+                        foreach (var font in fontTable)
+                        {
+                            elementStyles.TableFonts.Add(font.Name);
+                        }
+                    }
+
+                    var styleDefinitionsPart = _mainPart.StyleDefinitionsPart;
+
+                    if (styleDefinitionsPart == null) return elementStyles;
+                    var styles = styleDefinitionsPart.Styles;
                     if (styles != null)
                     {
-                        foreach (WP.Style style in styles.Elements<WP.Style>())
+                        foreach (var style in styles.Elements<WP.Style>())
                         {
                             if (style.Type != null && style.Type == WP.StyleValues.Paragraph)
                             {
                                 elementStyles.ParagraphStyles.Add(style.StyleId);
                             }
+
                             if (style.Type != null && style.Type == WP.StyleValues.Table)
                             {
                                 elementStyles.TableStyles.Add(style.StyleId);
                             }
                         }
                     }
+
+                    return elementStyles;
                 }
-                return elementStyles;
-            }
-            catch(Exception ex)
-            {
-                return null;
+                catch (Exception ex)
+                {
+                    return null;
+                }
             }
         }
 
         internal void SaveDocument(Stream stream)
         {
-            try
+            lock (_lockObject)
             {
-                pkgDocument.Clone(stream);
-                pkgDocument.Dispose();
-                ms.Dispose();
+                try
+                {
+                    _pkgDocument.Clone(stream);
+                    //_pkgDocument.Dispose();
+                    //_ms.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Save OOXML OWDocument");
+                    throw new FileFormatException(errorMessage, ex);
+                }
             }
-            catch(Exception ex)
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                string errorMessage = OWD.OOXMLDocData.ConstructMessage(ex, "Save OOXML Document");
-                throw new FileFormatException(errorMessage, ex);
+                // Dispose of managed resources (if any)
+                if (_pkgDocument != null)
+                {
+                    _pkgDocument.Dispose();
+                    _pkgDocument = null;
+                }
             }
+            // Dispose of unmanaged resources
+            if (_ms == null) return;
+            _ms.Dispose();
+            _ms = null;
         }
     }
 }
