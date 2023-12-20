@@ -2,17 +2,17 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Complexities of OpenXML SDK </title>
+      <title>Challenges when using OpenXML SDK | Words FileFormat </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Complexities of OpenXML SDK ">
-      
+      <meta name="title" content="Challenges when using OpenXML SDK | Words FileFormat ">
+      <meta name="description" content="When using OpenXML SDK to manipulate word documents, you may face various complexities. This guide outlines some challenges and remedies.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
       <meta name="docfx:navrel" content="../toc.html">
       <meta name="docfx:tocrel" content="toc.html">
       
-      
+      <meta name="docfx:rel" content="../">
       
       
       
@@ -42,14 +42,18 @@
       <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
         <div class="container-xxl flex-nowrap">
           <a class="navbar-brand" href="../index.html">
-            <img id="logo" class="svg" src="../logo.svg" alt="">
-            
+            <img id="logo" class="svg" src="../logo.svg" alt="FileFormat.Words">
+            FileFormat.Words
           </a>
           <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
             <i class="bi bi-three-dots"></i>
           </button>
           <div class="collapse navbar-collapse" id="navpanel">
             <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
             </div>
           </div>
         </div>
@@ -129,7 +133,7 @@ var colorCorrect = new WP.Color { Val = &quot;#0000FF&quot; };
 runPropertiesCorrect.Append(colorCorrect);
 // Add other font properties as needed
 </code></pre>
-<h2 id="3-tableproperties-placement">3. TableProperties Placement</h2>
+<h2 id="tableproperties-placement">TableProperties Placement</h2>
 <p>The positioning of table properties is crucial for proper document interpretation in Word. If you append TableProperties after adding the table, row properties, or cell properties, Microsoft Word might overlook these XML elements. To avoid this issue, it is essential to define TableProperties before other related elements, such as rows and cells.</p>
 <h3 id="example-wrong-tableproperties-placement">Example: Wrong TableProperties Placement</h3>
 <pre><code class="lang-csharp">// Wrong Table Properties Placement
@@ -181,6 +185,7 @@ tableCorrect.Append(tableRowCorrect);
       </div>
     </main>
 
+    <div class="container-xxl search-results" id="search-results"></div>
 
     <footer class="border-top">
       <div class="container-xxl">

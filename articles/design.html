@@ -2,17 +2,17 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>C# Word API System Architecture and Design Patterns </title>
+      <title>Design Patterns Used by Word Document C# API | Words FileFormat </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="C# Word API System Architecture and Design Patterns ">
-      
+      <meta name="title" content="Design Patterns Used by Word Document C# API | Words FileFormat ">
+      <meta name="description" content="FileFormat.Words for .NET uses a set of design patterns in order to provide a robust handling of Microsoft Word documents in C# with a few lines of code.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
       <meta name="docfx:navrel" content="../toc.html">
       <meta name="docfx:tocrel" content="toc.html">
       
-      
+      <meta name="docfx:rel" content="../">
       
       
       
@@ -42,14 +42,18 @@
       <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
         <div class="container-xxl flex-nowrap">
           <a class="navbar-brand" href="../index.html">
-            <img id="logo" class="svg" src="../logo.svg" alt="">
-            
+            <img id="logo" class="svg" src="../logo.svg" alt="FileFormat.Words">
+            FileFormat.Words
           </a>
           <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
             <i class="bi bi-three-dots"></i>
           </button>
           <div class="collapse navbar-collapse" id="navpanel">
             <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled="" placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
             </div>
           </div>
         </div>
@@ -79,7 +83,7 @@
         </div>
 
         <article data-uid="">
-<h1 id="c-word-api-system-architecture-and-design-patterns">C# Word API System Architecture and Design Patterns</h1>
+<h1 id="system-architecture-and-design-patterns">System Architecture and Design Patterns</h1>
 
 <h2 id="introduction">Introduction</h2>
 <p><a href="https://www.nuget.org/packages/FileFormat.Words">FileFormat.Words</a> is an <a href="https://github.com/fileformat-words/FileFormat.Words-for-.NET">open source</a> C# Word Document API. The system architecture offers a robust and flexible framework for creating, loading, and manipulating Word documents using C# code. This architecture relies on a set of design patterns that enable efficient document processing while ensuring a user-friendly experience. In this article, we will explore the design patterns used in this architecture and how they contribute to the system's overall effectiveness.</p>
@@ -88,13 +92,13 @@
 <h3 id="custom-objects-pattern">Custom Objects Pattern</h3>
 <p>The architecture employs custom objects, collectively known as <code>FileFormat.Words.IElements</code>, to represent the various components of a Word document, such as paragraphs, images, and tables. These custom elements mirror the document's structure and serve as a data structure for data transfer to and from OpenXML objects. This pattern enhances user-friendliness, as it provides a higher-level interface for users to interact with the content of Word documents. It abstracts away the complexities of dealing with raw OpenXML, making it easier to work with document content.</p>
 <h3 id="bridge-pattern">Bridge Pattern</h3>
-<p>The internal <code>OpenXML.Words.Document</code> class plays a crucial role in bridging the gap between the custom document elements in <code>FileFormat.Words</code> and the OpenXML-based Word document. It serves as the bridge by providing operations for loading existing Word documents into OpenXML and creating new documents from scratch. This design pattern decouples the custom elements from the low-level OpenXML representation, enabling seamless synchronization between the two. It simplifies the process of document creation and modification by acting as an intermediary.</p>
-<h3 id="static-class-pattern-for-existing-document">Static Class Pattern (For Existing Document)</h3>
-<p>The <code>OpenXML.Words.Data.OOXMLDocData</code> class, marked as internal and static, leverages static methods to perform operations like inserting, updating, and removing elements within an existing OpenXML-based Word document. This design pattern is particularly useful when dealing with documents that already exist and need modification following the same styles. It receives synchronization instructions from the <code>FileFormat.Words.Document</code> class, ensuring that changes made to custom objects are accurately reflected in the OpenXML document. The static class pattern optimizes resource usage and streamlines document processing for existing documents.</p>
+<p>The internal <code>OpenXML.Words.OwDocument</code> class plays a crucial role in bridging the gap between the custom document elements in <code>FileFormat.Words</code> and the OpenXML-based Word document. It serves as the bridge by providing operations for loading existing Word documents into OpenXML and creating new documents from scratch. This design pattern decouples the custom elements from the low-level OpenXML representation, enabling seamless synchronization between the two. It simplifies the process of document creation and modification by acting as an intermediary.</p>
+<h3 id="monostate-pattern-for-existing-documents">Monostate Pattern (For Existing Documents)</h3>
+<p>The internal <code>OpenXML.Words.Data.OoxmlDocData</code> class, designed with the Monostate pattern, facilitates operations like insertion, updating, appending and removal of elements within an existing Word document. While the class is not marked as static, it employs shared state among instances to ensure consistency in document modifications. This pattern proves valuable when working with pre-existing documents that require alterations while adhering to established styles. Synchronization instructions from the <code>FileFormat.Words.Document</code> class guide the actions of individual instances, guaranteeing that changes made to custom objects accurately reflect in the corresponding OpenXML documents. The Monostate pattern optimizes resource utilization and streamlines document processing for managing existing documents.</p>
 <h3 id="template-method-pattern-for-new-document">Template Method Pattern (For New Document)</h3>
 <p>The architecture benefits from predefined templates stored in the <code>OpenXML.Templates</code> namespace. These templates, created using OpenXML SDK Productivity Tools, offer essential structures and customization options for document metadata. When creating new Word documents from scratch within the <code>OpenXML.Words.Document</code> class, the template method pattern is applied. It defines the skeleton of the document creation process, adds document properties and metadata. This pattern simplifies the creation of standardized documents and ensures consistency in document structure for new documents.</p>
 <h2 id="conclusion">Conclusion</h2>
-<p>The Word Document C# API system architecture employs several design patterns to deliver a powerful yet user-friendly experience for developers working with Word documents in C#. The combination of facade, custom objects, bridge, static classes, and template methods simplifies document processing, abstracts complexity, and promotes efficiency. These design patterns are the foundation of an architecture that streamlines the creation, modification, and customization of Word documents, making it a valuable resource for developers in need of document automation and manipulation capabilities.</p>
+<p>The Word Document C# API system architecture employs several design patterns to deliver a powerful yet user-friendly experience for developers working with Word documents in C#. The combination of facade, custom objects, bridge, monostate and template methods simplifies document processing, abstracts complexity, and promotes efficiency. These design patterns are the foundation of an architecture that streamlines the creation, modification, and customization of Word documents, making it a valuable resource for developers in need of document automation and manipulation capabilities.</p>
 
 </article>
 
@@ -110,6 +114,7 @@
       </div>
     </main>
 
+    <div class="container-xxl search-results" id="search-results"></div>
 
     <footer class="border-top">
       <div class="container-xxl">

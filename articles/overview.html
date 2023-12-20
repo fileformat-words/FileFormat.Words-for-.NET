@@ -2,12 +2,10 @@
 <html>
   <head>
     <meta charset="utf-8">
-      <title>Namespace FileFormat.Words
- | Words FileFormat </title>
+      <title>Word Document C# API Outlines | Words FileFormat </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="title" content="Namespace FileFormat.Words
- | Words FileFormat ">
-      
+      <meta name="title" content="Word Document C# API Outlines | Words FileFormat ">
+      <meta name="description" content="Get familiarized with namespaces and classes to work with Microsoft Word documents in C#. Brief overview of the functionality of main classes.">
       <link rel="icon" href="../favicon.ico">
       <link rel="stylesheet" href="../public/docfx.min.css">
       <link rel="stylesheet" href="../public/main.css">
@@ -39,7 +37,7 @@
   </script>
 
 
-  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
     <header class="bg-body border-bottom">
       <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
         <div class="container-xxl flex-nowrap">
@@ -84,39 +82,53 @@
           <nav id="breadcrumb"></nav>
         </div>
 
-        <article data-uid="FileFormat.Words">
+        <article data-uid="">
+<h1 id="system-outlines">System Outlines</h1>
 
-  <h1 id="FileFormat_Words" data-uid="FileFormat.Words" class="text-break">Namespace FileFormat.Words
-</h1>
-  <div class="markdown level0 summary"></div>
-  <div class="markdown level0 conceptual"></div>
-  <div class="markdown level0 remarks"></div>
-
-    <h3 id="classes">
-Classes
-</h3>
-    <dl class="jumplist">
-      <dt><a class="xref" href="FileFormat.Words.Body.html">Body</a></dt>
-      <dd><p>Represents the body of a document, containing paragraphs, tables, images, and sections.</p>
-</dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="FileFormat.Words.Document.html">Document</a></dt>
-      <dd><p>Represents a document with structured elements.</p>
-</dd>
-    </dl>
-    <dl class="jumplist">
-      <dt><a class="xref" href="FileFormat.Words.FileFormatException.html">FileFormatException</a></dt>
-      <dd><p>Custom exception class for file format-related exceptions.</p>
-</dd>
-    </dl>
-
+<p>This documentation provides an in-depth overview of the internal namespaces and classes, unveiling the intricacies behind our Word Document C# API system. While the internal structure is complex, we've designed the public APIs to be straightforward and user-friendly, making Word document manipulation a seamless experience.</p>
+<p>For a more detailed understanding of our system architecture, design patterns, and public interfaces, please visit the <a href="https://fileformat-words.github.io/FileFormat.Words-for-.NET/">Articles Section</a>.</p>
+<h2 id="fileformatwords-namespace">FileFormat.Words Namespace</h2>
+<h3 id="document-class">Document Class</h3>
+<ul>
+<li>The primary interface for creating, loading, and modifying Word documents.</li>
+<li>Serves as a facade for interacting with internal classes in the OpenXML.Words, OpenXML.Words.Data, and OpenXML.Templates namespaces.</li>
+</ul>
+<h2 id="fileformatwordsielements-namespace">FileFormat.Words.IElements Namespace</h2>
+<h3 id="fileformatwordsielement-common-interface-for-all-custom-elements">FileFormat.Words.IElement (Common Interface for all custom elements)</h3>
+<ul>
+<li>Custom elements, such as Paragraphs, Images, and Tables, that mimic Word document structure.</li>
+<li>Act as a data structure for seamless data transfer to and from OpenXML objects.</li>
+<li>Offers a user-friendly interface for interacting with Word document content.</li>
+</ul>
+<h2 id="openxmlwords-namespace">OpenXML.Words Namespace</h2>
+<h3 id="owdocument-class-internal">OwDocument Class (Internal)</h3>
+<ul>
+<li>Facilitates loading existing Word documents into OpenXML and creating new documents from scratch.</li>
+<li>Acts as a bridge between custom document elements in FileFormat.Words and OpenXML-based Word documents.</li>
+<li>Sets the WordProcessing package for OpenXML.Words.Data.OOXMLDocData to enable synchronization.</li>
+<li>Utilizes templates from the OpenXML.Templates namespace for creating new documents.</li>
+</ul>
+<h2 id="openxmlwordsdata-namespace">OpenXML.Words.Data Namespace</h2>
+<h3 id="ooxmldocdata-class-internal">OoxmlDocData Class (Internal)</h3>
+<ul>
+<li>Employs operations for inserting, updating, and removing elements in pre-existing Microsoft Word documents.</li>
+<li>Receives synchronization instructions from the <code>FileFormat.Words.Document</code> class.</li>
+<li>Guarantees changes made to custom objects are accurately reflected in the OpenXML document.</li>
+</ul>
+<h2 id="openxmltemplates-namespace">OpenXML.Templates Namespace</h2>
+<ul>
+<li>Offers pre-defined templates created using OpenXML SDK Productivity Tools.</li>
+<li>Comprises classes for core properties and custom properties, enhancing document metadata and customization.</li>
+<li>Templates come into play when creating new Word documents from scratch within the <code>OpenXML.Words.Document</code> class.</li>
+</ul>
+<p>This extended architecture leverages templates and properties from the OpenXML.Templates namespace, enriching the document creation process with pre-defined structures and metadata customization options for newly created documents. The FileFormat.Words.Document class remains the central interface for users, orchestrating interactions with various internal components across multiple namespaces.</p>
 
 </article>
 
         <div class="contribution d-print-none">
         </div>
 
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
 
       </div>
 

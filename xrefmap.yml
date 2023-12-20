@@ -133,18 +133,39 @@ references:
   fullName.vb: FileFormat.Words.Document.New
   nameWithType: Document.Document
   nameWithType.vb: Document.New
-- uid: FileFormat.Words.Document.ElementStyles
-  name: ElementStyles
-  href: api/FileFormat.Words.Document.html#FileFormat_Words_Document_ElementStyles
-  commentId: P:FileFormat.Words.Document.ElementStyles
-  fullName: FileFormat.Words.Document.ElementStyles
-  nameWithType: Document.ElementStyles
-- uid: FileFormat.Words.Document.ElementStyles*
-  name: ElementStyles
-  href: api/FileFormat.Words.Document.html#FileFormat_Words_Document_ElementStyles_
-  commentId: Overload:FileFormat.Words.Document.ElementStyles
-  fullName: FileFormat.Words.Document.ElementStyles
-  nameWithType: Document.ElementStyles
+- uid: FileFormat.Words.Document.Dispose
+  name: Dispose()
+  href: api/FileFormat.Words.Document.html#FileFormat_Words_Document_Dispose
+  commentId: M:FileFormat.Words.Document.Dispose
+  fullName: FileFormat.Words.Document.Dispose()
+  nameWithType: Document.Dispose()
+- uid: FileFormat.Words.Document.Dispose(System.Boolean)
+  name: Dispose(bool)
+  href: api/FileFormat.Words.Document.html#FileFormat_Words_Document_Dispose_System_Boolean_
+  commentId: M:FileFormat.Words.Document.Dispose(System.Boolean)
+  name.vb: Dispose(Boolean)
+  fullName: FileFormat.Words.Document.Dispose(bool)
+  fullName.vb: FileFormat.Words.Document.Dispose(Boolean)
+  nameWithType: Document.Dispose(bool)
+  nameWithType.vb: Document.Dispose(Boolean)
+- uid: FileFormat.Words.Document.Dispose*
+  name: Dispose
+  href: api/FileFormat.Words.Document.html#FileFormat_Words_Document_Dispose_
+  commentId: Overload:FileFormat.Words.Document.Dispose
+  fullName: FileFormat.Words.Document.Dispose
+  nameWithType: Document.Dispose
+- uid: FileFormat.Words.Document.GetElementStyles
+  name: GetElementStyles()
+  href: api/FileFormat.Words.Document.html#FileFormat_Words_Document_GetElementStyles
+  commentId: M:FileFormat.Words.Document.GetElementStyles
+  fullName: FileFormat.Words.Document.GetElementStyles()
+  nameWithType: Document.GetElementStyles()
+- uid: FileFormat.Words.Document.GetElementStyles*
+  name: GetElementStyles
+  href: api/FileFormat.Words.Document.html#FileFormat_Words_Document_GetElementStyles_
+  commentId: Overload:FileFormat.Words.Document.GetElementStyles
+  fullName: FileFormat.Words.Document.GetElementStyles
+  nameWithType: Document.GetElementStyles
 - uid: FileFormat.Words.Document.GetElements
   name: GetElements()
   href: api/FileFormat.Words.Document.html#FileFormat_Words_Document_GetElements
@@ -838,18 +859,18 @@ references:
   commentId: T:FileFormat.Words.IElements.IElement
   fullName: FileFormat.Words.IElements.IElement
   nameWithType: IElement
-- uid: FileFormat.Words.IElements.IElement.ElementID
-  name: ElementID
-  href: api/FileFormat.Words.IElements.IElement.html#FileFormat_Words_IElements_IElement_ElementID
-  commentId: P:FileFormat.Words.IElements.IElement.ElementID
-  fullName: FileFormat.Words.IElements.IElement.ElementID
-  nameWithType: IElement.ElementID
-- uid: FileFormat.Words.IElements.IElement.ElementID*
-  name: ElementID
-  href: api/FileFormat.Words.IElements.IElement.html#FileFormat_Words_IElements_IElement_ElementID_
-  commentId: Overload:FileFormat.Words.IElements.IElement.ElementID
-  fullName: FileFormat.Words.IElements.IElement.ElementID
-  nameWithType: IElement.ElementID
+- uid: FileFormat.Words.IElements.IElement.ElementId
+  name: ElementId
+  href: api/FileFormat.Words.IElements.IElement.html#FileFormat_Words_IElements_IElement_ElementId
+  commentId: P:FileFormat.Words.IElements.IElement.ElementId
+  fullName: FileFormat.Words.IElements.IElement.ElementId
+  nameWithType: IElement.ElementId
+- uid: FileFormat.Words.IElements.IElement.ElementId*
+  name: ElementId
+  href: api/FileFormat.Words.IElements.IElement.html#FileFormat_Words_IElements_IElement_ElementId_
+  commentId: Overload:FileFormat.Words.IElements.IElement.ElementId
+  fullName: FileFormat.Words.IElements.IElement.ElementId
+  nameWithType: IElement.ElementId
 - uid: FileFormat.Words.IElements.Image
   name: Image
   href: api/FileFormat.Words.IElements.Image.html
@@ -874,18 +895,18 @@ references:
   fullName.vb: FileFormat.Words.IElements.Image.New
   nameWithType: Image.Image
   nameWithType.vb: Image.New
-- uid: FileFormat.Words.IElements.Image.ElementID
-  name: ElementID
-  href: api/FileFormat.Words.IElements.Image.html#FileFormat_Words_IElements_Image_ElementID
-  commentId: P:FileFormat.Words.IElements.Image.ElementID
-  fullName: FileFormat.Words.IElements.Image.ElementID
-  nameWithType: Image.ElementID
-- uid: FileFormat.Words.IElements.Image.ElementID*
-  name: ElementID
-  href: api/FileFormat.Words.IElements.Image.html#FileFormat_Words_IElements_Image_ElementID_
-  commentId: Overload:FileFormat.Words.IElements.Image.ElementID
-  fullName: FileFormat.Words.IElements.Image.ElementID
-  nameWithType: Image.ElementID
+- uid: FileFormat.Words.IElements.Image.ElementId
+  name: ElementId
+  href: api/FileFormat.Words.IElements.Image.html#FileFormat_Words_IElements_Image_ElementId
+  commentId: P:FileFormat.Words.IElements.Image.ElementId
+  fullName: FileFormat.Words.IElements.Image.ElementId
+  nameWithType: Image.ElementId
+- uid: FileFormat.Words.IElements.Image.ElementId*
+  name: ElementId
+  href: api/FileFormat.Words.IElements.Image.html#FileFormat_Words_IElements_Image_ElementId_
+  commentId: Overload:FileFormat.Words.IElements.Image.ElementId
+  fullName: FileFormat.Words.IElements.Image.ElementId
+  nameWithType: Image.ElementId
 - uid: FileFormat.Words.IElements.Image.Height
   name: Height
   href: api/FileFormat.Words.IElements.Image.html#FileFormat_Words_IElements_Image_Height
@@ -1078,18 +1099,18 @@ references:
   commentId: Overload:FileFormat.Words.IElements.Paragraph.AddRun
   fullName: FileFormat.Words.IElements.Paragraph.AddRun
   nameWithType: Paragraph.AddRun
-- uid: FileFormat.Words.IElements.Paragraph.ElementID
-  name: ElementID
-  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_ElementID
-  commentId: P:FileFormat.Words.IElements.Paragraph.ElementID
-  fullName: FileFormat.Words.IElements.Paragraph.ElementID
-  nameWithType: Paragraph.ElementID
-- uid: FileFormat.Words.IElements.Paragraph.ElementID*
-  name: ElementID
-  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_ElementID_
-  commentId: Overload:FileFormat.Words.IElements.Paragraph.ElementID
-  fullName: FileFormat.Words.IElements.Paragraph.ElementID
-  nameWithType: Paragraph.ElementID
+- uid: FileFormat.Words.IElements.Paragraph.ElementId
+  name: ElementId
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_ElementId
+  commentId: P:FileFormat.Words.IElements.Paragraph.ElementId
+  fullName: FileFormat.Words.IElements.Paragraph.ElementId
+  nameWithType: Paragraph.ElementId
+- uid: FileFormat.Words.IElements.Paragraph.ElementId*
+  name: ElementId
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_ElementId_
+  commentId: Overload:FileFormat.Words.IElements.Paragraph.ElementId
+  fullName: FileFormat.Words.IElements.Paragraph.ElementId
+  nameWithType: Paragraph.ElementId
 - uid: FileFormat.Words.IElements.Paragraph.Runs
   name: Runs
   href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_Runs
@@ -1276,18 +1297,18 @@ references:
   commentId: T:FileFormat.Words.IElements.Section
   fullName: FileFormat.Words.IElements.Section
   nameWithType: Section
-- uid: FileFormat.Words.IElements.Section.ElementID
-  name: ElementID
-  href: api/FileFormat.Words.IElements.Section.html#FileFormat_Words_IElements_Section_ElementID
-  commentId: P:FileFormat.Words.IElements.Section.ElementID
-  fullName: FileFormat.Words.IElements.Section.ElementID
-  nameWithType: Section.ElementID
-- uid: FileFormat.Words.IElements.Section.ElementID*
-  name: ElementID
-  href: api/FileFormat.Words.IElements.Section.html#FileFormat_Words_IElements_Section_ElementID_
-  commentId: Overload:FileFormat.Words.IElements.Section.ElementID
-  fullName: FileFormat.Words.IElements.Section.ElementID
-  nameWithType: Section.ElementID
+- uid: FileFormat.Words.IElements.Section.ElementId
+  name: ElementId
+  href: api/FileFormat.Words.IElements.Section.html#FileFormat_Words_IElements_Section_ElementId
+  commentId: P:FileFormat.Words.IElements.Section.ElementId
+  fullName: FileFormat.Words.IElements.Section.ElementId
+  nameWithType: Section.ElementId
+- uid: FileFormat.Words.IElements.Section.ElementId*
+  name: ElementId
+  href: api/FileFormat.Words.IElements.Section.html#FileFormat_Words_IElements_Section_ElementId_
+  commentId: Overload:FileFormat.Words.IElements.Section.ElementId
+  fullName: FileFormat.Words.IElements.Section.ElementId
+  nameWithType: Section.ElementId
 - uid: FileFormat.Words.IElements.Section.PageMargin
   name: PageMargin
   href: api/FileFormat.Words.IElements.Section.html#FileFormat_Words_IElements_Section_PageMargin
@@ -1357,18 +1378,18 @@ references:
   commentId: Overload:FileFormat.Words.IElements.Table.Column
   fullName: FileFormat.Words.IElements.Table.Column
   nameWithType: Table.Column
-- uid: FileFormat.Words.IElements.Table.ElementID
-  name: ElementID
-  href: api/FileFormat.Words.IElements.Table.html#FileFormat_Words_IElements_Table_ElementID
-  commentId: P:FileFormat.Words.IElements.Table.ElementID
-  fullName: FileFormat.Words.IElements.Table.ElementID
-  nameWithType: Table.ElementID
-- uid: FileFormat.Words.IElements.Table.ElementID*
-  name: ElementID
-  href: api/FileFormat.Words.IElements.Table.html#FileFormat_Words_IElements_Table_ElementID_
-  commentId: Overload:FileFormat.Words.IElements.Table.ElementID
-  fullName: FileFormat.Words.IElements.Table.ElementID
-  nameWithType: Table.ElementID
+- uid: FileFormat.Words.IElements.Table.ElementId
+  name: ElementId
+  href: api/FileFormat.Words.IElements.Table.html#FileFormat_Words_IElements_Table_ElementId
+  commentId: P:FileFormat.Words.IElements.Table.ElementId
+  fullName: FileFormat.Words.IElements.Table.ElementId
+  nameWithType: Table.ElementId
+- uid: FileFormat.Words.IElements.Table.ElementId*
+  name: ElementId
+  href: api/FileFormat.Words.IElements.Table.html#FileFormat_Words_IElements_Table_ElementId_
+  commentId: Overload:FileFormat.Words.IElements.Table.ElementId
+  fullName: FileFormat.Words.IElements.Table.ElementId
+  nameWithType: Table.ElementId
 - uid: FileFormat.Words.IElements.Table.Rows
   name: Rows
   href: api/FileFormat.Words.IElements.Table.html#FileFormat_Words_IElements_Table_Rows
@@ -1399,15 +1420,15 @@ references:
   commentId: T:FileFormat.Words.IElements.Unknown
   fullName: FileFormat.Words.IElements.Unknown
   nameWithType: Unknown
-- uid: FileFormat.Words.IElements.Unknown.ElementID
-  name: ElementID
-  href: api/FileFormat.Words.IElements.Unknown.html#FileFormat_Words_IElements_Unknown_ElementID
-  commentId: P:FileFormat.Words.IElements.Unknown.ElementID
-  fullName: FileFormat.Words.IElements.Unknown.ElementID
-  nameWithType: Unknown.ElementID
-- uid: FileFormat.Words.IElements.Unknown.ElementID*
-  name: ElementID
-  href: api/FileFormat.Words.IElements.Unknown.html#FileFormat_Words_IElements_Unknown_ElementID_
-  commentId: Overload:FileFormat.Words.IElements.Unknown.ElementID
-  fullName: FileFormat.Words.IElements.Unknown.ElementID
-  nameWithType: Unknown.ElementID
+- uid: FileFormat.Words.IElements.Unknown.ElementId
+  name: ElementId
+  href: api/FileFormat.Words.IElements.Unknown.html#FileFormat_Words_IElements_Unknown_ElementId
+  commentId: P:FileFormat.Words.IElements.Unknown.ElementId
+  fullName: FileFormat.Words.IElements.Unknown.ElementId
+  nameWithType: Unknown.ElementId
+- uid: FileFormat.Words.IElements.Unknown.ElementId*
+  name: ElementId
+  href: api/FileFormat.Words.IElements.Unknown.html#FileFormat_Words_IElements_Unknown_ElementId_
+  commentId: Overload:FileFormat.Words.IElements.Unknown.ElementId
+  fullName: FileFormat.Words.IElements.Unknown.ElementId
+  nameWithType: Unknown.ElementId
