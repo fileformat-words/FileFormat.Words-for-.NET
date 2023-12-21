@@ -2,6 +2,6 @@ plugins:
   - jekyll-redirect-from
 
 redirect_from:
-  - /api/FileFormat.Words.Table.InsideHorizontalBorder.html: /api/FileFormat.Words.IElements.Table.html
-  - /api/FileFormat.Words.Table.TableCellWidth.html: /api/FileFormat.Words.IElements.Table.html
-  - /articles/intro.html: /articles/index.html
+  - /api/FileFormat.Words.Table.InsideHorizontalBorder.html
+  - /api/FileFormat.Words.Table.TableCellWidth.html
+  - /articles/intro.html
