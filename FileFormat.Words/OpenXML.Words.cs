@@ -532,9 +532,11 @@ namespace OpenXML.Words
                 case WP.JustificationValues.Center:
                     return "Center";
                 case WP.JustificationValues.Right:
-                    return "Right";                
+                    return "Right"; 
+                case WP.JustificationValues.Both
+                    return "Justify"
                 default:
-                    return "Justify";
+                    return "Left";
             }
         }
 
