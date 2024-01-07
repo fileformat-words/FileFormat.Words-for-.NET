@@ -21,6 +21,12 @@ namespace OpenXML.Words
         private MemoryStream _ms;
         private PKG.MainDocumentPart _mainPart;
         private readonly object _lockObject = new object();
+        public enum ParagraphAlignment
+        {
+            Left,
+            Center,
+            Right
+        }
         private OwDocument()
         {
             lock (_lockObject)
@@ -130,6 +136,11 @@ namespace OpenXML.Words
                         var paragraphProperties = new WP.ParagraphProperties();
                         var paragraphStyleId = new WP.ParagraphStyleId { Val = ffP.Style };
                         paragraphProperties.Append(paragraphStyleId);
+                        if (Enum.TryParse<ParagraphAlignment>(ffP.Alignment, true, out var alignmentEnum))
+                        {                            
+                            WP.JustificationValues justificationValue = MapAlignmentToJustification(alignmentEnum);
+                            paragraphProperties.Append(new WP.Justification { Val = justificationValue });
+                        }
                         wpParagraph.Append(paragraphProperties);
                     }
 
@@ -191,6 +202,21 @@ namespace OpenXML.Words
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Create Paragraph");
                     throw new FileFormatException(errorMessage, ex);
                 }
+            }
+        }
+
+        private WP.JustificationValues MapAlignmentToJustification(ParagraphAlignment alignment)
+        {
+            switch (alignment)
+            {
+                case ParagraphAlignment.Left:
+                    return WP.JustificationValues.Left;
+                case ParagraphAlignment.Center:
+                    return WP.JustificationValues.Center;
+                case ParagraphAlignment.Right:
+                    return WP.JustificationValues.Right;                
+                default:
+                    return WP.JustificationValues.Left;
             }
         }
 
@@ -458,9 +484,13 @@ namespace OpenXML.Words
                         if (paraStyleId != null)
                         {
                             if (paraStyleId.Val != null) ffP.Style = paraStyleId.Val.Value;
-                        }
+                        }                        
                     }
-
+                    var justificationElement = paraProps.Elements<WP.Justification>().FirstOrDefault();
+                    if (justificationElement != null)
+                    {
+                        ffP.Alignment = MapJustificationToAlignment(justificationElement.Val);
+                    }
                     var runs = wpPara.Elements<WP.Run>();
 
                     foreach (var wpR in runs)
@@ -473,7 +503,7 @@ namespace OpenXML.Words
                         {
                             Text = wpR.InnerText,
                             FontFamily = wpR.RunProperties?.RunFonts?.Ascii ?? null,
-                            FontSize = fontSize ?? 0, //int.Parse(wpR.RunProperties?.FontSize?.Val ?? null),
+                            FontSize = fontSize ?? 0,
                             Color = wpR.RunProperties?.Color?.Val ?? null,
                             Bold = (wpR.RunProperties != null && wpR.RunProperties.Bold != null),
                             Italic = (wpR.RunProperties != null && wpR.RunProperties.Italic != null),
@@ -489,6 +519,22 @@ namespace OpenXML.Words
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load Paragraph");
                     throw new FileFormatException(errorMessage, ex);
                 }
+            }
+        }
+
+        private string MapJustificationToAlignment(WP.JustificationValues justificationValue)
+        {
+            switch (justificationValue)
+            {
+                case WP.JustificationValues.Left:
+                    return "Left";
+                case WP.JustificationValues.Center:
+                    return "Center";
+                case WP.JustificationValues.Right:
+                    return "Right";
+                // Add more cases as needed
+                default:
+                    return "Left";
             }
         }
 

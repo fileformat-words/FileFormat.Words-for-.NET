@@ -13,6 +13,7 @@ namespace FileFormat.Words.IElements
         int ElementId { get; }
     }
 
+
     /// <summary>
     /// Represents a paragraph element in a Word document.
     /// </summary>
@@ -37,6 +38,11 @@ namespace FileFormat.Words.IElements
         /// Gets or sets the style of the paragraph.
         /// </summary>
         public string Style { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Alignment of the word paragraph
+        /// </summary>
+        public string Alignment { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Paragraph"/> class.
