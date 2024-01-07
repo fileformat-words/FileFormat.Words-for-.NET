@@ -215,9 +215,11 @@ namespace OpenXML.Words
                 case ParagraphAlignment.Center:
                     return WP.JustificationValues.Center;
                 case ParagraphAlignment.Right:
-                    return WP.JustificationValues.Right;                
-                default:
+                    return WP.JustificationValues.Right;
+                case ParagraphAlignment.Justify:
                     return WP.JustificationValues.Both;
+                default:
+                    return WP.JustificationValues.Left;
             }
         }
 
