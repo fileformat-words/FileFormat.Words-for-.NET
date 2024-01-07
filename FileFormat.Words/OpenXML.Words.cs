@@ -25,7 +25,8 @@ namespace OpenXML.Words
         {
             Left,
             Center,
-            Right
+            Right,
+            Justify
         }
         private OwDocument()
         {
@@ -216,7 +217,7 @@ namespace OpenXML.Words
                 case ParagraphAlignment.Right:
                     return WP.JustificationValues.Right;                
                 default:
-                    return WP.JustificationValues.Left;
+                    return WP.JustificationValues.Both;
             }
         }
 
@@ -533,7 +534,7 @@ namespace OpenXML.Words
                 case WP.JustificationValues.Right:
                     return "Right";                
                 default:
-                    return "Left";
+                    return "Justify";
             }
         }
 
