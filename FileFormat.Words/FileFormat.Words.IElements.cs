@@ -13,6 +13,13 @@ namespace FileFormat.Words.IElements
         int ElementId { get; }
     }
 
+    public class Indentation
+    {
+        public double Left { get; set; }
+        public double Right { get; set; }
+        public double FirstLine { get; set; }
+        public double Hanging { get; set; }
+    }
 
     /// <summary>
     /// Represents a paragraph element in a Word document.
@@ -45,12 +52,18 @@ namespace FileFormat.Words.IElements
         public string Alignment { get; set; }
 
         /// <summary>
+        /// Gets or Sets Indentation of the word paragraph
+        /// </summary>
+        public Indentation Indentation { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Paragraph"/> class.
         /// </summary>
         public Paragraph()
         {
             Runs = new List<Run>();
             Style = "Normal";
+            Indentation = new Indentation();
             UpdateText(); // Initialize the Text property
         }
 
@@ -570,7 +583,3 @@ namespace FileFormat.Words.IElements
     }
 
 }
-
-
-
-

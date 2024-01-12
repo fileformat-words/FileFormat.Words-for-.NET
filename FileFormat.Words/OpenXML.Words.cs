@@ -138,9 +138,13 @@ namespace OpenXML.Words
                         var paragraphStyleId = new WP.ParagraphStyleId { Val = ffP.Style };
                         paragraphProperties.Append(paragraphStyleId);
                         if (Enum.TryParse<ParagraphAlignment>(ffP.Alignment, true, out var alignmentEnum))
-                        {                            
+                        {
                             WP.JustificationValues justificationValue = MapAlignmentToJustification(alignmentEnum);
                             paragraphProperties.Append(new WP.Justification { Val = justificationValue });
+                        }
+                        if (ffP.Indentation != null)
+                        {
+                            SetIndentation(paragraphProperties, ffP.Indentation);
                         }
                         wpParagraph.Append(paragraphProperties);
                     }
@@ -204,6 +208,33 @@ namespace OpenXML.Words
                     throw new FileFormatException(errorMessage, ex);
                 }
             }
+        }
+
+        private void SetIndentation(WP.ParagraphProperties paragraphProperties, FF.Indentation ffIndentation)
+        {
+            var indentation = new WP.Indentation();
+
+            if (ffIndentation.Left > 0)
+            {
+                indentation.Left = (ffIndentation.Left * 1440).ToString();
+            }
+
+            if (ffIndentation.Right > 0)
+            {
+                indentation.Right = (ffIndentation.Right * 1440).ToString();
+            }
+
+            if (ffIndentation.FirstLine > 0)
+            {
+                indentation.FirstLine = (ffIndentation.FirstLine * 1440).ToString();
+            }
+
+            if (ffIndentation.Hanging > 0)
+            {
+                indentation.Hanging = (ffIndentation.FirstLine * 1440).ToString();
+            }
+
+            paragraphProperties.Append(indentation);
         }
 
         private WP.JustificationValues MapAlignmentToJustification(ParagraphAlignment alignment)
@@ -494,6 +525,14 @@ namespace OpenXML.Words
                     {
                         ffP.Alignment = MapJustificationToAlignment(justificationElement.Val);
                     }
+                    var Indentation = paraProps.Elements<WP.Indentation>().FirstOrDefault();
+                    if (Indentation != null)
+                    {
+                        ffP.Indentation.Left = int.Parse(Indentation.Left);
+                        ffP.Indentation.Right = int.Parse(Indentation.Right);
+                        ffP.Indentation.Hanging = int.Parse(Indentation.Hanging);
+                        ffP.Indentation.FirstLine = int.Parse(Indentation.FirstLine);
+                    }
                     var runs = wpPara.Elements<WP.Run>();
 
                     foreach (var wpR in runs)
@@ -534,9 +573,9 @@ namespace OpenXML.Words
                 case WP.JustificationValues.Center:
                     return "Center";
                 case WP.JustificationValues.Right:
-                    return "Right"; 
-                case WP.JustificationValues.Both
-                    return "Justify"
+                    return "Right";
+                case WP.JustificationValues.Both:
+                    return "Justify";
                 default:
                     return "Left";
             }
