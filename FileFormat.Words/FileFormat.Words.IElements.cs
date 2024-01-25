@@ -57,6 +57,26 @@ namespace FileFormat.Words.IElements
         public Indentation Indentation { get; set; }
 
         /// <summary>
+        /// Gets or sets the numbering ID for the paragraph.
+        /// </summary>
+        public int? NumberingId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the numbering level for the paragraph.
+        /// </summary>
+        public int? NumberingLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether the paragraph has bullet points.
+        /// </summary>
+        public bool IsBullet { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether the paragraph has numbering.
+        /// </summary>
+        public bool IsNumbered { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Paragraph"/> class.
         /// </summary>
         public Paragraph()
@@ -64,6 +84,10 @@ namespace FileFormat.Words.IElements
             Runs = new List<Run>();
             Style = "Normal";
             Indentation = new Indentation();
+            NumberingId = null;
+            NumberingLevel = null;
+            IsBullet = false;
+            IsNumbered = false;
             UpdateText(); // Initialize the Text property
         }
 

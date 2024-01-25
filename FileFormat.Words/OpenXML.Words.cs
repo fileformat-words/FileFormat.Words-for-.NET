@@ -137,14 +137,36 @@ namespace OpenXML.Words
                         var paragraphProperties = new WP.ParagraphProperties();
                         var paragraphStyleId = new WP.ParagraphStyleId { Val = ffP.Style };
                         paragraphProperties.Append(paragraphStyleId);
+                        
                         if (Enum.TryParse<ParagraphAlignment>(ffP.Alignment, true, out var alignmentEnum))
                         {
                             WP.JustificationValues justificationValue = MapAlignmentToJustification(alignmentEnum);
                             paragraphProperties.Append(new WP.Justification { Val = justificationValue });
                         }
+
                         if (ffP.Indentation != null)
                         {
                             SetIndentation(paragraphProperties, ffP.Indentation);
+                        }
+                        
+                        if (ffP.IsNumbered)
+                        {
+                            var numberingProperties = new WP.NumberingProperties
+                            {
+                                NumberingId = new WP.NumberingId { Val = ffP.NumberingId },
+                                NumberingLevelReference = new WP.NumberingLevelReference { Val = ffP.NumberingLevel.Value }
+                            };
+                            paragraphProperties.Append(numberingProperties);
+                        }
+
+                        if (ffP.IsBullet)
+                        {
+                            var bulletProperties = new WP.NumberingProperties
+                            {
+                                NumberingId = new WP.NumberingId { Val = 1 },
+                                NumberingLevelReference = new WP.NumberingLevelReference { Val = 0 }
+                            };
+                            paragraphProperties.Append(bulletProperties);
                         }
                         wpParagraph.Append(paragraphProperties);
                     }
@@ -518,7 +540,19 @@ namespace OpenXML.Words
                         if (paraStyleId != null)
                         {
                             if (paraStyleId.Val != null) ffP.Style = paraStyleId.Val.Value;
-                        }                        
+
+                            if (IsBulletStyle(paraStyleId.Val.Value))
+                            {
+                                ffP.IsBullet = true;
+                            }
+                        }
+                        var numberingProperties = paraProps.Elements<WP.NumberingProperties>().FirstOrDefault();
+                        if (numberingProperties != null)
+                        {
+                            ffP.IsNumbered = true;
+                            ffP.NumberingId = numberingProperties.NumberingId?.Val ?? 0;
+                            ffP.NumberingLevel = numberingProperties.NumberingLevelReference?.Val ?? 0;
+                        }
                     }
                     var justificationElement = paraProps.Elements<WP.Justification>().FirstOrDefault();
                     if (justificationElement != null)
