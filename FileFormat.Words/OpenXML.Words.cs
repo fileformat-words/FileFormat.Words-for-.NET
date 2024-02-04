@@ -253,7 +253,7 @@ namespace OpenXML.Words
 
             if (ffIndentation.Hanging > 0)
             {
-                indentation.Hanging = (ffIndentation.FirstLine * 1440).ToString();
+                indentation.Hanging = (ffIndentation.Hanging * 1440).ToString();
             }
 
             paragraphProperties.Append(indentation);
@@ -560,13 +560,23 @@ namespace OpenXML.Words
                         ffP.Alignment = MapJustificationToAlignment(justificationElement.Val);
                     }
                     var Indentation = paraProps.Elements<WP.Indentation>().FirstOrDefault();
-                    if (Indentation != null)
+                    if (Indentation.Left != null)
                     {
-                        ffP.Indentation.Left = int.Parse(Indentation.Left);
+                        ffP.Indentation.Left = int.Parse(Indentation.Left);                        
+                    }
+                    if (Indentation.Right != null)
+                    {
                         ffP.Indentation.Right = int.Parse(Indentation.Right);
+                    }
+                    if (Indentation.Hanging != null)
+                    {
                         ffP.Indentation.Hanging = int.Parse(Indentation.Hanging);
+                    }
+                    if (Indentation.FirstLine != null)
+                    {                        
                         ffP.Indentation.FirstLine = int.Parse(Indentation.FirstLine);
                     }
+
                     var runs = wpPara.Elements<WP.Run>();
 
                     foreach (var wpR in runs)
@@ -596,6 +606,11 @@ namespace OpenXML.Words
                     throw new FileFormatException(errorMessage, ex);
                 }
             }
+        }
+
+        private bool IsBulletStyle(string styleId)
+        {            
+            return styleId == "BulletStyle";
         }
 
         private string MapJustificationToAlignment(WP.JustificationValues justificationValue)
