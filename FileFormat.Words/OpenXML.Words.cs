@@ -21,13 +21,6 @@ namespace OpenXML.Words
         private MemoryStream _ms;
         private PKG.MainDocumentPart _mainPart;
         private readonly object _lockObject = new object();
-        public enum ParagraphAlignment
-        {
-            Left,
-            Center,
-            Right,
-            Justify
-        }
         private OwDocument()
         {
             lock (_lockObject)
@@ -138,11 +131,9 @@ namespace OpenXML.Words
                         var paragraphStyleId = new WP.ParagraphStyleId { Val = ffP.Style };
                         paragraphProperties.Append(paragraphStyleId);
                         
-                        if (Enum.TryParse<ParagraphAlignment>(ffP.Alignment, true, out var alignmentEnum))
-                        {
-                            WP.JustificationValues justificationValue = MapAlignmentToJustification(alignmentEnum);
-                            paragraphProperties.Append(new WP.Justification { Val = justificationValue });
-                        }
+                        WP.JustificationValues justificationValue = MapAlignmentToJustification(ffP.Alignment);
+                        paragraphProperties.Append(new WP.Justification { Val = justificationValue });
+                        
 
                         if (ffP.Indentation != null)
                         {
@@ -259,17 +250,17 @@ namespace OpenXML.Words
             paragraphProperties.Append(indentation);
         }
 
-        private WP.JustificationValues MapAlignmentToJustification(ParagraphAlignment alignment)
+        private WP.JustificationValues MapAlignmentToJustification(FF.ParagraphAlignment alignment)
         {
             switch (alignment)
             {
-                case ParagraphAlignment.Left:
+                case FF.ParagraphAlignment.Left:
                     return WP.JustificationValues.Left;
-                case ParagraphAlignment.Center:
+                case FF.ParagraphAlignment.Center:
                     return WP.JustificationValues.Center;
-                case ParagraphAlignment.Right:
+                case FF.ParagraphAlignment.Right:
                     return WP.JustificationValues.Right;
-                case ParagraphAlignment.Justify:
+                case FF.ParagraphAlignment.Justify:
                     return WP.JustificationValues.Both;
                 default:
                     return WP.JustificationValues.Left;
@@ -613,20 +604,20 @@ namespace OpenXML.Words
             return styleId == "BulletStyle";
         }
 
-        private string MapJustificationToAlignment(WP.JustificationValues justificationValue)
+        private FF.ParagraphAlignment MapJustificationToAlignment(WP.JustificationValues justificationValue)
         {
             switch (justificationValue)
             {
                 case WP.JustificationValues.Left:
-                    return "Left";
+                    return FF.ParagraphAlignment.Left;
                 case WP.JustificationValues.Center:
-                    return "Center";
+                    return FF.ParagraphAlignment.Center;
                 case WP.JustificationValues.Right:
-                    return "Right";
+                    return FF.ParagraphAlignment.Right;
                 case WP.JustificationValues.Both:
-                    return "Justify";
+                    return FF.ParagraphAlignment.Justify;
                 default:
-                    return "Left";
+                    return FF.ParagraphAlignment.Left;
             }
         }
 
