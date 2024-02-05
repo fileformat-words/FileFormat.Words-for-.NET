@@ -13,6 +13,14 @@ namespace FileFormat.Words.IElements
         int ElementId { get; }
     }
 
+    public class Indentation
+    {
+        public double Left { get; set; }
+        public double Right { get; set; }
+        public double FirstLine { get; set; }
+        public double Hanging { get; set; }
+    }
+
     /// <summary>
     /// Represents a paragraph element in a Word document.
     /// </summary>
@@ -39,12 +47,47 @@ namespace FileFormat.Words.IElements
         public string Style { get; set; }
 
         /// <summary>
+        /// Gets or Sets Alignment of the word paragraph
+        /// </summary>
+        public string Alignment { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Indentation of the word paragraph
+        /// </summary>
+        public Indentation Indentation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the numbering ID for the paragraph.
+        /// </summary>
+        public int? NumberingId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the numbering level for the paragraph.
+        /// </summary>
+        public int? NumberingLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether the paragraph has bullet points.
+        /// </summary>
+        public bool IsBullet { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether the paragraph has numbering.
+        /// </summary>
+        public bool IsNumbered { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Paragraph"/> class.
         /// </summary>
         public Paragraph()
         {
             Runs = new List<Run>();
             Style = "Normal";
+            Indentation = new Indentation();
+            NumberingId = null;
+            NumberingLevel = null;
+            IsBullet = false;
+            IsNumbered = false;
             UpdateText(); // Initialize the Text property
         }
 
@@ -564,7 +607,3 @@ namespace FileFormat.Words.IElements
     }
 
 }
-
-
-
-

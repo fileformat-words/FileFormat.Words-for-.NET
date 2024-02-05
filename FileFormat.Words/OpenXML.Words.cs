@@ -21,6 +21,13 @@ namespace OpenXML.Words
         private MemoryStream _ms;
         private PKG.MainDocumentPart _mainPart;
         private readonly object _lockObject = new object();
+        public enum ParagraphAlignment
+        {
+            Left,
+            Center,
+            Right,
+            Justify
+        }
         private OwDocument()
         {
             lock (_lockObject)
@@ -130,6 +137,37 @@ namespace OpenXML.Words
                         var paragraphProperties = new WP.ParagraphProperties();
                         var paragraphStyleId = new WP.ParagraphStyleId { Val = ffP.Style };
                         paragraphProperties.Append(paragraphStyleId);
+                        
+                        if (Enum.TryParse<ParagraphAlignment>(ffP.Alignment, true, out var alignmentEnum))
+                        {
+                            WP.JustificationValues justificationValue = MapAlignmentToJustification(alignmentEnum);
+                            paragraphProperties.Append(new WP.Justification { Val = justificationValue });
+                        }
+
+                        if (ffP.Indentation != null)
+                        {
+                            SetIndentation(paragraphProperties, ffP.Indentation);
+                        }
+                        
+                        if (ffP.IsNumbered)
+                        {
+                            var numberingProperties = new WP.NumberingProperties
+                            {
+                                NumberingId = new WP.NumberingId { Val = ffP.NumberingId },
+                                NumberingLevelReference = new WP.NumberingLevelReference { Val = ffP.NumberingLevel.Value }
+                            };
+                            paragraphProperties.Append(numberingProperties);
+                        }
+
+                        if (ffP.IsBullet)
+                        {
+                            var bulletProperties = new WP.NumberingProperties
+                            {
+                                NumberingId = new WP.NumberingId { Val = 1 },
+                                NumberingLevelReference = new WP.NumberingLevelReference { Val = 0 }
+                            };
+                            paragraphProperties.Append(bulletProperties);
+                        }
                         wpParagraph.Append(paragraphProperties);
                     }
 
@@ -191,6 +229,50 @@ namespace OpenXML.Words
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Create Paragraph");
                     throw new FileFormatException(errorMessage, ex);
                 }
+            }
+        }
+
+        private void SetIndentation(WP.ParagraphProperties paragraphProperties, FF.Indentation ffIndentation)
+        {
+            var indentation = new WP.Indentation();
+
+            if (ffIndentation.Left > 0)
+            {
+                indentation.Left = (ffIndentation.Left * 1440).ToString();
+            }
+
+            if (ffIndentation.Right > 0)
+            {
+                indentation.Right = (ffIndentation.Right * 1440).ToString();
+            }
+
+            if (ffIndentation.FirstLine > 0)
+            {
+                indentation.FirstLine = (ffIndentation.FirstLine * 1440).ToString();
+            }
+
+            if (ffIndentation.Hanging > 0)
+            {
+                indentation.Hanging = (ffIndentation.Hanging * 1440).ToString();
+            }
+
+            paragraphProperties.Append(indentation);
+        }
+
+        private WP.JustificationValues MapAlignmentToJustification(ParagraphAlignment alignment)
+        {
+            switch (alignment)
+            {
+                case ParagraphAlignment.Left:
+                    return WP.JustificationValues.Left;
+                case ParagraphAlignment.Center:
+                    return WP.JustificationValues.Center;
+                case ParagraphAlignment.Right:
+                    return WP.JustificationValues.Right;
+                case ParagraphAlignment.Justify:
+                    return WP.JustificationValues.Both;
+                default:
+                    return WP.JustificationValues.Left;
             }
         }
 
@@ -458,7 +540,41 @@ namespace OpenXML.Words
                         if (paraStyleId != null)
                         {
                             if (paraStyleId.Val != null) ffP.Style = paraStyleId.Val.Value;
+
+                            if (IsBulletStyle(paraStyleId.Val.Value))
+                            {
+                                ffP.IsBullet = true;
+                            }
                         }
+                        var numberingProperties = paraProps.Elements<WP.NumberingProperties>().FirstOrDefault();
+                        if (numberingProperties != null)
+                        {
+                            ffP.IsNumbered = true;
+                            ffP.NumberingId = numberingProperties.NumberingId?.Val ?? 0;
+                            ffP.NumberingLevel = numberingProperties.NumberingLevelReference?.Val ?? 0;
+                        }
+                    }
+                    var justificationElement = paraProps.Elements<WP.Justification>().FirstOrDefault();
+                    if (justificationElement != null)
+                    {
+                        ffP.Alignment = MapJustificationToAlignment(justificationElement.Val);
+                    }
+                    var Indentation = paraProps.Elements<WP.Indentation>().FirstOrDefault();
+                    if (Indentation.Left != null)
+                    {
+                        ffP.Indentation.Left = int.Parse(Indentation.Left);                        
+                    }
+                    if (Indentation.Right != null)
+                    {
+                        ffP.Indentation.Right = int.Parse(Indentation.Right);
+                    }
+                    if (Indentation.Hanging != null)
+                    {
+                        ffP.Indentation.Hanging = int.Parse(Indentation.Hanging);
+                    }
+                    if (Indentation.FirstLine != null)
+                    {                        
+                        ffP.Indentation.FirstLine = int.Parse(Indentation.FirstLine);
                     }
 
                     var runs = wpPara.Elements<WP.Run>();
@@ -473,7 +589,7 @@ namespace OpenXML.Words
                         {
                             Text = wpR.InnerText,
                             FontFamily = wpR.RunProperties?.RunFonts?.Ascii ?? null,
-                            FontSize = fontSize ?? 0, //int.Parse(wpR.RunProperties?.FontSize?.Val ?? null),
+                            FontSize = fontSize ?? 0,
                             Color = wpR.RunProperties?.Color?.Val ?? null,
                             Bold = (wpR.RunProperties != null && wpR.RunProperties.Bold != null),
                             Italic = (wpR.RunProperties != null && wpR.RunProperties.Italic != null),
@@ -489,6 +605,28 @@ namespace OpenXML.Words
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load Paragraph");
                     throw new FileFormatException(errorMessage, ex);
                 }
+            }
+        }
+
+        private bool IsBulletStyle(string styleId)
+        {            
+            return styleId == "BulletStyle";
+        }
+
+        private string MapJustificationToAlignment(WP.JustificationValues justificationValue)
+        {
+            switch (justificationValue)
+            {
+                case WP.JustificationValues.Left:
+                    return "Left";
+                case WP.JustificationValues.Center:
+                    return "Center";
+                case WP.JustificationValues.Right:
+                    return "Right";
+                case WP.JustificationValues.Both:
+                    return "Justify";
+                default:
+                    return "Left";
             }
         }
 
