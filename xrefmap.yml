@@ -943,6 +943,78 @@ references:
   commentId: Overload:FileFormat.Words.IElements.Image.Width
   fullName: FileFormat.Words.IElements.Image.Width
   nameWithType: Image.Width
+- uid: FileFormat.Words.IElements.Indentation
+  name: Indentation
+  href: api/FileFormat.Words.IElements.Indentation.html
+  commentId: T:FileFormat.Words.IElements.Indentation
+  fullName: FileFormat.Words.IElements.Indentation
+  nameWithType: Indentation
+- uid: FileFormat.Words.IElements.Indentation.#ctor
+  name: Indentation()
+  href: api/FileFormat.Words.IElements.Indentation.html#FileFormat_Words_IElements_Indentation__ctor
+  commentId: M:FileFormat.Words.IElements.Indentation.#ctor
+  name.vb: New()
+  fullName: FileFormat.Words.IElements.Indentation.Indentation()
+  fullName.vb: FileFormat.Words.IElements.Indentation.New()
+  nameWithType: Indentation.Indentation()
+  nameWithType.vb: Indentation.New()
+- uid: FileFormat.Words.IElements.Indentation.#ctor*
+  name: Indentation
+  href: api/FileFormat.Words.IElements.Indentation.html#FileFormat_Words_IElements_Indentation__ctor_
+  commentId: Overload:FileFormat.Words.IElements.Indentation.#ctor
+  name.vb: New
+  fullName: FileFormat.Words.IElements.Indentation.Indentation
+  fullName.vb: FileFormat.Words.IElements.Indentation.New
+  nameWithType: Indentation.Indentation
+  nameWithType.vb: Indentation.New
+- uid: FileFormat.Words.IElements.Indentation.FirstLine
+  name: FirstLine
+  href: api/FileFormat.Words.IElements.Indentation.html#FileFormat_Words_IElements_Indentation_FirstLine
+  commentId: P:FileFormat.Words.IElements.Indentation.FirstLine
+  fullName: FileFormat.Words.IElements.Indentation.FirstLine
+  nameWithType: Indentation.FirstLine
+- uid: FileFormat.Words.IElements.Indentation.FirstLine*
+  name: FirstLine
+  href: api/FileFormat.Words.IElements.Indentation.html#FileFormat_Words_IElements_Indentation_FirstLine_
+  commentId: Overload:FileFormat.Words.IElements.Indentation.FirstLine
+  fullName: FileFormat.Words.IElements.Indentation.FirstLine
+  nameWithType: Indentation.FirstLine
+- uid: FileFormat.Words.IElements.Indentation.Hanging
+  name: Hanging
+  href: api/FileFormat.Words.IElements.Indentation.html#FileFormat_Words_IElements_Indentation_Hanging
+  commentId: P:FileFormat.Words.IElements.Indentation.Hanging
+  fullName: FileFormat.Words.IElements.Indentation.Hanging
+  nameWithType: Indentation.Hanging
+- uid: FileFormat.Words.IElements.Indentation.Hanging*
+  name: Hanging
+  href: api/FileFormat.Words.IElements.Indentation.html#FileFormat_Words_IElements_Indentation_Hanging_
+  commentId: Overload:FileFormat.Words.IElements.Indentation.Hanging
+  fullName: FileFormat.Words.IElements.Indentation.Hanging
+  nameWithType: Indentation.Hanging
+- uid: FileFormat.Words.IElements.Indentation.Left
+  name: Left
+  href: api/FileFormat.Words.IElements.Indentation.html#FileFormat_Words_IElements_Indentation_Left
+  commentId: P:FileFormat.Words.IElements.Indentation.Left
+  fullName: FileFormat.Words.IElements.Indentation.Left
+  nameWithType: Indentation.Left
+- uid: FileFormat.Words.IElements.Indentation.Left*
+  name: Left
+  href: api/FileFormat.Words.IElements.Indentation.html#FileFormat_Words_IElements_Indentation_Left_
+  commentId: Overload:FileFormat.Words.IElements.Indentation.Left
+  fullName: FileFormat.Words.IElements.Indentation.Left
+  nameWithType: Indentation.Left
+- uid: FileFormat.Words.IElements.Indentation.Right
+  name: Right
+  href: api/FileFormat.Words.IElements.Indentation.html#FileFormat_Words_IElements_Indentation_Right
+  commentId: P:FileFormat.Words.IElements.Indentation.Right
+  fullName: FileFormat.Words.IElements.Indentation.Right
+  nameWithType: Indentation.Right
+- uid: FileFormat.Words.IElements.Indentation.Right*
+  name: Right
+  href: api/FileFormat.Words.IElements.Indentation.html#FileFormat_Words_IElements_Indentation_Right_
+  commentId: Overload:FileFormat.Words.IElements.Indentation.Right
+  fullName: FileFormat.Words.IElements.Indentation.Right
+  nameWithType: Indentation.Right
 - uid: FileFormat.Words.IElements.PageMargin
   name: PageMargin
   href: api/FileFormat.Words.IElements.PageMargin.html
@@ -1099,6 +1171,18 @@ references:
   commentId: Overload:FileFormat.Words.IElements.Paragraph.AddRun
   fullName: FileFormat.Words.IElements.Paragraph.AddRun
   nameWithType: Paragraph.AddRun
+- uid: FileFormat.Words.IElements.Paragraph.Alignment
+  name: Alignment
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_Alignment
+  commentId: P:FileFormat.Words.IElements.Paragraph.Alignment
+  fullName: FileFormat.Words.IElements.Paragraph.Alignment
+  nameWithType: Paragraph.Alignment
+- uid: FileFormat.Words.IElements.Paragraph.Alignment*
+  name: Alignment
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_Alignment_
+  commentId: Overload:FileFormat.Words.IElements.Paragraph.Alignment
+  fullName: FileFormat.Words.IElements.Paragraph.Alignment
+  nameWithType: Paragraph.Alignment
 - uid: FileFormat.Words.IElements.Paragraph.ElementId
   name: ElementId
   href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_ElementId
@@ -1111,6 +1195,66 @@ references:
   commentId: Overload:FileFormat.Words.IElements.Paragraph.ElementId
   fullName: FileFormat.Words.IElements.Paragraph.ElementId
   nameWithType: Paragraph.ElementId
+- uid: FileFormat.Words.IElements.Paragraph.Indentation
+  name: Indentation
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_Indentation
+  commentId: P:FileFormat.Words.IElements.Paragraph.Indentation
+  fullName: FileFormat.Words.IElements.Paragraph.Indentation
+  nameWithType: Paragraph.Indentation
+- uid: FileFormat.Words.IElements.Paragraph.Indentation*
+  name: Indentation
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_Indentation_
+  commentId: Overload:FileFormat.Words.IElements.Paragraph.Indentation
+  fullName: FileFormat.Words.IElements.Paragraph.Indentation
+  nameWithType: Paragraph.Indentation
+- uid: FileFormat.Words.IElements.Paragraph.IsBullet
+  name: IsBullet
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_IsBullet
+  commentId: P:FileFormat.Words.IElements.Paragraph.IsBullet
+  fullName: FileFormat.Words.IElements.Paragraph.IsBullet
+  nameWithType: Paragraph.IsBullet
+- uid: FileFormat.Words.IElements.Paragraph.IsBullet*
+  name: IsBullet
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_IsBullet_
+  commentId: Overload:FileFormat.Words.IElements.Paragraph.IsBullet
+  fullName: FileFormat.Words.IElements.Paragraph.IsBullet
+  nameWithType: Paragraph.IsBullet
+- uid: FileFormat.Words.IElements.Paragraph.IsNumbered
+  name: IsNumbered
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_IsNumbered
+  commentId: P:FileFormat.Words.IElements.Paragraph.IsNumbered
+  fullName: FileFormat.Words.IElements.Paragraph.IsNumbered
+  nameWithType: Paragraph.IsNumbered
+- uid: FileFormat.Words.IElements.Paragraph.IsNumbered*
+  name: IsNumbered
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_IsNumbered_
+  commentId: Overload:FileFormat.Words.IElements.Paragraph.IsNumbered
+  fullName: FileFormat.Words.IElements.Paragraph.IsNumbered
+  nameWithType: Paragraph.IsNumbered
+- uid: FileFormat.Words.IElements.Paragraph.NumberingId
+  name: NumberingId
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_NumberingId
+  commentId: P:FileFormat.Words.IElements.Paragraph.NumberingId
+  fullName: FileFormat.Words.IElements.Paragraph.NumberingId
+  nameWithType: Paragraph.NumberingId
+- uid: FileFormat.Words.IElements.Paragraph.NumberingId*
+  name: NumberingId
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_NumberingId_
+  commentId: Overload:FileFormat.Words.IElements.Paragraph.NumberingId
+  fullName: FileFormat.Words.IElements.Paragraph.NumberingId
+  nameWithType: Paragraph.NumberingId
+- uid: FileFormat.Words.IElements.Paragraph.NumberingLevel
+  name: NumberingLevel
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_NumberingLevel
+  commentId: P:FileFormat.Words.IElements.Paragraph.NumberingLevel
+  fullName: FileFormat.Words.IElements.Paragraph.NumberingLevel
+  nameWithType: Paragraph.NumberingLevel
+- uid: FileFormat.Words.IElements.Paragraph.NumberingLevel*
+  name: NumberingLevel
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_NumberingLevel_
+  commentId: Overload:FileFormat.Words.IElements.Paragraph.NumberingLevel
+  fullName: FileFormat.Words.IElements.Paragraph.NumberingLevel
+  nameWithType: Paragraph.NumberingLevel
 - uid: FileFormat.Words.IElements.Paragraph.Runs
   name: Runs
   href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_Runs
