@@ -33,6 +33,7 @@ namespace OpenXML.Words
                     _mainPart.Document = new WP.Document();
                     var tmp = new OT.DefaultTemplate();
                     tmp.CreateMainDocumentPart(_mainPart);
+                    AddNumberingDefinitions(_pkgDocument);
                     CreateProperties(_pkgDocument);
                 }
                 catch (Exception ex)
@@ -139,25 +140,27 @@ namespace OpenXML.Words
                         {
                             SetIndentation(paragraphProperties, ffP.Indentation);
                         }
-                        
-                        if (ffP.IsNumbered)
-                        {
-                            var numberingProperties = new WP.NumberingProperties
-                            {
-                                NumberingId = new WP.NumberingId { Val = ffP.NumberingId },
-                                NumberingLevelReference = new WP.NumberingLevelReference { Val = ffP.NumberingLevel.Value }
-                            };
-                            paragraphProperties.Append(numberingProperties);
-                        }
 
-                        if (ffP.IsBullet)
+                        if (ffP.IsNumbered || ffP.IsBullet)
                         {
-                            var bulletProperties = new WP.NumberingProperties
+                            var numberingProperties = new WP.NumberingProperties();
+                            var numberingId = new WP.NumberingId();
+                            var numberingLevelReference = new WP.NumberingLevelReference();
+
+                            if (ffP.IsBullet)
                             {
-                                NumberingId = new WP.NumberingId { Val = 1 },
-                                NumberingLevelReference = new WP.NumberingLevelReference { Val = 0 }
-                            };
-                            paragraphProperties.Append(bulletProperties);
+                                // Assuming '1' is the ID for your bullet list definition in NumberingDefinitionsPart
+                                numberingId.Val = 1; // This value should match the ID of your bullet list definition
+                                numberingLevelReference.Val = ffP.NumberingLevel ?? 0; // Use the specified level or default to 0
+                            }
+                            else if (ffP.IsNumbered)
+                            {
+                                numberingId.Val = ffP.NumberingId <= 1 || ffP.NumberingId == null ? 2 : ffP.NumberingId; // This value should match the ID of your numbered list definition, assuming '2' as an example
+                                numberingLevelReference.Val = ffP.NumberingLevel ?? 0;
+                            }
+
+                            numberingProperties.Append(numberingId, numberingLevelReference);
+                            paragraphProperties.Append(numberingProperties);
                         }
                         wpParagraph.Append(paragraphProperties);
                     }
@@ -221,6 +224,48 @@ namespace OpenXML.Words
                     throw new FileFormatException(errorMessage, ex);
                 }
             }
+        }
+
+        internal void AddNumberingDefinitions(PKG.WordprocessingDocument pkgDocument)
+        {
+            PKG.NumberingDefinitionsPart numberingPart = pkgDocument.MainDocumentPart.NumberingDefinitionsPart;
+            if (numberingPart == null)
+            {
+                numberingPart = pkgDocument.MainDocumentPart.AddNewPart<PKG.NumberingDefinitionsPart>();
+            }
+
+            WP.Numbering numbering = new WP.Numbering();
+
+            WP.AbstractNum abstractNumBulleted = new WP.AbstractNum() { AbstractNumberId = 1 };
+            abstractNumBulleted.Append(new WP.Level(
+                new WP.NumberingFormat() { Val = WP.NumberFormatValues.Bullet },
+                new WP.LevelText() { Val = "•" },
+                new WP.LevelJustification() { Val = WP.LevelJustificationValues.Left }
+            )
+            { LevelIndex = 0 });
+            
+            WP.AbstractNum abstractNumNumbered = new WP.AbstractNum() { AbstractNumberId = 2 };
+            abstractNumNumbered.Append(new WP.Level(
+                new WP.StartNumberingValue() { Val = 1 },
+                new WP.NumberingFormat() { Val = WP.NumberFormatValues.Decimal },
+                new WP.LevelText() { Val = "%1." },
+                new WP.LevelJustification() { Val = WP.LevelJustificationValues.Left }
+            )
+            { LevelIndex = 0 });
+            
+            numbering.Append(abstractNumBulleted);
+            numbering.Append(abstractNumNumbered);
+
+            WP.NumberingInstance numInstanceBulleted = new WP.NumberingInstance() { NumberID = 1 };
+            numInstanceBulleted.Append(new WP.AbstractNumId() { Val = abstractNumBulleted.AbstractNumberId });
+
+            WP.NumberingInstance numInstanceNumbered = new WP.NumberingInstance() { NumberID = 2 };
+            numInstanceNumbered.Append(new WP.AbstractNumId() { Val = abstractNumNumbered.AbstractNumberId });
+
+            numbering.Append(numInstanceBulleted);
+            numbering.Append(numInstanceNumbered);
+
+            numberingPart.Numbering = numbering;
         }
 
         private void SetIndentation(WP.ParagraphProperties paragraphProperties, FF.Indentation ffIndentation)
@@ -531,18 +576,46 @@ namespace OpenXML.Words
                         if (paraStyleId != null)
                         {
                             if (paraStyleId.Val != null) ffP.Style = paraStyleId.Val.Value;
-
-                            if (IsBulletStyle(paraStyleId.Val.Value))
-                            {
-                                ffP.IsBullet = true;
-                            }
                         }
-                        var numberingProperties = paraProps.Elements<WP.NumberingProperties>().FirstOrDefault();
-                        if (numberingProperties != null)
+                    }
+                    var numberingProperties = wpPara.ParagraphProperties?.NumberingProperties;
+                    if (numberingProperties != null)
+                    {
+                        var numIdVal = numberingProperties.NumberingId?.Val;
+                        var levelVal = numberingProperties.NumberingLevelReference?.Val;
+
+                        // Check if there's a valid numbering id and level reference
+                        if (numIdVal.HasValue && levelVal.HasValue)
                         {
-                            ffP.IsNumbered = true;
-                            ffP.NumberingId = numberingProperties.NumberingId?.Val ?? 0;
-                            ffP.NumberingLevel = numberingProperties.NumberingLevelReference?.Val ?? 0;
+                            // Get the numbering part from the document
+                            var numberingPart = _pkgDocument.MainDocumentPart.NumberingDefinitionsPart;
+                            if (numberingPart != null)
+                            {
+                                // Look for the AbstractNum that matches the numIdVal
+                                var abstractNum = numberingPart.Numbering.Elements<WP.AbstractNum>()
+                                                .FirstOrDefault(a => a.AbstractNumberId.Value == numIdVal.Value);
+
+                                if (abstractNum != null)
+                                {
+                                    // Get the level corresponding to the levelVal
+                                    var level = abstractNum.Elements<WP.Level>()
+                                                    .FirstOrDefault(l => l.LevelIndex.Value == levelVal.Value);
+
+                                    // If the level's numbering format is bullet, set IsBullet to true
+                                    if (level != null && level.NumberingFormat != null && level.NumberingFormat.Val.Value == WP.NumberFormatValues.Bullet)
+                                    {
+                                        ffP.IsBullet = true;
+                                        ffP.NumberingLevel = levelVal.Value;
+                                    }
+                                    // If the level's numbering format is not bullet, it's a numbered list
+                                    else if (level != null)
+                                    {
+                                        ffP.IsNumbered = true;
+                                        ffP.NumberingLevel = levelVal.Value;
+                                        ffP.NumberingId = numIdVal.Value;
+                                    }
+                                }
+                            }
                         }
                     }
                     var justificationElement = paraProps.Elements<WP.Justification>().FirstOrDefault();
@@ -551,23 +624,24 @@ namespace OpenXML.Words
                         ffP.Alignment = MapJustificationToAlignment(justificationElement.Val);
                     }
                     var Indentation = paraProps.Elements<WP.Indentation>().FirstOrDefault();
-                    if (Indentation.Left != null)
-                    {
-                        ffP.Indentation.Left = int.Parse(Indentation.Left);                        
+                    if (Indentation != null) { 
+                        if (Indentation.Left != null)
+                        {
+                            ffP.Indentation.Left = int.Parse(Indentation.Left);                        
+                        }
+                        if (Indentation.Right != null)
+                        {
+                            ffP.Indentation.Right = int.Parse(Indentation.Right);
+                        }
+                        if (Indentation.Hanging != null)
+                        {
+                            ffP.Indentation.Hanging = int.Parse(Indentation.Hanging);
+                        }
+                        if (Indentation.FirstLine != null)
+                        {                        
+                            ffP.Indentation.FirstLine = int.Parse(Indentation.FirstLine);
+                        }
                     }
-                    if (Indentation.Right != null)
-                    {
-                        ffP.Indentation.Right = int.Parse(Indentation.Right);
-                    }
-                    if (Indentation.Hanging != null)
-                    {
-                        ffP.Indentation.Hanging = int.Parse(Indentation.Hanging);
-                    }
-                    if (Indentation.FirstLine != null)
-                    {                        
-                        ffP.Indentation.FirstLine = int.Parse(Indentation.FirstLine);
-                    }
-
                     var runs = wpPara.Elements<WP.Run>();
 
                     foreach (var wpR in runs)
