@@ -237,11 +237,15 @@ namespace OpenXML.Words
 
             WP.AbstractNum abstractNumBulleted = new WP.AbstractNum() { AbstractNumberId = 1 };
             WP.AbstractNum abstractNumNumbered = new WP.AbstractNum() { AbstractNumberId = 2 };
-
+            string numberingStyle = "%1.";
             for (int i = 0; i < 9; i++)
-            {
+            {                
+                for(int j = 0; j < i; j++)
+                {
+                    numberingStyle += $"%{i + 1}.";
+                }
                 abstractNumBulleted.Append(CreateLevel(i, WP.NumberFormatValues.Bullet, "•"));
-                abstractNumNumbered.Append(CreateLevel(i, WP.NumberFormatValues.Decimal, $"%{i + 1}."));
+                abstractNumNumbered.Append(CreateLevel(i, WP.NumberFormatValues.Decimal, numberingStyle));
             }
 
             numbering.Append(abstractNumBulleted);
