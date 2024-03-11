@@ -83,6 +83,16 @@ namespace FileFormat.Words.IElements
         /// Gets or sets whether the paragraph has numbering.
         /// </summary>
         public bool IsNumbered { get; set; }
+        
+        /// <summary>
+        /// Gets or sets whether the paragraph has numbering.
+        /// </summary>
+        public bool IsRoman { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether the paragraph has numbering.
+        /// </summary>
+        public bool IsAlphabeticNumber { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Paragraph"/> class.

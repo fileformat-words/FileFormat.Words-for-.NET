@@ -141,7 +141,7 @@ namespace OpenXML.Words
                             SetIndentation(paragraphProperties, ffP.Indentation);
                         }
 
-                        if (ffP.IsNumbered || ffP.IsBullet)
+                        if (ffP.IsNumbered || ffP.IsBullet || ffP.IsRoman || ffP.IsAlphabeticNumber)
                         {
                             var numberingProperties = new WP.NumberingProperties();
                             var numberingId = new WP.NumberingId();
@@ -155,6 +155,16 @@ namespace OpenXML.Words
                             else if (ffP.IsNumbered)
                             {
                                 numberingId.Val = ffP.NumberingId <= 1 || ffP.NumberingId == null ? 2 : ffP.NumberingId;
+                                numberingLevelReference.Val = ffP.NumberingLevel ?? 0;
+                            }
+                            else if (ffP.IsAlphabeticNumber)
+                            {
+                                numberingId.Val = ffP.NumberingId <= 2 || ffP.NumberingId == null ? 3 : ffP.NumberingId;
+                                numberingLevelReference.Val = ffP.NumberingLevel ?? 0;
+                            }
+                            else if (ffP.IsRoman)
+                            {
+                                numberingId.Val = ffP.NumberingId <= 3 || ffP.NumberingId == null ? 4 : ffP.NumberingId;
                                 numberingLevelReference.Val = ffP.NumberingLevel ?? 0;
                             }
 
@@ -237,6 +247,8 @@ namespace OpenXML.Words
 
             WP.AbstractNum abstractNumBulleted = new WP.AbstractNum() { AbstractNumberId = 1 };
             WP.AbstractNum abstractNumNumbered = new WP.AbstractNum() { AbstractNumberId = 2 };
+            WP.AbstractNum abstractNumLetter = new WP.AbstractNum() { AbstractNumberId = 3 };
+            WP.AbstractNum abstractNumRoman = new WP.AbstractNum() { AbstractNumberId = 4 };
             string numberingStyle = "%1.";
             for (int i = 0; i < 9; i++)
             {                
@@ -246,10 +258,14 @@ namespace OpenXML.Words
                 }
                 abstractNumBulleted.Append(CreateLevel(i, WP.NumberFormatValues.Bullet, "•"));
                 abstractNumNumbered.Append(CreateLevel(i, WP.NumberFormatValues.Decimal, numberingStyle));
+                abstractNumLetter.Append(CreateLevel(i, WP.NumberFormatValues.LowerLetter, $"%{ i + 1 }."));
+                abstractNumRoman.Append(CreateLevel(i, WP.NumberFormatValues.LowerRoman, $"%{i + 1}."));
             }
 
             numbering.Append(abstractNumBulleted);
             numbering.Append(abstractNumNumbered);
+            numbering.Append(abstractNumLetter);
+            numbering.Append(abstractNumRoman);
 
             WP.NumberingInstance numInstanceBulleted = new WP.NumberingInstance() { NumberID = 1 };
             numInstanceBulleted.Append(new WP.AbstractNumId() { Val = abstractNumBulleted.AbstractNumberId });
@@ -257,8 +273,16 @@ namespace OpenXML.Words
             WP.NumberingInstance numInstanceNumbered = new WP.NumberingInstance() { NumberID = 2 };
             numInstanceNumbered.Append(new WP.AbstractNumId() { Val = abstractNumNumbered.AbstractNumberId });
 
+            WP.NumberingInstance numInstanceLetter = new WP.NumberingInstance() { NumberID = 3 };
+            numInstanceLetter.Append(new WP.AbstractNumId() { Val = abstractNumLetter.AbstractNumberId });
+
+            WP.NumberingInstance numInstanceRoman = new WP.NumberingInstance() { NumberID = 4 };
+            numInstanceRoman.Append(new WP.AbstractNumId() { Val = abstractNumRoman.AbstractNumberId });
+
             numbering.Append(numInstanceBulleted);
             numbering.Append(numInstanceNumbered);
+            numbering.Append(numInstanceLetter);
+            numbering.Append(numInstanceRoman);
 
             numberingPart.Numbering = numbering;
         }
@@ -616,6 +640,16 @@ namespace OpenXML.Words
                                     if (level != null && level.NumberingFormat != null && level.NumberingFormat.Val.Value == WP.NumberFormatValues.Bullet)
                                     {
                                         ffP.IsBullet = true;
+                                        ffP.NumberingLevel = levelVal.Value;
+                                    }
+                                    else if (level != null && level.NumberingFormat != null && level.NumberingFormat.Val.Value == WP.NumberFormatValues.LowerLetter)
+                                    {
+                                        ffP.IsAlphabeticNumber = true;
+                                        ffP.NumberingLevel = levelVal.Value;
+                                    }
+                                    else if (level != null && level.NumberingFormat != null && level.NumberingFormat.Val.Value == WP.NumberFormatValues.LowerRoman)
+                                    {
+                                        ffP.IsAlphabeticNumber = true;
                                         ffP.NumberingLevel = levelVal.Value;
                                     }
                                     // If the level's numbering format is not bullet, it's a numbered list
