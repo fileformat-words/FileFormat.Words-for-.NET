@@ -21,6 +21,14 @@ namespace FileFormat.Words.IElements
         public double Hanging { get; set; }
     }
 
+    public enum ParagraphAlignment
+    {
+        Left,
+        Center,
+        Right,
+        Justify
+    }
+
     /// <summary>
     /// Represents a paragraph element in a Word document.
     /// </summary>
@@ -49,7 +57,7 @@ namespace FileFormat.Words.IElements
         /// <summary>
         /// Gets or Sets Alignment of the word paragraph
         /// </summary>
-        public string Alignment { get; set; }
+        public ParagraphAlignment Alignment { get; set; }
 
         /// <summary>
         /// Gets or Sets Indentation of the word paragraph
@@ -75,6 +83,16 @@ namespace FileFormat.Words.IElements
         /// Gets or sets whether the paragraph has numbering.
         /// </summary>
         public bool IsNumbered { get; set; }
+        
+        /// <summary>
+        /// Gets or sets whether the paragraph has numbering.
+        /// </summary>
+        public bool IsRoman { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether the paragraph has numbering.
+        /// </summary>
+        public bool IsAlphabeticNumber { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Paragraph"/> class.

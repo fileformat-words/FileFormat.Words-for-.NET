@@ -21,13 +21,6 @@ namespace OpenXML.Words
         private MemoryStream _ms;
         private PKG.MainDocumentPart _mainPart;
         private readonly object _lockObject = new object();
-        public enum ParagraphAlignment
-        {
-            Left,
-            Center,
-            Right,
-            Justify
-        }
         private OwDocument()
         {
             lock (_lockObject)
@@ -40,6 +33,7 @@ namespace OpenXML.Words
                     _mainPart.Document = new WP.Document();
                     var tmp = new OT.DefaultTemplate();
                     tmp.CreateMainDocumentPart(_mainPart);
+                    AddNumberingDefinitions(_pkgDocument);
                     CreateProperties(_pkgDocument);
                 }
                 catch (Exception ex)
@@ -138,35 +132,44 @@ namespace OpenXML.Words
                         var paragraphStyleId = new WP.ParagraphStyleId { Val = ffP.Style };
                         paragraphProperties.Append(paragraphStyleId);
                         
-                        if (Enum.TryParse<ParagraphAlignment>(ffP.Alignment, true, out var alignmentEnum))
-                        {
-                            WP.JustificationValues justificationValue = MapAlignmentToJustification(alignmentEnum);
-                            paragraphProperties.Append(new WP.Justification { Val = justificationValue });
-                        }
+                        WP.JustificationValues justificationValue = MapAlignmentToJustification(ffP.Alignment);
+                        paragraphProperties.Append(new WP.Justification { Val = justificationValue });
+                        
 
                         if (ffP.Indentation != null)
                         {
                             SetIndentation(paragraphProperties, ffP.Indentation);
                         }
-                        
-                        if (ffP.IsNumbered)
-                        {
-                            var numberingProperties = new WP.NumberingProperties
-                            {
-                                NumberingId = new WP.NumberingId { Val = ffP.NumberingId },
-                                NumberingLevelReference = new WP.NumberingLevelReference { Val = ffP.NumberingLevel.Value }
-                            };
-                            paragraphProperties.Append(numberingProperties);
-                        }
 
-                        if (ffP.IsBullet)
+                        if (ffP.IsNumbered || ffP.IsBullet || ffP.IsRoman || ffP.IsAlphabeticNumber)
                         {
-                            var bulletProperties = new WP.NumberingProperties
+                            var numberingProperties = new WP.NumberingProperties();
+                            var numberingId = new WP.NumberingId();
+                            var numberingLevelReference = new WP.NumberingLevelReference();
+
+                            if (ffP.IsBullet)
+                            {                                
+                                numberingId.Val = 1;
+                                numberingLevelReference.Val = ffP.NumberingLevel ?? 0;
+                            }
+                            else if (ffP.IsNumbered)
                             {
-                                NumberingId = new WP.NumberingId { Val = 1 },
-                                NumberingLevelReference = new WP.NumberingLevelReference { Val = 0 }
-                            };
-                            paragraphProperties.Append(bulletProperties);
+                                numberingId.Val = ffP.NumberingId <= 1 || ffP.NumberingId == null ? 2 : ffP.NumberingId;
+                                numberingLevelReference.Val = ffP.NumberingLevel ?? 0;
+                            }
+                            else if (ffP.IsAlphabeticNumber)
+                            {
+                                numberingId.Val = ffP.NumberingId <= 2 || ffP.NumberingId == null ? 3 : ffP.NumberingId;
+                                numberingLevelReference.Val = ffP.NumberingLevel ?? 0;
+                            }
+                            else if (ffP.IsRoman)
+                            {
+                                numberingId.Val = ffP.NumberingId <= 3 || ffP.NumberingId == null ? 4 : ffP.NumberingId;
+                                numberingLevelReference.Val = ffP.NumberingLevel ?? 0;
+                            }
+
+                            numberingProperties.Append(numberingId, numberingLevelReference);
+                            paragraphProperties.Append(numberingProperties);
                         }
                         wpParagraph.Append(paragraphProperties);
                     }
@@ -232,6 +235,74 @@ namespace OpenXML.Words
             }
         }
 
+        internal void AddNumberingDefinitions(PKG.WordprocessingDocument pkgDocument)
+        {
+            PKG.NumberingDefinitionsPart numberingPart = pkgDocument.MainDocumentPart.NumberingDefinitionsPart;
+            if (numberingPart == null)
+            {
+                numberingPart = pkgDocument.MainDocumentPart.AddNewPart<PKG.NumberingDefinitionsPart>();
+            }
+
+            WP.Numbering numbering = new WP.Numbering();
+
+            WP.AbstractNum abstractNumBulleted = new WP.AbstractNum() { AbstractNumberId = 1 };
+            WP.AbstractNum abstractNumNumbered = new WP.AbstractNum() { AbstractNumberId = 2 };
+            WP.AbstractNum abstractNumLetter = new WP.AbstractNum() { AbstractNumberId = 3 };
+            WP.AbstractNum abstractNumRoman = new WP.AbstractNum() { AbstractNumberId = 4 };
+            string numberingStyle = "%1.";
+            for (int i = 0; i < 9; i++)
+            {                
+                for(int j = 0; j < i; j++)
+                {
+                    numberingStyle += $"%{i + 1}.";
+                }
+                abstractNumBulleted.Append(CreateLevel(i, WP.NumberFormatValues.Bullet, "•"));
+                abstractNumNumbered.Append(CreateLevel(i, WP.NumberFormatValues.Decimal, numberingStyle));
+                abstractNumLetter.Append(CreateLevel(i, WP.NumberFormatValues.LowerLetter, $"%{ i + 1 }."));
+                abstractNumRoman.Append(CreateLevel(i, WP.NumberFormatValues.LowerRoman, $"%{i + 1}."));
+            }
+
+            numbering.Append(abstractNumBulleted);
+            numbering.Append(abstractNumNumbered);
+            numbering.Append(abstractNumLetter);
+            numbering.Append(abstractNumRoman);
+
+            WP.NumberingInstance numInstanceBulleted = new WP.NumberingInstance() { NumberID = 1 };
+            numInstanceBulleted.Append(new WP.AbstractNumId() { Val = abstractNumBulleted.AbstractNumberId });
+
+            WP.NumberingInstance numInstanceNumbered = new WP.NumberingInstance() { NumberID = 2 };
+            numInstanceNumbered.Append(new WP.AbstractNumId() { Val = abstractNumNumbered.AbstractNumberId });
+
+            WP.NumberingInstance numInstanceLetter = new WP.NumberingInstance() { NumberID = 3 };
+            numInstanceLetter.Append(new WP.AbstractNumId() { Val = abstractNumLetter.AbstractNumberId });
+
+            WP.NumberingInstance numInstanceRoman = new WP.NumberingInstance() { NumberID = 4 };
+            numInstanceRoman.Append(new WP.AbstractNumId() { Val = abstractNumRoman.AbstractNumberId });
+
+            numbering.Append(numInstanceBulleted);
+            numbering.Append(numInstanceNumbered);
+            numbering.Append(numInstanceLetter);
+            numbering.Append(numInstanceRoman);
+
+            numberingPart.Numbering = numbering;
+        }
+
+        private WP.Level CreateLevel(int levelIndex, WP.NumberFormatValues numFormatVal, string levelTextVal)
+        {
+            WP.Level level = new WP.Level(
+                new WP.StartNumberingValue() { Val = 1 },
+                new WP.NumberingFormat() { Val = numFormatVal },
+                new WP.LevelText() { Val = levelTextVal },
+                new WP.LevelJustification() { Val = WP.LevelJustificationValues.Left }
+            )
+            { LevelIndex = levelIndex };
+            if (numFormatVal == WP.NumberFormatValues.Bullet)
+            {
+                level.RemoveAllChildren<WP.StartNumberingValue>();
+            }
+            return level;
+        }
+
         private void SetIndentation(WP.ParagraphProperties paragraphProperties, FF.Indentation ffIndentation)
         {
             var indentation = new WP.Indentation();
@@ -259,17 +330,17 @@ namespace OpenXML.Words
             paragraphProperties.Append(indentation);
         }
 
-        private WP.JustificationValues MapAlignmentToJustification(ParagraphAlignment alignment)
+        private WP.JustificationValues MapAlignmentToJustification(FF.ParagraphAlignment alignment)
         {
             switch (alignment)
             {
-                case ParagraphAlignment.Left:
+                case FF.ParagraphAlignment.Left:
                     return WP.JustificationValues.Left;
-                case ParagraphAlignment.Center:
+                case FF.ParagraphAlignment.Center:
                     return WP.JustificationValues.Center;
-                case ParagraphAlignment.Right:
+                case FF.ParagraphAlignment.Right:
                     return WP.JustificationValues.Right;
-                case ParagraphAlignment.Justify:
+                case FF.ParagraphAlignment.Justify:
                     return WP.JustificationValues.Both;
                 default:
                     return WP.JustificationValues.Left;
@@ -540,18 +611,56 @@ namespace OpenXML.Words
                         if (paraStyleId != null)
                         {
                             if (paraStyleId.Val != null) ffP.Style = paraStyleId.Val.Value;
-
-                            if (IsBulletStyle(paraStyleId.Val.Value))
-                            {
-                                ffP.IsBullet = true;
-                            }
                         }
-                        var numberingProperties = paraProps.Elements<WP.NumberingProperties>().FirstOrDefault();
-                        if (numberingProperties != null)
+                    }
+                    var numberingProperties = wpPara.ParagraphProperties?.NumberingProperties;
+                    if (numberingProperties != null)
+                    {
+                        var numIdVal = numberingProperties.NumberingId?.Val;
+                        var levelVal = numberingProperties.NumberingLevelReference?.Val;
+
+                        // Check if there's a valid numbering id and level reference
+                        if (numIdVal.HasValue && levelVal.HasValue)
                         {
-                            ffP.IsNumbered = true;
-                            ffP.NumberingId = numberingProperties.NumberingId?.Val ?? 0;
-                            ffP.NumberingLevel = numberingProperties.NumberingLevelReference?.Val ?? 0;
+                            // Get the numbering part from the document
+                            var numberingPart = _pkgDocument.MainDocumentPart.NumberingDefinitionsPart;
+                            if (numberingPart != null)
+                            {
+                                // Look for the AbstractNum that matches the numIdVal
+                                var abstractNum = numberingPart.Numbering.Elements<WP.AbstractNum>()
+                                                .FirstOrDefault(a => a.AbstractNumberId.Value == numIdVal.Value);
+
+                                if (abstractNum != null)
+                                {
+                                    // Get the level corresponding to the levelVal
+                                    var level = abstractNum.Elements<WP.Level>()
+                                                    .FirstOrDefault(l => l.LevelIndex.Value == levelVal.Value);
+
+                                    // If the level's numbering format is bullet, set IsBullet to true
+                                    if (level != null && level.NumberingFormat != null && level.NumberingFormat.Val.Value == WP.NumberFormatValues.Bullet)
+                                    {
+                                        ffP.IsBullet = true;
+                                        ffP.NumberingLevel = levelVal.Value;
+                                    }
+                                    else if (level != null && level.NumberingFormat != null && level.NumberingFormat.Val.Value == WP.NumberFormatValues.LowerLetter)
+                                    {
+                                        ffP.IsAlphabeticNumber = true;
+                                        ffP.NumberingLevel = levelVal.Value;
+                                    }
+                                    else if (level != null && level.NumberingFormat != null && level.NumberingFormat.Val.Value == WP.NumberFormatValues.LowerRoman)
+                                    {
+                                        ffP.IsAlphabeticNumber = true;
+                                        ffP.NumberingLevel = levelVal.Value;
+                                    }
+                                    // If the level's numbering format is not bullet, it's a numbered list
+                                    else if (level != null)
+                                    {
+                                        ffP.IsNumbered = true;
+                                        ffP.NumberingLevel = levelVal.Value;
+                                        ffP.NumberingId = numIdVal.Value;
+                                    }
+                                }
+                            }
                         }
                     }
                     var justificationElement = paraProps.Elements<WP.Justification>().FirstOrDefault();
@@ -560,23 +669,24 @@ namespace OpenXML.Words
                         ffP.Alignment = MapJustificationToAlignment(justificationElement.Val);
                     }
                     var Indentation = paraProps.Elements<WP.Indentation>().FirstOrDefault();
-                    if (Indentation.Left != null)
-                    {
-                        ffP.Indentation.Left = int.Parse(Indentation.Left);                        
+                    if (Indentation != null) { 
+                        if (Indentation.Left != null)
+                        {
+                            ffP.Indentation.Left = int.Parse(Indentation.Left);                        
+                        }
+                        if (Indentation.Right != null)
+                        {
+                            ffP.Indentation.Right = int.Parse(Indentation.Right);
+                        }
+                        if (Indentation.Hanging != null)
+                        {
+                            ffP.Indentation.Hanging = int.Parse(Indentation.Hanging);
+                        }
+                        if (Indentation.FirstLine != null)
+                        {                        
+                            ffP.Indentation.FirstLine = int.Parse(Indentation.FirstLine);
+                        }
                     }
-                    if (Indentation.Right != null)
-                    {
-                        ffP.Indentation.Right = int.Parse(Indentation.Right);
-                    }
-                    if (Indentation.Hanging != null)
-                    {
-                        ffP.Indentation.Hanging = int.Parse(Indentation.Hanging);
-                    }
-                    if (Indentation.FirstLine != null)
-                    {                        
-                        ffP.Indentation.FirstLine = int.Parse(Indentation.FirstLine);
-                    }
-
                     var runs = wpPara.Elements<WP.Run>();
 
                     foreach (var wpR in runs)
@@ -613,20 +723,20 @@ namespace OpenXML.Words
             return styleId == "BulletStyle";
         }
 
-        private string MapJustificationToAlignment(WP.JustificationValues justificationValue)
+        private FF.ParagraphAlignment MapJustificationToAlignment(WP.JustificationValues justificationValue)
         {
             switch (justificationValue)
             {
                 case WP.JustificationValues.Left:
-                    return "Left";
+                    return FF.ParagraphAlignment.Left;
                 case WP.JustificationValues.Center:
-                    return "Center";
+                    return FF.ParagraphAlignment.Center;
                 case WP.JustificationValues.Right:
-                    return "Right";
+                    return FF.ParagraphAlignment.Right;
                 case WP.JustificationValues.Both:
-                    return "Justify";
+                    return FF.ParagraphAlignment.Justify;
                 default:
-                    return "Left";
+                    return FF.ParagraphAlignment.Left;
             }
         }
 
