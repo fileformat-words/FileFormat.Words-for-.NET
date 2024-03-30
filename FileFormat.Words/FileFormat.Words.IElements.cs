@@ -80,17 +80,17 @@ namespace FileFormat.Words.IElements
         public bool IsBullet { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the paragraph has numbering.
+        /// Gets or sets whether the paragraph has numbered bullets.
         /// </summary>
         public bool IsNumbered { get; set; }
         
         /// <summary>
-        /// Gets or sets whether the paragraph has numbering.
+        /// Gets or sets whether the paragraph has roman number bullets.
         /// </summary>
         public bool IsRoman { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the paragraph has numbering.
+        /// Gets or sets whether the paragraph has alphabetc number bullets.
         /// </summary>
         public bool IsAlphabeticNumber { get; set; }
 
