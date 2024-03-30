@@ -12,20 +12,55 @@ namespace FileFormat.Words.IElements
         /// </summary>
         int ElementId { get; }
     }
-
+    /// <summary>
+    /// Represents the indentation settings for a paragraph.
+    /// </summary>
     public class Indentation
     {
+        /// <summary>
+        /// Gets or sets the distance of the left indentation.
+        /// </summary>
         public double Left { get; set; }
+
+        /// <summary>
+        /// Gets or sets the distance of the right indentation.
+        /// </summary>
         public double Right { get; set; }
+
+        /// <summary>
+        /// Gets or sets the distance of the first line indentation.
+        /// </summary>
         public double FirstLine { get; set; }
+
+        /// <summary>
+        /// Gets or sets the distance of the hanging indentation.
+        /// </summary>
         public double Hanging { get; set; }
     }
 
+    /// <summary>
+    /// Specifies the alignment of a paragraph within a text block or document.
+    /// </summary>
     public enum ParagraphAlignment
     {
+        /// <summary>
+        /// Aligns the paragraph to the left.
+        /// </summary>
         Left,
+
+        /// <summary>
+        /// Centers the paragraph within the available space.
+        /// </summary>
         Center,
+        
+        /// <summary>
+        /// Aligns the paragraph to the right.
+        /// </summary>
         Right,
+        
+        /// <summary>
+        /// Justifies the text within the paragraph, aligning both the left and right edges.
+        /// </summary>
         Justify
     }
 
