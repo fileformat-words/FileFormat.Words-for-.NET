@@ -1,5 +1,5 @@
 {
-  "source_base_path": "/Users/muhammadsabir/Projects/docfx_project/24.2.0/API/docfx_project",
+  "source_base_path": "/Users/muhammadsabir/Projects/docfx_project/24.3.0/API/docfx_project",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -156,6 +156,16 @@
       "output": {
         ".html": {
           "relative_path": "api/FileFormat.Words.IElements.Paragraph.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/FileFormat.Words.IElements.ParagraphAlignment.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/FileFormat.Words.IElements.ParagraphAlignment.html"
         }
       },
       "version": ""

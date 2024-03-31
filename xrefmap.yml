@@ -1207,6 +1207,18 @@ references:
   commentId: Overload:FileFormat.Words.IElements.Paragraph.Indentation
   fullName: FileFormat.Words.IElements.Paragraph.Indentation
   nameWithType: Paragraph.Indentation
+- uid: FileFormat.Words.IElements.Paragraph.IsAlphabeticNumber
+  name: IsAlphabeticNumber
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_IsAlphabeticNumber
+  commentId: P:FileFormat.Words.IElements.Paragraph.IsAlphabeticNumber
+  fullName: FileFormat.Words.IElements.Paragraph.IsAlphabeticNumber
+  nameWithType: Paragraph.IsAlphabeticNumber
+- uid: FileFormat.Words.IElements.Paragraph.IsAlphabeticNumber*
+  name: IsAlphabeticNumber
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_IsAlphabeticNumber_
+  commentId: Overload:FileFormat.Words.IElements.Paragraph.IsAlphabeticNumber
+  fullName: FileFormat.Words.IElements.Paragraph.IsAlphabeticNumber
+  nameWithType: Paragraph.IsAlphabeticNumber
 - uid: FileFormat.Words.IElements.Paragraph.IsBullet
   name: IsBullet
   href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_IsBullet
@@ -1231,6 +1243,18 @@ references:
   commentId: Overload:FileFormat.Words.IElements.Paragraph.IsNumbered
   fullName: FileFormat.Words.IElements.Paragraph.IsNumbered
   nameWithType: Paragraph.IsNumbered
+- uid: FileFormat.Words.IElements.Paragraph.IsRoman
+  name: IsRoman
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_IsRoman
+  commentId: P:FileFormat.Words.IElements.Paragraph.IsRoman
+  fullName: FileFormat.Words.IElements.Paragraph.IsRoman
+  nameWithType: Paragraph.IsRoman
+- uid: FileFormat.Words.IElements.Paragraph.IsRoman*
+  name: IsRoman
+  href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_IsRoman_
+  commentId: Overload:FileFormat.Words.IElements.Paragraph.IsRoman
+  fullName: FileFormat.Words.IElements.Paragraph.IsRoman
+  nameWithType: Paragraph.IsRoman
 - uid: FileFormat.Words.IElements.Paragraph.NumberingId
   name: NumberingId
   href: api/FileFormat.Words.IElements.Paragraph.html#FileFormat_Words_IElements_Paragraph_NumberingId
@@ -1291,6 +1315,36 @@ references:
   commentId: Overload:FileFormat.Words.IElements.Paragraph.Text
   fullName: FileFormat.Words.IElements.Paragraph.Text
   nameWithType: Paragraph.Text
+- uid: FileFormat.Words.IElements.ParagraphAlignment
+  name: ParagraphAlignment
+  href: api/FileFormat.Words.IElements.ParagraphAlignment.html
+  commentId: T:FileFormat.Words.IElements.ParagraphAlignment
+  fullName: FileFormat.Words.IElements.ParagraphAlignment
+  nameWithType: ParagraphAlignment
+- uid: FileFormat.Words.IElements.ParagraphAlignment.Center
+  name: Center
+  href: api/FileFormat.Words.IElements.ParagraphAlignment.html#FileFormat_Words_IElements_ParagraphAlignment_Center
+  commentId: F:FileFormat.Words.IElements.ParagraphAlignment.Center
+  fullName: FileFormat.Words.IElements.ParagraphAlignment.Center
+  nameWithType: ParagraphAlignment.Center
+- uid: FileFormat.Words.IElements.ParagraphAlignment.Justify
+  name: Justify
+  href: api/FileFormat.Words.IElements.ParagraphAlignment.html#FileFormat_Words_IElements_ParagraphAlignment_Justify
+  commentId: F:FileFormat.Words.IElements.ParagraphAlignment.Justify
+  fullName: FileFormat.Words.IElements.ParagraphAlignment.Justify
+  nameWithType: ParagraphAlignment.Justify
+- uid: FileFormat.Words.IElements.ParagraphAlignment.Left
+  name: Left
+  href: api/FileFormat.Words.IElements.ParagraphAlignment.html#FileFormat_Words_IElements_ParagraphAlignment_Left
+  commentId: F:FileFormat.Words.IElements.ParagraphAlignment.Left
+  fullName: FileFormat.Words.IElements.ParagraphAlignment.Left
+  nameWithType: ParagraphAlignment.Left
+- uid: FileFormat.Words.IElements.ParagraphAlignment.Right
+  name: Right
+  href: api/FileFormat.Words.IElements.ParagraphAlignment.html#FileFormat_Words_IElements_ParagraphAlignment_Right
+  commentId: F:FileFormat.Words.IElements.ParagraphAlignment.Right
+  fullName: FileFormat.Words.IElements.ParagraphAlignment.Right
+  nameWithType: ParagraphAlignment.Right
 - uid: FileFormat.Words.IElements.Row
   name: Row
   href: api/FileFormat.Words.IElements.Row.html
