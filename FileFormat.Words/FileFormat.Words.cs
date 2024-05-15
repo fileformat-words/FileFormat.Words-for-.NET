@@ -35,7 +35,7 @@ namespace FileFormat.Words
         //private static List<int> _instances = new List<int>();
         //private static int _instanceNumber = 0;
         //private int _instance = 0;
-        private static Lazy<List<int>> _instances = new Lazy<List<int>>(() => new List<int>()); 
+        private static Lazy<List<int>> _instances = new Lazy<List<int>>(() => new List<int>());
         private static int _instanceNumber = 0;
         private int _instance = 0;
         private int _originalSize = 0;
@@ -170,7 +170,7 @@ namespace FileFormat.Words
                     if (!_isNew)
                     {
                         using var fs = new IO.FileStream(filename, IO.FileMode.Create);
-                        OWD.OoxmlDocData.CreateInstance().Save(fs,this);
+                        OWD.OoxmlDocData.CreateInstance().Save(fs, this);
                     }
                     else
                     {
@@ -203,7 +203,7 @@ namespace FileFormat.Words
                 {
                     if (!_isNew)
                     {
-                        OWD.OoxmlDocData.CreateInstance().Save(stream,this);
+                        OWD.OoxmlDocData.CreateInstance().Save(stream, this);
                     }
                     else
                     {
@@ -283,7 +283,7 @@ namespace FileFormat.Words
                 try
                 {
                     _lstStructure[position] = element;
-                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Update(element, position,this);
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Update(element, position, this);
                     return true;
                 }
                 catch (Exception ex)
@@ -327,7 +327,7 @@ namespace FileFormat.Words
                 if (elementId != element.ElementId)
                 {
                     var ex = new Exception("The elements mismatch: Update is only available for same element");
-                    throw new FileFormatException(ex.Message,new InvalidOperationException());
+                    throw new FileFormatException(ex.Message, new InvalidOperationException());
                 }
 
                 var position = _lstStructure.FindIndex(e => e.ElementId == elementId);
@@ -340,7 +340,7 @@ namespace FileFormat.Words
                 try
                 {
                     _lstStructure[position] = element;
-                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Update(element, position,this);
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Update(element, position, this);
                     return true;
                 }
                 catch (Exception ex)
@@ -402,7 +402,7 @@ namespace FileFormat.Words
                 try
                 {
                     _lstStructure.Insert(position, newElement);
-                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Insert(newElement, position,this);
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Insert(newElement, position, this);
                     _originalSize++;
                     return newElementId;
                 }
@@ -460,7 +460,7 @@ namespace FileFormat.Words
                 try
                 {
                     _lstStructure.Insert(position, newElement);
-                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Insert(newElement, position,this);
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Insert(newElement, position, this);
                     _originalSize++;
                     return newElementId;
                 }
@@ -509,7 +509,7 @@ namespace FileFormat.Words
                         _lstStructure.Add(newElement);
                         if (!_isNew) OWD.OoxmlDocData.CreateInstance().Append(newElement, this);
                     }
-                    
+
                     //Console.WriteLine("Hello + " + _instance);
                     _originalSize++;
                     return newElementId;
@@ -580,7 +580,7 @@ namespace FileFormat.Words
                 try
                 {
                     _lstStructure.Insert(position + 1, newElement);
-                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Insert(newElement, position + 1,this);
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Insert(newElement, position + 1, this);
                     _originalSize++;
                     return newElementId;
                 }
@@ -637,7 +637,7 @@ namespace FileFormat.Words
                 try
                 {
                     _lstStructure.Insert(position + 1, newElement);
-                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Insert(newElement, position + 1,this);
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Insert(newElement, position + 1, this);
                     _originalSize++;
                     return newElementId;
                 }
@@ -681,7 +681,7 @@ namespace FileFormat.Words
                     try
                     {
                         _lstStructure.RemoveAt(position + 1);
-                        if (!_isNew) OWD.OoxmlDocData.CreateInstance().Remove(position + 1,this);
+                        if (!_isNew) OWD.OoxmlDocData.CreateInstance().Remove(position + 1, this);
                         return true;
                     }
                     catch (Exception ex)
@@ -728,7 +728,7 @@ namespace FileFormat.Words
                     try
                     {
                         _lstStructure.RemoveAt(position + 1);
-                        if (!_isNew) OWD.OoxmlDocData.CreateInstance().Remove(position + 1,this);
+                        if (!_isNew) OWD.OoxmlDocData.CreateInstance().Remove(position + 1, this);
                         return true;
                     }
                     catch (Exception ex)
@@ -774,7 +774,7 @@ namespace FileFormat.Words
                 try
                 {
                     _lstStructure.RemoveAt(position - 1);
-                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Remove(position - 1,this);
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Remove(position - 1, this);
                     return true;
                 }
                 catch (Exception ex)
@@ -813,7 +813,7 @@ namespace FileFormat.Words
                 try
                 {
                     _lstStructure.RemoveAt(position - 1);
-                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Remove(position - 1,this);
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Remove(position - 1, this);
                     return true;
                 }
                 catch (Exception ex)
@@ -852,7 +852,7 @@ namespace FileFormat.Words
                 try
                 {
                     _lstStructure.RemoveAt(position);
-                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Remove(position,this);
+                    if (!_isNew) OWD.OoxmlDocData.CreateInstance().Remove(position, this);
                     return true;
                 }
                 catch (Exception ex)
@@ -878,11 +878,11 @@ namespace FileFormat.Words
             {
                 // Dispose of managed resources (if any)
                 if (_lstStructure != null) _lstStructure = null;
-                if (_elementStyles != null) _elementStyles =null;
+                if (_elementStyles != null) _elementStyles = null;
                 if (_ooxmlDoc != null)
                 {
                     _ooxmlDoc.Dispose();
-                    _ooxmlDoc=null;
+                    _ooxmlDoc = null;
                 }
                 OWD.OoxmlDocData.CreateInstance().Dispose();
             }

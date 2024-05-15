@@ -12,6 +12,7 @@ namespace FileFormat.Words.IElements
         /// </summary>
         int ElementId { get; }
     }
+
     /// <summary>
     /// Represents the indentation settings for a paragraph.
     /// </summary>
@@ -52,12 +53,12 @@ namespace FileFormat.Words.IElements
         /// Centers the paragraph within the available space.
         /// </summary>
         Center,
-        
+
         /// <summary>
         /// Aligns the paragraph to the right.
         /// </summary>
         Right,
-        
+
         /// <summary>
         /// Justifies the text within the paragraph, aligning both the left and right edges.
         /// </summary>
@@ -125,7 +126,7 @@ namespace FileFormat.Words.IElements
         public bool IsRoman { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the paragraph has alphabetc number bullets.
+        /// Gets or sets whether the paragraph has alphabetic number bullets.
         /// </summary>
         public bool IsAlphabeticNumber { get; set; }
 

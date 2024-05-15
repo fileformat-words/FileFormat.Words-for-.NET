@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using DF = DocumentFormat.OpenXml;
-using PKG = DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Packaging;
 using WP = DocumentFormat.OpenXml.Wordprocessing;
 using A = DocumentFormat.OpenXml.Drawing;
 using DW = DocumentFormat.OpenXml.Drawing.Wordprocessing;
@@ -16,10 +16,12 @@ namespace OpenXML.Words
 {
     internal class OwDocument
     {
-        private PKG.WordprocessingDocument _pkgDocument;
+        private WordprocessingDocument _pkgDocument;
         private WP.Body _wpBody;
         private MemoryStream _ms;
-        private PKG.MainDocumentPart _mainPart;
+        private MainDocumentPart _mainPart;
+        private List<int> _IDs; 
+        private NumberingDefinitionsPart _numberingPart; 
         private readonly object _lockObject = new object();
         private OwDocument()
         {
@@ -28,13 +30,23 @@ namespace OpenXML.Words
                 try
                 {
                     _ms = new MemoryStream();
-                    _pkgDocument = PKG.WordprocessingDocument.Create(_ms, DF.WordprocessingDocumentType.Document, true);
+                    _pkgDocument = WordprocessingDocument.Create(_ms, DF.WordprocessingDocumentType.Document, true);
                     _mainPart = _pkgDocument.AddMainDocumentPart();
                     _mainPart.Document = new WP.Document();
                     var tmp = new OT.DefaultTemplate();
                     tmp.CreateMainDocumentPart(_mainPart);
-                    AddNumberingDefinitions(_pkgDocument);
                     CreateProperties(_pkgDocument);
+
+                    _numberingPart = _mainPart.NumberingDefinitionsPart;
+                    
+                    if (_numberingPart != null)
+                    {
+                        _IDs = new List<int>();
+                        foreach (var abstractNum in _numberingPart.Numbering.Elements<WP.AbstractNum>())
+                        {
+                            _IDs.Add(abstractNum.AbstractNumberId);
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -44,52 +56,8 @@ namespace OpenXML.Words
             }
         }
 
-        public static OwDocument CreateInstance()
-        {
-            return new OwDocument(); 
-        }
-
-        internal void CreateDocument(List<FF.IElement> lst)
-        {
-            try
-            {
-                _wpBody = _mainPart.Document.Body;
-                if (_wpBody == null)
-                    throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
-                var sectionProperties = _wpBody.Elements<WP.SectionProperties>().FirstOrDefault();
-                foreach (var element in lst)
-                {
-                    switch (element)
-                    {
-                        case FF.Paragraph ffP:
-                        {
-                            var para = CreateParagraph(ffP);
-                            _wpBody.InsertBefore(para, sectionProperties);
-                            break;
-                        }
-                        case FF.Image ffImg:
-                        {
-                            var para = CreateImage(ffImg, _mainPart);
-                            _wpBody.InsertBefore(para, sectionProperties);
-                            break;
-                        }
-                        case FF.Table ffTable:
-                        {
-                            var table = CreateTable(ffTable);
-                            _wpBody.InsertBefore(table, sectionProperties);
-                            break;
-                        }
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
-                var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Create OOXML Element(s)");
-                throw new FileFormatException(errorMessage, ex);
-            }
-        }
-
-        internal void CreateProperties(PKG.WordprocessingDocument pkgDocument)
+        #region Create Core Properties for OpenXML Word Document
+        internal void CreateProperties(WordprocessingDocument pkgDocument)
         {
             var corePart = pkgDocument.CoreFilePropertiesPart;
             if (corePart != null)
@@ -97,7 +65,7 @@ namespace OpenXML.Words
                 pkgDocument.DeletePart(corePart);
             }
             var customPart = pkgDocument.CustomFilePropertiesPart;
-            if(customPart != null)
+            if (customPart != null)
             {
                 pkgDocument.DeletePart(customPart);
             }
@@ -117,7 +85,62 @@ namespace OpenXML.Words
             var customProperties = new OT.CustomProperties();
             customProperties.CreateExtendedFilePropertiesPart(pkgDocument.AddExtendedFilePropertiesPart());
         }
+        #endregion
 
+        public static OwDocument CreateInstance()
+        {
+            return new OwDocument();
+        }
+
+        #region Create OpenXML Word Document Contents Based on FileFormat.Words.IElements
+
+        #region Main Method
+        internal void CreateDocument(List<FF.IElement> lst)
+        {
+            try
+            {
+                _wpBody = _mainPart.Document.Body;
+
+                if (_wpBody == null)
+                    throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
+
+                var sectionProperties = _wpBody.Elements<WP.SectionProperties>().FirstOrDefault();
+                
+                foreach (var element in lst)
+                {                   
+                    switch (element)
+                    {
+                        case FF.Paragraph ffP:
+                            {
+                                var para = CreateParagraph(ffP);
+                                _wpBody.InsertBefore(para, sectionProperties);
+                                break;
+                            }
+                        case FF.Image ffImg:
+                            {
+                                var para = CreateImage(ffImg, _mainPart);
+                                _wpBody.InsertBefore(para, sectionProperties);
+                                break;
+                            }
+                        case FF.Table ffTable:
+                            {
+                                var table = CreateTable(ffTable);
+                                _wpBody.InsertBefore(table, sectionProperties);
+                                break;
+                            }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Initialize OOXML Element(s)");
+                throw new FileFormatException(errorMessage, ex);
+            }
+
+        }
+        #endregion
+
+        #region Create OpenXML Paragraph
         internal WP.Paragraph CreateParagraph(FF.Paragraph ffP)
         {
             lock (_lockObject)
@@ -131,48 +154,148 @@ namespace OpenXML.Words
                         var paragraphProperties = new WP.ParagraphProperties();
                         var paragraphStyleId = new WP.ParagraphStyleId { Val = ffP.Style };
                         paragraphProperties.Append(paragraphStyleId);
-                        
-                        WP.JustificationValues justificationValue = MapAlignmentToJustification(ffP.Alignment);
+
+                        if (ffP.Style == "ListParagraph")
+                        {
+
+                            // Check if NumberingId already exists
+
+                            var isExist = false;
+                            if (_IDs != null)
+                            {
+                                foreach (var id in _IDs)
+                                {
+                                if (id == ffP.NumberingId)
+                                {
+                                    isExist = true;
+
+                                    var numbering = _numberingPart.Numbering;
+                                    var abstractNum = numbering.Elements<WP.AbstractNum>().FirstOrDefault(an => an.AbstractNumberId == ffP.NumberingId);
+                                    if (abstractNum != null)
+                                    {
+                                        var level = abstractNum.Elements<WP.Level>().FirstOrDefault(l => l.LevelIndex == ffP.NumberingLevel - 1);
+                                        if (level != null)
+                                        {
+                                            if (ffP.IsAlphabeticNumber)
+                                            {
+                                                level.NumberingFormat.Val = WP.NumberFormatValues.LowerLetter;
+                                                level.LevelText.Val = string.Format("%{0}.", (int)ffP.NumberingLevel);
+                                            }
+                                            else if (ffP.IsRoman)
+                                            {
+                                                level.NumberingFormat.Val = WP.NumberFormatValues.LowerRoman;
+                                                level.LevelText.Val = string.Format("%{0}.", (int)ffP.NumberingLevel);
+                                            }
+                                            else if (ffP.IsBullet)
+                                            {
+                                                level.NumberingFormat.Val = WP.NumberFormatValues.Bullet;
+                                                level.LevelText.Val = "o";
+                                            }
+                                            if (ffP.IsNumbered)
+                                            {
+                                                level.NumberingFormat.Val = WP.NumberFormatValues.Decimal;
+                                                level.LevelText.Val = string.Format("%{0}.", string.Join(".%", Enumerable.Range(1, (int)ffP.NumberingLevel)));
+                                            }
+                                            numbering.Save();
+                                        }
+                                    }
+                                }                                
+                                }
+                            }
+                            if (!isExist)
+                            {
+                            if (ffP.NumberingId != null)
+                            {
+                                if (ffP.NumberingLevel == null)
+                                    ffP.NumberingLevel = 1;
+                                if (ffP.IsAlphabeticNumber == false && ffP.IsBullet == false &&
+                                    ffP.IsNumbered == false && ffP.IsRoman == false)
+                                    ffP.IsNumbered = true;
+
+                                var abstractNum = new WP.AbstractNum() { AbstractNumberId = ffP.NumberingId };
+                                abstractNum.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
+
+                                var multiLevelType = new WP.MultiLevelType() { Val = WP.MultiLevelValues.Multilevel };
+                                multiLevelType.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
+
+                                abstractNum.Append(multiLevelType);
+
+                                var level = new WP.Level() { LevelIndex = 0 };
+
+                                for (var i = 1; i <= 9; i++)
+                                {
+                                    level = new WP.Level() { LevelIndex = i - 1 };
+                                    level.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
+
+                                    var numberingFormat = new WP.NumberingFormat();
+                                    var levelText = new WP.LevelText();
+
+                                    if (ffP.IsNumbered)
+                                    {
+                                        numberingFormat.Val = WP.NumberFormatValues.Decimal;
+                                        levelText.Val = string.Format("%{0}.", string.Join(".%", Enumerable.Range(1, i)));
+                                    }
+                                    else if (ffP.IsAlphabeticNumber)
+                                    {
+                                        numberingFormat.Val = WP.NumberFormatValues.LowerLetter;
+                                        levelText.Val = string.Format("%{0}.", i);
+                                    }
+                                    else if (ffP.IsRoman)
+                                    {
+                                        numberingFormat.Val = WP.NumberFormatValues.LowerRoman;
+                                        levelText.Val = string.Format("%{0}.", i);
+                                    }
+                                    else if (ffP.IsBullet)
+                                    {
+                                        numberingFormat.Val = WP.NumberFormatValues.Bullet;
+                                        levelText.Val = "o";
+                                    }
+
+                                    var previousParagraphProperties = new WP.PreviousParagraphProperties();
+                                    var indentation = new WP.Indentation() { Left = (i * 720).ToString(), Hanging = "360" };
+                                    previousParagraphProperties.Append(indentation);
+
+                                    level.Append(new WP.StartNumberingValue() { Val = 1 });
+                                    level.Append(numberingFormat);
+                                    level.Append(levelText);
+                                    level.Append(new WP.LevelJustification() { Val = WP.LevelJustificationValues.Left });
+                                    level.Append(previousParagraphProperties);
+
+                                    abstractNum.Append(level);
+                                }
+
+                                var numberingInstance = new WP.NumberingInstance() { NumberID = ffP.NumberingId };
+                                var abstractNumId = new WP.AbstractNumId() { Val = ffP.NumberingId };
+
+                                numberingInstance.Append(abstractNumId);
+                                _numberingPart.Numbering.Append(abstractNum);
+                                _numberingPart.Numbering.Append(numberingInstance);
+
+
+                                _IDs.Add((int)ffP.NumberingId);
+                            }
+                            }
+
+                            var numberingProperties = new WP.NumberingProperties();
+                            var numberingLevelReference = new WP.NumberingLevelReference() { Val = ffP.NumberingLevel-1 };                            
+                            var numberingId = new WP.NumberingId() { Val = ffP.NumberingId };
+                            numberingProperties.Append(numberingLevelReference);
+                            numberingProperties.Append(numberingId);
+                            paragraphProperties.Append(numberingProperties);
+                        }
+                        WP.JustificationValues justificationValue = CreateJustification(ffP.Alignment);
+
                         paragraphProperties.Append(new WP.Justification { Val = justificationValue });
-                        
 
                         if (ffP.Indentation != null)
                         {
-                            SetIndentation(paragraphProperties, ffP.Indentation);
+                            CreateIndentation(paragraphProperties, ffP.Indentation);
                         }
 
-                        if (ffP.IsNumbered || ffP.IsBullet || ffP.IsRoman || ffP.IsAlphabeticNumber)
-                        {
-                            var numberingProperties = new WP.NumberingProperties();
-                            var numberingId = new WP.NumberingId();
-                            var numberingLevelReference = new WP.NumberingLevelReference();
 
-                            if (ffP.IsBullet)
-                            {                                
-                                numberingId.Val = 1;
-                                numberingLevelReference.Val = ffP.NumberingLevel ?? 0;
-                            }
-                            else if (ffP.IsNumbered)
-                            {
-                                numberingId.Val = ffP.NumberingId <= 1 || ffP.NumberingId == null ? 2 : ffP.NumberingId;
-                                numberingLevelReference.Val = ffP.NumberingLevel ?? 0;
-                            }
-                            else if (ffP.IsAlphabeticNumber)
-                            {
-                                numberingId.Val = ffP.NumberingId <= 2 || ffP.NumberingId == null ? 3 : ffP.NumberingId;
-                                numberingLevelReference.Val = ffP.NumberingLevel ?? 0;
-                            }
-                            else if (ffP.IsRoman)
-                            {
-                                numberingId.Val = ffP.NumberingId <= 3 || ffP.NumberingId == null ? 4 : ffP.NumberingId;
-                                numberingLevelReference.Val = ffP.NumberingLevel ?? 0;
-                            }
-
-                            numberingProperties.Append(numberingId, numberingLevelReference);
-                            paragraphProperties.Append(numberingProperties);
-                        }
                         wpParagraph.Append(paragraphProperties);
                     }
+                        
 
                     foreach (var ffR in ffP.Runs)
                     {
@@ -206,6 +329,7 @@ namespace OpenXML.Words
 
                         if (ffR.Bold)
                         {
+
                             runProperties.Append(new WP.Bold() { Val = new DF.OnOffValue(true) });
                         }
 
@@ -235,75 +359,24 @@ namespace OpenXML.Words
             }
         }
 
-        internal void AddNumberingDefinitions(PKG.WordprocessingDocument pkgDocument)
+        private WP.JustificationValues CreateJustification(FF.ParagraphAlignment alignment)
         {
-            PKG.NumberingDefinitionsPart numberingPart = pkgDocument.MainDocumentPart.NumberingDefinitionsPart;
-            if (numberingPart == null)
+            switch (alignment)
             {
-                numberingPart = pkgDocument.MainDocumentPart.AddNewPart<PKG.NumberingDefinitionsPart>();
+                case FF.ParagraphAlignment.Left:
+                    return WP.JustificationValues.Left;
+                case FF.ParagraphAlignment.Center:
+                    return WP.JustificationValues.Center;
+                case FF.ParagraphAlignment.Right:
+                    return WP.JustificationValues.Right;
+                case FF.ParagraphAlignment.Justify:
+                    return WP.JustificationValues.Both;
+                default:
+                    return WP.JustificationValues.Left;
             }
-
-            WP.Numbering numbering = new WP.Numbering();
-
-            WP.AbstractNum abstractNumBulleted = new WP.AbstractNum() { AbstractNumberId = 1 };
-            WP.AbstractNum abstractNumNumbered = new WP.AbstractNum() { AbstractNumberId = 2 };
-            WP.AbstractNum abstractNumLetter = new WP.AbstractNum() { AbstractNumberId = 3 };
-            WP.AbstractNum abstractNumRoman = new WP.AbstractNum() { AbstractNumberId = 4 };
-            string numberingStyle = "%1.";
-            for (int i = 0; i < 9; i++)
-            {                
-                for(int j = 0; j < i; j++)
-                {
-                    numberingStyle += $"%{i + 1}.";
-                }
-                abstractNumBulleted.Append(CreateLevel(i, WP.NumberFormatValues.Bullet, "•"));
-                abstractNumNumbered.Append(CreateLevel(i, WP.NumberFormatValues.Decimal, numberingStyle));
-                abstractNumLetter.Append(CreateLevel(i, WP.NumberFormatValues.LowerLetter, $"%{ i + 1 }."));
-                abstractNumRoman.Append(CreateLevel(i, WP.NumberFormatValues.LowerRoman, $"%{i + 1}."));
-            }
-
-            numbering.Append(abstractNumBulleted);
-            numbering.Append(abstractNumNumbered);
-            numbering.Append(abstractNumLetter);
-            numbering.Append(abstractNumRoman);
-
-            WP.NumberingInstance numInstanceBulleted = new WP.NumberingInstance() { NumberID = 1 };
-            numInstanceBulleted.Append(new WP.AbstractNumId() { Val = abstractNumBulleted.AbstractNumberId });
-
-            WP.NumberingInstance numInstanceNumbered = new WP.NumberingInstance() { NumberID = 2 };
-            numInstanceNumbered.Append(new WP.AbstractNumId() { Val = abstractNumNumbered.AbstractNumberId });
-
-            WP.NumberingInstance numInstanceLetter = new WP.NumberingInstance() { NumberID = 3 };
-            numInstanceLetter.Append(new WP.AbstractNumId() { Val = abstractNumLetter.AbstractNumberId });
-
-            WP.NumberingInstance numInstanceRoman = new WP.NumberingInstance() { NumberID = 4 };
-            numInstanceRoman.Append(new WP.AbstractNumId() { Val = abstractNumRoman.AbstractNumberId });
-
-            numbering.Append(numInstanceBulleted);
-            numbering.Append(numInstanceNumbered);
-            numbering.Append(numInstanceLetter);
-            numbering.Append(numInstanceRoman);
-
-            numberingPart.Numbering = numbering;
         }
 
-        private WP.Level CreateLevel(int levelIndex, WP.NumberFormatValues numFormatVal, string levelTextVal)
-        {
-            WP.Level level = new WP.Level(
-                new WP.StartNumberingValue() { Val = 1 },
-                new WP.NumberingFormat() { Val = numFormatVal },
-                new WP.LevelText() { Val = levelTextVal },
-                new WP.LevelJustification() { Val = WP.LevelJustificationValues.Left }
-            )
-            { LevelIndex = levelIndex };
-            if (numFormatVal == WP.NumberFormatValues.Bullet)
-            {
-                level.RemoveAllChildren<WP.StartNumberingValue>();
-            }
-            return level;
-        }
-
-        private void SetIndentation(WP.ParagraphProperties paragraphProperties, FF.Indentation ffIndentation)
+        private void CreateIndentation(WP.ParagraphProperties paragraphProperties, FF.Indentation ffIndentation)
         {
             var indentation = new WP.Indentation();
 
@@ -329,24 +402,9 @@ namespace OpenXML.Words
 
             paragraphProperties.Append(indentation);
         }
+        #endregion
 
-        private WP.JustificationValues MapAlignmentToJustification(FF.ParagraphAlignment alignment)
-        {
-            switch (alignment)
-            {
-                case FF.ParagraphAlignment.Left:
-                    return WP.JustificationValues.Left;
-                case FF.ParagraphAlignment.Center:
-                    return WP.JustificationValues.Center;
-                case FF.ParagraphAlignment.Right:
-                    return WP.JustificationValues.Right;
-                case FF.ParagraphAlignment.Justify:
-                    return WP.JustificationValues.Both;
-                default:
-                    return WP.JustificationValues.Left;
-            }
-        }
-
+        #region Create OpenXML Table
         internal WP.Table CreateTable(FF.Table ffTable)
         {
             lock (_lockObject)
@@ -400,15 +458,17 @@ namespace OpenXML.Words
                 }
             }
         }
+        #endregion
 
-        internal WP.Paragraph CreateImage(FF.Image ffImg,PKG.MainDocumentPart mainPart)
+        #region Create OpenXML Image
+        internal WP.Paragraph CreateImage(FF.Image ffImg, MainDocumentPart mainPart)
         {
             lock (_lockObject)
             {
                 try
                 {
                     var imageBytes = ffImg.ImageData;
-                    var imagePart = mainPart.AddImagePart(PKG.ImagePartType.Png);
+                    var imagePart = mainPart.AddImagePart(ImagePartType.Png);
                     using (var partStream = imagePart.GetStream())
                     {
                         partStream.Write(imageBytes, 0, imageBytes.Length); // Write the image bytes to the partStream
@@ -484,9 +544,9 @@ namespace OpenXML.Words
                                                     new A.PresetGeometry(
                                                             new A.AdjustValueList()
                                                         )
-                                                        { Preset = A.ShapeTypeValues.Rectangle }))
+                                                    { Preset = A.ShapeTypeValues.Rectangle }))
                                         )
-                                        { Uri = "http://schemas.openxmlformats.org/drawingml/2006/picture" })
+                                    { Uri = "http://schemas.openxmlformats.org/drawingml/2006/picture" })
                             )
                             {
                                 DistanceFromTop = (DF.UInt32Value)0U,
@@ -504,20 +564,26 @@ namespace OpenXML.Words
                 }
             }
         }
+        #endregion
+        #endregion
 
+        #region Load OpenXML Word Document Content into FileFormat.Words.IElements
+
+        #region Main Method
         internal List<FF.IElement> LoadDocument(Stream stream)
         {
             lock (_lockObject)
             {
                 try
                 {
-                    _pkgDocument = PKG.WordprocessingDocument.Open(stream, true);
+                    _pkgDocument = WordprocessingDocument.Open(stream, true);
 
                     if (_pkgDocument.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
 
                     OWD.OoxmlDocData.CreateInstance(_pkgDocument);
 
                     _mainPart = _pkgDocument.MainDocumentPart;
+                    _numberingPart = _mainPart.NumberingDefinitionsPart;
                     _wpBody = _pkgDocument.MainDocumentPart.Document.Body;
 
                     var sequence = 1;
@@ -525,56 +591,62 @@ namespace OpenXML.Words
 
                     foreach (var element in _wpBody.Elements())
                     {
+                        
                         switch (element)
                         {
                             case WP.Paragraph wpPara:
-                            {
-                                var drawingFound = false;
-                                foreach (var drawing in wpPara.Descendants<WP.Drawing>())
                                 {
+                                    var drawingFound = false;
+                                    
+                                    foreach (var drawing in wpPara.Descendants<WP.Drawing>())
+                                    {
+                                        var image = LoadImage(drawing, sequence);
+                                        if (image != null)
+                                        {
+                                            elements.Add(LoadImage(drawing, sequence));
+                                            sequence++;
+                                            drawingFound = true;
+                                        }
+                                        else
+                                        {
+                                            elements.Add(new FF.Unknown { ElementId = sequence });
+                                            sequence++;
+                                            drawingFound = true;
+                                        }
+                                    }
+                                    
+
+                                    if (!drawingFound)
+                                    {
+                                        elements.Add(LoadParagraph(wpPara, sequence));
+                                        sequence++;
+                                    }
+
+                                    break;
+                                }
+                                
+                            case WP.Drawing drawing:
+                                {
+                                    
                                     var image = LoadImage(drawing, sequence);
                                     if (image != null)
                                     {
                                         elements.Add(LoadImage(drawing, sequence));
                                         sequence++;
-                                        drawingFound = true;
                                     }
                                     else
                                     {
                                         elements.Add(new FF.Unknown { ElementId = sequence });
                                         sequence++;
-                                        drawingFound = true;
                                     }
-                                }
 
-                                if (!drawingFound)
-                                {
-                                    elements.Add(LoadParagraph(wpPara, sequence));
-                                    sequence++;
+                                    break;
                                 }
-
-                                break;
-                            }
-                            case WP.Drawing drawing:
-                            {
-                                var image = LoadImage(drawing, sequence);
-                                if (image != null)
-                                {
-                                    elements.Add(LoadImage(drawing, sequence));
-                                    sequence++;
-                                }
-                                else
-                                {
-                                    elements.Add(new FF.Unknown { ElementId = sequence });
-                                    sequence++;
-                                }
-
-                                break;
-                            }
                             case WP.Table wpTable:
                                 elements.Add(LoadTable(wpTable, sequence));
                                 sequence++;
                                 break;
+                                
                             case WP.SectionProperties wpSection:
                                 elements.Add(LoadSection(wpSection, sequence));
                                 sequence++;
@@ -584,6 +656,7 @@ namespace OpenXML.Words
                                 sequence++;
                                 break;
                         }
+                        
                     }
 
                     return elements;
@@ -596,6 +669,9 @@ namespace OpenXML.Words
             }
         }
 
+        #endregion
+
+        #region Load OpenXML Paragraph
         internal FF.Paragraph LoadParagraph(WP.Paragraph wpPara, int id)
         {
             lock (_lockObject)
@@ -613,66 +689,52 @@ namespace OpenXML.Words
                             if (paraStyleId.Val != null) ffP.Style = paraStyleId.Val.Value;
                         }
                     }
-                    var numberingProperties = wpPara.ParagraphProperties?.NumberingProperties;
-                    if (numberingProperties != null)
+
+                    if(ffP.Style == "ListParagraph")
                     {
-                        var numIdVal = numberingProperties.NumberingId?.Val;
-                        var levelVal = numberingProperties.NumberingLevelReference?.Val;
-
-                        // Check if there's a valid numbering id and level reference
-                        if (numIdVal.HasValue && levelVal.HasValue)
+                        if (_numberingPart != null)
                         {
-                            // Get the numbering part from the document
-                            var numberingPart = _pkgDocument.MainDocumentPart.NumberingDefinitionsPart;
-                            if (numberingPart != null)
+                            if (ffP.NumberingId != null && ffP.NumberingLevel != null)
                             {
-                                // Look for the AbstractNum that matches the numIdVal
-                                var abstractNum = numberingPart.Numbering.Elements<WP.AbstractNum>()
-                                                .FirstOrDefault(a => a.AbstractNumberId.Value == numIdVal.Value);
+                                ffP.NumberingId = paraProps.NumberingProperties.NumberingId.Val;
+                                ffP.NumberingLevel = paraProps.NumberingProperties.NumberingLevelReference.Val + 1;
 
+                                var numbering = _numberingPart.Numbering;
+                                var abstractNum = numbering.Elements<WP.AbstractNum>().FirstOrDefault(an => an.AbstractNumberId == ffP.NumberingId);
                                 if (abstractNum != null)
                                 {
-                                    // Get the level corresponding to the levelVal
-                                    var level = abstractNum.Elements<WP.Level>()
-                                                    .FirstOrDefault(l => l.LevelIndex.Value == levelVal.Value);
-
-                                    // If the level's numbering format is bullet, set IsBullet to true
-                                    if (level != null && level.NumberingFormat != null && level.NumberingFormat.Val.Value == WP.NumberFormatValues.Bullet)
+                                    var level = abstractNum.Elements<WP.Level>().FirstOrDefault(l => l.LevelIndex == ffP.NumberingLevel - 1);
+                                    if (level != null)
                                     {
-                                        ffP.IsBullet = true;
-                                        ffP.NumberingLevel = levelVal.Value;
-                                    }
-                                    else if (level != null && level.NumberingFormat != null && level.NumberingFormat.Val.Value == WP.NumberFormatValues.LowerLetter)
-                                    {
-                                        ffP.IsAlphabeticNumber = true;
-                                        ffP.NumberingLevel = levelVal.Value;
-                                    }
-                                    else if (level != null && level.NumberingFormat != null && level.NumberingFormat.Val.Value == WP.NumberFormatValues.LowerRoman)
-                                    {
-                                        ffP.IsAlphabeticNumber = true;
-                                        ffP.NumberingLevel = levelVal.Value;
-                                    }
-                                    // If the level's numbering format is not bullet, it's a numbered list
-                                    else if (level != null)
-                                    {
-                                        ffP.IsNumbered = true;
-                                        ffP.NumberingLevel = levelVal.Value;
-                                        ffP.NumberingId = numIdVal.Value;
+                                        if (level.NumberingFormat.Val == WP.NumberFormatValues.Decimal)
+                                            ffP.IsNumbered = true;
+                                        else if (level.NumberingFormat.Val == WP.NumberFormatValues.LowerLetter)
+                                            ffP.IsAlphabeticNumber = true;
+                                        else if (level.NumberingFormat.Val == WP.NumberFormatValues.LowerRoman)
+                                            ffP.IsRoman = true;
+                                        else if (level.NumberingFormat.Val == WP.NumberFormatValues.Bullet)
+                                            ffP.IsBullet = true;
+                                        else
+                                            ffP.IsNumbered = true;
                                     }
                                 }
                             }
+
                         }
                     }
+
+                    
                     var justificationElement = paraProps.Elements<WP.Justification>().FirstOrDefault();
                     if (justificationElement != null)
                     {
-                        ffP.Alignment = MapJustificationToAlignment(justificationElement.Val);
+                        ffP.Alignment = LoadAlignment(justificationElement.Val);
                     }
                     var Indentation = paraProps.Elements<WP.Indentation>().FirstOrDefault();
-                    if (Indentation != null) { 
+                    if (Indentation != null)
+                    {
                         if (Indentation.Left != null)
                         {
-                            ffP.Indentation.Left = int.Parse(Indentation.Left);                        
+                            ffP.Indentation.Left = int.Parse(Indentation.Left);
                         }
                         if (Indentation.Right != null)
                         {
@@ -683,10 +745,12 @@ namespace OpenXML.Words
                             ffP.Indentation.Hanging = int.Parse(Indentation.Hanging);
                         }
                         if (Indentation.FirstLine != null)
-                        {                        
+                        {
                             ffP.Indentation.FirstLine = int.Parse(Indentation.FirstLine);
                         }
                     }
+                    
+
                     var runs = wpPara.Elements<WP.Run>();
 
                     foreach (var wpR in runs)
@@ -718,28 +782,24 @@ namespace OpenXML.Words
             }
         }
 
-        private bool IsBulletStyle(string styleId)
-        {            
-            return styleId == "BulletStyle";
-        }
-
-        private FF.ParagraphAlignment MapJustificationToAlignment(WP.JustificationValues justificationValue)
+        private FF.ParagraphAlignment LoadAlignment(WP.JustificationValues justificationValue)
         {
-            switch (justificationValue)
-            {
-                case WP.JustificationValues.Left:
+                if (justificationValue == WP.JustificationValues.Left)
                     return FF.ParagraphAlignment.Left;
-                case WP.JustificationValues.Center:
+                else if (justificationValue == WP.JustificationValues.Center)
                     return FF.ParagraphAlignment.Center;
-                case WP.JustificationValues.Right:
+                else if (justificationValue == WP.JustificationValues.Right)
                     return FF.ParagraphAlignment.Right;
-                case WP.JustificationValues.Both:
+                else if (justificationValue == WP.JustificationValues.Both)
                     return FF.ParagraphAlignment.Justify;
-                default:
+                else
                     return FF.ParagraphAlignment.Left;
-            }
         }
 
+
+        #endregion
+
+        #region Load OpenXML Image
         internal FF.Image LoadImage(WP.Drawing drawing, int sequence)
         {
             lock (_lockObject)
@@ -759,7 +819,7 @@ namespace OpenXML.Words
                                 var widthInPixels = (int)(extent.Cx / (914400 / dpi));
                                 var heightInPixels = (int)(extent.Cy / (914400 / dpi));
 
-                                var imagePart = _mainPart.GetPartById(blip.Embed) as PKG.ImagePart;
+                                var imagePart = _mainPart.GetPartById(blip.Embed) as ImagePart;
                                 if (imagePart == null) continue;
                                 using var stream = imagePart.GetStream();
                                 var image = new FF.Image
@@ -792,8 +852,10 @@ namespace OpenXML.Words
                 }
             }
         }
+        #endregion
 
-        internal FF.Table LoadTable(WP.Table wpTable,int id)
+        #region Load OpenXML Table
+        internal FF.Table LoadTable(WP.Table wpTable, int id)
         {
             lock (_lockObject)
             {
@@ -850,8 +912,10 @@ namespace OpenXML.Words
                 }
             }
         }
+        #endregion
 
-        internal FF.Section LoadSection(WP.SectionProperties sectPr,int id)
+        #region Load OpenXML Section
+        internal FF.Section LoadSection(WP.SectionProperties sectPr, int id)
         {
             lock (_lockObject)
             {
@@ -898,7 +962,9 @@ namespace OpenXML.Words
                 }
             }
         }
+        #endregion
 
+        #region Load OpenXML Styles
         internal FF.ElementStyles LoadStyles()
         {
             lock (_lockObject)
@@ -971,7 +1037,11 @@ namespace OpenXML.Words
                 }
             }
         }
+        #endregion
 
+        #endregion
+
+        #region Save OpenXML Word Document to Stream
         internal void SaveDocument(Stream stream)
         {
             lock (_lockObject)
@@ -984,11 +1054,13 @@ namespace OpenXML.Words
                 }
                 catch (Exception ex)
                 {
-                    var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Save OOXML OWDocument");
-                    throw new FileFormatException(errorMessage, ex);
+                    //var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Save OOXML OWDocument");
+                    //throw new FileFormatException(errorMessage, ex);
+                    throw new Exception(ex.Message);
                 }
             }
         }
+
         public void Dispose()
         {
             Dispose(true);
@@ -1011,6 +1083,6 @@ namespace OpenXML.Words
             _ms.Dispose();
             _ms = null;
         }
+        #endregion
     }
 }
-

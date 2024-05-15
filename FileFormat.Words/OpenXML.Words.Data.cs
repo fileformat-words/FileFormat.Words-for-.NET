@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using DF = DocumentFormat.OpenXml;
-using PKG = DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Packaging;
 using WP = DocumentFormat.OpenXml.Wordprocessing;
 using FF = FileFormat.Words.IElements;
 using FileFormat.Words;
@@ -12,21 +12,17 @@ namespace OpenXML.Words.Data
 {
     internal class OoxmlDocData
     {
-        //private static ConcurrentBag<PKG.WordprocessingDocument> _staticDocBag = new ConcurrentBag<PKG.WordprocessingDocument>();
-        //private static readonly List<PKG.WordprocessingDocument> _staticDocs = new List<PKG.WordprocessingDocument>();
-        private static ConcurrentDictionary<int, PKG.WordprocessingDocument> _staticDocDict =
-            new ConcurrentDictionary<int, PKG.WordprocessingDocument>();
+        private static ConcurrentDictionary<int, WordprocessingDocument> _staticDocDict =
+            new ConcurrentDictionary<int, WordprocessingDocument>();
         private static int _staticDocCount = 0;
         private OwDocument _ooxmlDoc;
         private readonly object _lockObject = new object();
 
-        private OoxmlDocData(PKG.WordprocessingDocument doc)
+        private OoxmlDocData(WordprocessingDocument doc)
         {
             lock (_lockObject)
             {
                 _ooxmlDoc = OwDocument.CreateInstance();
-                //_staticDocBag.Add(doc);
-                //_staticDocs.Add(doc);
                 _staticDocCount++;
                 _staticDocDict.TryAdd(_staticDocCount,doc);
             }
@@ -40,7 +36,7 @@ namespace OpenXML.Words.Data
             }
         }
 
-        internal static OoxmlDocData CreateInstance(PKG.WordprocessingDocument doc)
+        internal static OoxmlDocData CreateInstance(WordprocessingDocument doc)
         {
             return new OoxmlDocData(doc);
         }
@@ -59,18 +55,7 @@ namespace OpenXML.Words.Data
         {
             lock (_lockObject)
             {
-                /**
-                if (!_staticDocBag.TryPeek(out PKG.WordprocessingDocument staticDoc))
-                {
-                    throw new FileFormatException("No Package is available", new InvalidOperationException());
-                }
-                **/
-                
-                //Console.WriteLine("sss : " + doc.GetInstanceInfo());
-                //var staticDoc = _staticDocs[instance];
-
-                //_staticDocDict.TryGetValue(instance,out PKG.WordprocessingDocument staticDoc);
-                _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out PKG.WordprocessingDocument staticDoc);
+                _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out WordprocessingDocument staticDoc);
 
                 if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null",new NullReferenceException());
                 
@@ -81,6 +66,7 @@ namespace OpenXML.Words.Data
 
                 try
                 {
+                    
                     switch (newElement)
                     {
                         case FF.Paragraph ffPara:
@@ -88,6 +74,7 @@ namespace OpenXML.Words.Data
                             elements.ElementAt(position).InsertBeforeSelf(wpPara);
                             break;
 
+                        
                         case FF.Table ffTable:
                             var wpTable = _ooxmlDoc.CreateTable(ffTable);
                             elements.ElementAt(position).InsertBeforeSelf(wpTable);
@@ -97,11 +84,12 @@ namespace OpenXML.Words.Data
                             var wpImage = _ooxmlDoc.CreateImage(ffImage, staticDoc.MainDocumentPart);
                             elements.ElementAt(position).InsertBeforeSelf(wpImage);
                             break;
+                        
                     }
+                    
                 }
                 catch (Exception ex)
                 {
-                    // Rollback changes by restoring the original elements
                     staticDoc.MainDocumentPart.Document.Body.RemoveAllChildren();
                     staticDoc.MainDocumentPart.Document.Body.Append(originalElements);
                     var errorMessage = ConstructMessage(ex, "Remove OOXML Element(s)");
@@ -114,16 +102,7 @@ namespace OpenXML.Words.Data
         {
             lock (_lockObject) 
             {
-                /**
-                if (!_staticDocBag.TryPeek(out PKG.WordprocessingDocument staticDoc))
-                {
-                    throw new FileFormatException("No Package is available", new InvalidOperationException());
-                }**/
-
-                //var staticDoc = _staticDocs[instance];
-
-                //_staticDocDict.TryGetValue(instance, out PKG.WordprocessingDocument staticDoc);
-                _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out PKG.WordprocessingDocument staticDoc);
+                _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out WordprocessingDocument staticDoc);
 
                 if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
                 
@@ -138,12 +117,14 @@ namespace OpenXML.Words.Data
                         elements.ElementAt(position).Remove();
                         var enumerable1 = elements.ToList();
                         var existingElement = enumerable1.ElementAt(position);
+                        
                         switch (newElement)
                         {
                             case FF.Paragraph ffPara:
                                 var wpPara = _ooxmlDoc.CreateParagraph(ffPara);
                                 enumerable1.ElementAt(position).InsertBeforeSelf(wpPara);
                                 break;
+                                
                             case FF.Table ffTable:
                                 var wpTable = _ooxmlDoc.CreateTable(ffTable);
                                 enumerable1.ElementAt(position).InsertBeforeSelf(wpTable);
@@ -153,6 +134,7 @@ namespace OpenXML.Words.Data
                                 enumerable1.ElementAt(position).InsertBeforeSelf(wpImage);
                                 break;
                         }
+                        
                     }
                 }
                 catch (Exception ex)
@@ -170,17 +152,7 @@ namespace OpenXML.Words.Data
         {
             lock (_lockObject) 
             {
-                /**
-                if (!_staticDocBag.TryPeek(out PKG.WordprocessingDocument staticDoc))
-                {
-                    throw new FileFormatException("No Package is available", new InvalidOperationException());
-                }**/
-
-
-                //var staticDoc = _staticDocs[instance];
-
-                //_staticDocDict.TryGetValue(instance, out PKG.WordprocessingDocument staticDoc);
-                _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out PKG.WordprocessingDocument staticDoc);
+                _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out WordprocessingDocument staticDoc);
 
                 if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
 
@@ -207,17 +179,7 @@ namespace OpenXML.Words.Data
         {
             lock (_lockObject) 
             {
-                /**
-                if (!_staticDocBag.TryPeek(out PKG.WordprocessingDocument staticDoc))
-                {
-                    throw new FileFormatException("No Package is available", new InvalidOperationException());
-                }**/
-
-                //var staticDoc = _staticDocs[instance];
-
-                //_staticDocDict.TryGetValue(instance, out PKG.WordprocessingDocument staticDoc);
-
-                _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out PKG.WordprocessingDocument staticDoc);
+                _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out WordprocessingDocument staticDoc);
 
                 if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
 
@@ -230,6 +192,7 @@ namespace OpenXML.Words.Data
 
                 try
                 {
+                    
                     switch (newElement)
                     {
                         case FF.Paragraph ffPara:
@@ -248,7 +211,7 @@ namespace OpenXML.Words.Data
                             else staticDoc.MainDocumentPart.Document.Body.Append(wpImage);
                             break;
                     }
-
+                    
                 }
                 catch (Exception ex)
                 {
@@ -267,23 +230,11 @@ namespace OpenXML.Words.Data
             {
                 try
                 {
-                    /**
-                    if (!_staticDocBag.TryPeek(out PKG.WordprocessingDocument staticDoc))
-                    {
-                        throw new FileFormatException("No Package is available", new InvalidOperationException());
-                    }**/
 
-
-                    //var staticDoc = _staticDocs[instance];
-
-                    //_staticDocDict.TryGetValue(instance, out PKG.WordprocessingDocument staticDoc);
-
-                    _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out PKG.WordprocessingDocument staticDoc);
+                    _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out WordprocessingDocument staticDoc);
 
                     //_ooxmlDoc.CreateProperties(_staticDoc);
                     staticDoc.Clone(stream);
-                    //_staticDoc.Dispose();
-                    //_ooxmlDoc = null;
                 }
                 catch (Exception ex)
                 {
@@ -302,19 +253,6 @@ namespace OpenXML.Words.Data
         {
             if (disposing)
             {
-
-                // Dispose of managed resources (if any)
-                /**
-                if (_staticDocBag != null)
-                {
-                    while (_staticDocBag.TryTake(out var staticDoc))
-                    {
-                        if (staticDoc == null) continue;
-                        staticDoc.Dispose();
-                    }
-                }
-                **/
-
                 if (_ooxmlDoc == null) return;
                 _ooxmlDoc.Dispose();
                 _ooxmlDoc = null;
