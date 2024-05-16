@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
@@ -55,6 +55,38 @@ namespace OpenXML.Words
                 }
             }
         }
+        private OwDocument(WordprocessingDocument pkg)
+        {
+            lock (_lockObject)
+            {
+                try
+                {
+                    //_ms = new MemoryStream();
+                    _pkgDocument = pkg;
+                    _mainPart = pkg.MainDocumentPart;
+                    //_mainPart.Document = new WP.Document();
+                    //var tmp = new OT.DefaultTemplate();
+                    //tmp.CreateMainDocumentPart(_mainPart);
+                    //CreateProperties(_pkgDocument);
+
+                    _numberingPart = _mainPart.NumberingDefinitionsPart;
+
+                    if (_numberingPart != null)
+                    {
+                        _IDs = new List<int>();
+                        foreach (var abstractNum in _numberingPart.Numbering.Elements<WP.AbstractNum>())
+                        {
+                            _IDs.Add(abstractNum.AbstractNumberId);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Initialize OOXML Element(s)");
+                    throw new FileFormatException(errorMessage, ex);
+                }
+            }
+        }
 
         #region Create Core Properties for OpenXML Word Document
         internal void CreateProperties(WordprocessingDocument pkgDocument)
@@ -90,6 +122,11 @@ namespace OpenXML.Words
         public static OwDocument CreateInstance()
         {
             return new OwDocument();
+        }
+
+        public static OwDocument CreateInstance(WordprocessingDocument pkg)
+        {
+            return new OwDocument(pkg);
         }
 
         #region Create OpenXML Word Document Contents Based on FileFormat.Words.IElements
@@ -694,7 +731,8 @@ namespace OpenXML.Words
                     {
                         if (_numberingPart != null)
                         {
-                            if (ffP.NumberingId != null && ffP.NumberingLevel != null)
+                            if (paraProps.NumberingProperties.NumberingId.Val != null &&
+                                paraProps.NumberingProperties.NumberingLevelReference.Val != null)
                             {
                                 ffP.NumberingId = paraProps.NumberingProperties.NumberingId.Val;
                                 ffP.NumberingLevel = paraProps.NumberingProperties.NumberingLevelReference.Val + 1;

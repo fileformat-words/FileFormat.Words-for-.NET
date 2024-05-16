@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using DF = DocumentFormat.OpenXml;
@@ -22,7 +22,7 @@ namespace OpenXML.Words.Data
         {
             lock (_lockObject)
             {
-                _ooxmlDoc = OwDocument.CreateInstance();
+                _ooxmlDoc = OwDocument.CreateInstance(doc);
                 _staticDocCount++;
                 _staticDocDict.TryAdd(_staticDocCount,doc);
             }
@@ -58,7 +58,9 @@ namespace OpenXML.Words.Data
                 _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out WordprocessingDocument staticDoc);
 
                 if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null",new NullReferenceException());
-                
+
+                _ooxmlDoc = OwDocument.CreateInstance(staticDoc);
+
                 var enumerable = staticDoc.MainDocumentPart.Document.Body.Elements().ToList();
                 var originalElements = new List<DF.OpenXmlElement>(enumerable);
 
@@ -105,7 +107,9 @@ namespace OpenXML.Words.Data
                 _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out WordprocessingDocument staticDoc);
 
                 if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
-                
+
+                _ooxmlDoc = OwDocument.CreateInstance(staticDoc);
+
                 var enumerable = staticDoc.MainDocumentPart.Document.Body.Elements().ToList();
                 var originalElements = new List<DF.OpenXmlElement>(enumerable);
                 
@@ -182,6 +186,8 @@ namespace OpenXML.Words.Data
                 _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out WordprocessingDocument staticDoc);
 
                 if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
+
+                _ooxmlDoc = OwDocument.CreateInstance(staticDoc);
 
                 var enumerable = staticDoc.MainDocumentPart.Document.Body.Elements().ToList();
                 var originalElements = new List<DF.OpenXmlElement>(enumerable);
