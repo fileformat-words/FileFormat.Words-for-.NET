@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-namespace FileFormat.Words.IElements
+namespace Openize.Words.IElements
 {
     /// <summary>
     /// Represents an element in a Word document.
@@ -119,7 +119,7 @@ namespace FileFormat.Words.IElements
         /// Gets or sets whether the paragraph has numbered bullets.
         /// </summary>
         public bool IsNumbered { get; set; }
-        
+
         /// <summary>
         /// Gets or sets whether the paragraph has roman number bullets.
         /// </summary>
@@ -225,7 +225,7 @@ namespace FileFormat.Words.IElements
         /// </summary>
         public string Text
         {
-            
+
             get => _text;
             set
             {
@@ -235,7 +235,7 @@ namespace FileFormat.Words.IElements
                     ParentParagraph.UpdateText();
                 }
             }
-    }
+        }
 
         /// <summary>
         /// Gets or sets the font family of the run.

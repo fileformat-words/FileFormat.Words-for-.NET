@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using IO = System.IO;
 using OOXML = OpenXML.Words;
 using OWD = OpenXML.Words.Data;
-using FileFormat.Words.IElements;
+using Openize.Words.IElements;
 using System.Threading;
 
-namespace FileFormat.Words
+namespace Openize.Words
 {
     /// <summary>
     /// Custom exception class for file format-related exceptions.
@@ -52,12 +52,12 @@ namespace FileFormat.Words
         /// <example>
         /// <code>
         /// // Create a new, empty document
-        /// Document Doc = new Document();
+        /// var Doc = new Openize.Words.Document();
         /// // Initialize a new instance of body the empty document.
-        /// Body body = new Body(doc);
+        /// var body = new Openize.Words.Body(doc);
         /// // Add paragraph wiht run
-        /// Paragraph para = new Paragraph();
-        /// para.AddRun(new FF.Run
+        /// var para = new Openize.Words.IElements.Paragraph();
+        /// para.AddRun(new Openize.Words.IElements.Run
         ///    {
         ///         Text = "First Run with Times New Roman Blue Color Bold",
         ///         FontFamily = "Times New Roman",

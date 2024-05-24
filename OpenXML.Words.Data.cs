@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using DF = DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using WP = DocumentFormat.OpenXml.Wordprocessing;
-using FF = FileFormat.Words.IElements;
-using FileFormat.Words;
+using FF = Openize.Words.IElements;
+using Openize.Words;
 using System.Linq;
 
 namespace OpenXML.Words.Data
@@ -24,7 +24,7 @@ namespace OpenXML.Words.Data
             {
                 _ooxmlDoc = OwDocument.CreateInstance(doc);
                 _staticDocCount++;
-                _staticDocDict.TryAdd(_staticDocCount,doc);
+                _staticDocDict.TryAdd(_staticDocCount, doc);
             }
         }
 
@@ -51,13 +51,13 @@ namespace OpenXML.Words.Data
             return $"Error in operation {operation} at OpenXML.Words.Data : {ex.Message} \n Inner Exception: {ex.InnerException?.Message ?? "N/A"}";
         }
 
-        internal void Insert(FF.IElement newElement, int position,Document doc)
+        internal void Insert(FF.IElement newElement, int position, Document doc)
         {
             lock (_lockObject)
             {
                 _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out WordprocessingDocument staticDoc);
 
-                if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null",new NullReferenceException());
+                if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
 
                 _ooxmlDoc = OwDocument.CreateInstance(staticDoc);
 
@@ -68,7 +68,7 @@ namespace OpenXML.Words.Data
 
                 try
                 {
-                    
+
                     switch (newElement)
                     {
                         case FF.Paragraph ffPara:
@@ -76,7 +76,7 @@ namespace OpenXML.Words.Data
                             elements.ElementAt(position).InsertBeforeSelf(wpPara);
                             break;
 
-                        
+
                         case FF.Table ffTable:
                             var wpTable = _ooxmlDoc.CreateTable(ffTable);
                             elements.ElementAt(position).InsertBeforeSelf(wpTable);
@@ -86,9 +86,9 @@ namespace OpenXML.Words.Data
                             var wpImage = _ooxmlDoc.CreateImage(ffImage, staticDoc.MainDocumentPart);
                             elements.ElementAt(position).InsertBeforeSelf(wpImage);
                             break;
-                        
+
                     }
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -100,9 +100,9 @@ namespace OpenXML.Words.Data
             }
         }
 
-        internal void Update(FF.IElement newElement, int position,Document doc)
+        internal void Update(FF.IElement newElement, int position, Document doc)
         {
-            lock (_lockObject) 
+            lock (_lockObject)
             {
                 _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out WordprocessingDocument staticDoc);
 
@@ -112,7 +112,7 @@ namespace OpenXML.Words.Data
 
                 var enumerable = staticDoc.MainDocumentPart.Document.Body.Elements().ToList();
                 var originalElements = new List<DF.OpenXmlElement>(enumerable);
-                
+
                 try
                 {
                     if (position >= 0)
@@ -121,14 +121,14 @@ namespace OpenXML.Words.Data
                         elements.ElementAt(position).Remove();
                         var enumerable1 = elements.ToList();
                         var existingElement = enumerable1.ElementAt(position);
-                        
+
                         switch (newElement)
                         {
                             case FF.Paragraph ffPara:
                                 var wpPara = _ooxmlDoc.CreateParagraph(ffPara);
                                 enumerable1.ElementAt(position).InsertBeforeSelf(wpPara);
                                 break;
-                                
+
                             case FF.Table ffTable:
                                 var wpTable = _ooxmlDoc.CreateTable(ffTable);
                                 enumerable1.ElementAt(position).InsertBeforeSelf(wpTable);
@@ -138,7 +138,7 @@ namespace OpenXML.Words.Data
                                 enumerable1.ElementAt(position).InsertBeforeSelf(wpImage);
                                 break;
                         }
-                        
+
                     }
                 }
                 catch (Exception ex)
@@ -152,9 +152,9 @@ namespace OpenXML.Words.Data
             }
         }
 
-        internal void Remove(int position,Document doc)
+        internal void Remove(int position, Document doc)
         {
-            lock (_lockObject) 
+            lock (_lockObject)
             {
                 _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out WordprocessingDocument staticDoc);
 
@@ -168,7 +168,7 @@ namespace OpenXML.Words.Data
                     var elements = staticDoc.MainDocumentPart.Document.Body.Elements();
                     elements.ElementAt(position).Remove();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     // Rollback changes by restoring the original elements
                     staticDoc.MainDocumentPart.Document.Body.RemoveAllChildren();
@@ -179,9 +179,9 @@ namespace OpenXML.Words.Data
             }
         }
 
-        internal void Append(FF.IElement newElement,Document doc)
+        internal void Append(FF.IElement newElement, Document doc)
         {
-            lock (_lockObject) 
+            lock (_lockObject)
             {
                 _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out WordprocessingDocument staticDoc);
 
@@ -198,7 +198,7 @@ namespace OpenXML.Words.Data
 
                 try
                 {
-                    
+
                     switch (newElement)
                     {
                         case FF.Paragraph ffPara:
@@ -217,7 +217,7 @@ namespace OpenXML.Words.Data
                             else staticDoc.MainDocumentPart.Document.Body.Append(wpImage);
                             break;
                     }
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -232,7 +232,7 @@ namespace OpenXML.Words.Data
 
         internal void Save(System.IO.Stream stream, Document doc)
         {
-            lock (_lockObject) 
+            lock (_lockObject)
             {
                 try
                 {

@@ -3367,9 +3367,9 @@ namespace OpenXML.Templates
         // Generates content of extendedPart1.
         //private void GenerateExtendedPart1Content(ExtendedPart extendedPart1)
         //{
-            //System.IO.Stream data = GetBinaryDataStream(extendedPart1Data);
-            //extendedPart1.FeedData(data);
-            //data.Close();
+        //System.IO.Stream data = GetBinaryDataStream(extendedPart1Data);
+        //extendedPart1.FeedData(data);
+        //data.Close();
         //}
 
         // Generates content of numberingDefinitionsPart1.
@@ -12661,7 +12661,7 @@ namespace OpenXML.Templates
             DocGrid docGrid1 = new DocGrid() { LinePitch = 360 };
             HeaderReference headerReference1 = new HeaderReference() { Type = HeaderFooterValues.Default, Id = "Rd4ac5a248dc44a1d" };
             FooterReference footerReference1 = new FooterReference() { Type = HeaderFooterValues.Default, Id = "R8b4a13de90614407" };
-            
+
             sectionProperties1.Append(pageSize1);
             sectionProperties1.Append(pageMargin1);
             sectionProperties1.Append(columns1);
