@@ -1,6 +1,6 @@
 # Openize.Words for .NET
 
-[Openize.Words for .NET](https://github.com/openize-words/Openize-Words-for-.NET) - A versatile free open source .NET SDK for creating, loading, and modifying MS Word documents. With this SDK, you can easily write your own C# code to insert, update, remove or append any elements including paragraphs, images and tables into Microsoft Word Documents.
+[Openize.Words for .NET](https://github.com/openize-words/Openize.Words-for-.NET) - A versatile free open source .NET SDK for creating, loading, and modifying MS Word documents. With this SDK, you can easily write your own C# code to insert, update, remove or append any elements including paragraphs, images and tables into Microsoft Word Documents.
 
 ## Table of Contents
 
@@ -12,7 +12,7 @@
 
 ## What does this project do?
 
-Openize.Words for .NET is an [open-source SDK](https://github.com/openize-words/Openize-Words-for-.NET) designed to streamline the process of working with Microsoft Word documents. The SDK wraps various open-source engines, including the Microsoft backed [OpenXML SDK](https://github.com/dotnet/Open-XML-SDK), to provide a unified and user-friendly interface for creating, loading, and modifying Word documents. Whether you're building applications that generate reports, automate document workflows, or enhance document management systems, FileFormat.Words for .NET aims to simplify the integration of MS Word document functionality.
+Openize.Words for .NET is an [open-source SDK](https://github.com/openize-words/Openize.Words-for-.NET) designed to streamline the process of working with Microsoft Word documents. The SDK wraps various open-source engines, including the Microsoft backed [OpenXML SDK](https://github.com/dotnet/Open-XML-SDK), to provide a unified and user-friendly interface for creating, loading, and modifying Word documents. Whether you're building applications that generate reports, automate document workflows, or enhance document management systems, FileFormat.Words for .NET aims to simplify the integration of MS Word document functionality.
 
 ## Why is this project useful?
 
@@ -36,7 +36,7 @@ To get started with Openize.Words for .NET, follow these steps:
    - Check out the [examples](https://github.com/openize-words-gists/Openize.Words-for-.NET/) for sample code snippets to kickstart your integration.
 
 3. **Contribution:**
-   - If you find issues or have improvements, feel free to open a [GitHub issue](https://github.com/openize-words/Openize-Words-for-.NET/issues) or submit a [pull request](https://github.com/openize-words/Openize-Words-for-.NET/pulls).
+   - If you find issues or have improvements, feel free to open a [GitHub issue](https://github.com/openize-words/Openize.Words-for-.NET/issues) or submit a [pull request](https://github.com/openize-words/Openize.Words-for-.NET/pulls).
 
 ## Where can I get more help, if I need it?
 
@@ -52,4 +52,4 @@ If you need assistance or have questions, you can reach out in the following way
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/openize-words/Openize-Words-for-.NET/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/openize-words/Openize.Words-for-.NET/blob/main/LICENSE) file for details.
