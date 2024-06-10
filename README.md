@@ -12,7 +12,7 @@
 
 ## What does this project do?
 
-Openize.Words for .NET is an [open-source SDK](https://github.com/openize-words/Openize.Words-for-.NET) designed to streamline the process of working with Microsoft Word documents. The SDK wraps various open-source engines, including the Microsoft backed [OpenXML SDK](https://github.com/dotnet/Open-XML-SDK), to provide a unified and user-friendly interface for creating, loading, and modifying Word documents. Whether you're building applications that generate reports, automate document workflows, or enhance document management systems, FileFormat.Words for .NET aims to simplify the integration of MS Word document functionality.
+Openize.Words for .NET is an [open-source SDK](https://github.com/openize-words/Openize.Words-for-.NET) designed to streamline the process of working with Microsoft Word documents. The SDK wraps various open-source engines, including the Microsoft backed [OpenXML SDK](https://github.com/dotnet/Open-XML-SDK), to provide a unified and user-friendly interface for creating, loading, and modifying Word documents. Whether you're building applications that generate reports, automate document workflows, or enhance document management systems, Openize.Words for .NET aims to simplify the integration of MS Word document functionality.
 
 ## Why is this project useful?
 
