@@ -37,6 +37,11 @@ namespace Openize.Words.IElements
         /// Gets or sets the distance of the hanging indentation.
         /// </summary>
         public double Hanging { get; set; }
+
+        //public Indentation()
+        //{
+            //Left = 0;
+        //}
     }
 
     /// <summary>
@@ -63,6 +68,44 @@ namespace Openize.Words.IElements
         /// Justifies the text within the paragraph, aligning both the left and right edges.
         /// </summary>
         Justify
+    }
+
+    /// <summary>
+    /// Specifies the border width of an element within a text block or document.
+    /// </summary>
+    public enum BorderWidth
+    {
+        /// <summary>
+        /// Aligns the paragraph to the left.
+        /// </summary>
+        Single,
+
+        /// <summary>
+        /// Centers the paragraph within the available space.
+        /// </summary>
+        Double,
+
+        /// <summary>
+        /// Aligns the paragraph to the right.
+        /// </summary>
+        Dotted,
+
+        /// <summary>
+        /// Justifies the text within the paragraph, aligning both the left and right edges.
+        /// </summary>
+        DotDash
+    }
+
+    public class Border
+    {
+        public BorderWidth Width { get; set; }
+        public string Color { get; set; }
+        public int Size { get; set; }
+
+        public Border()
+        {
+            Size = 0;
+        }
     }
 
     /// <summary>
@@ -131,12 +174,18 @@ namespace Openize.Words.IElements
         public bool IsAlphabeticNumber { get; set; }
 
         /// <summary>
+        /// Gets or sets whether the paragraph border.
+        /// </summary>
+        public Border ParagraphBorder { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Paragraph"/> class.
         /// </summary>
         public Paragraph()
         {
             Runs = new List<Run>();
             Style = "Normal";
+            ParagraphBorder = new Border();
             Indentation = new Indentation();
             NumberingId = null;
             NumberingLevel = null;

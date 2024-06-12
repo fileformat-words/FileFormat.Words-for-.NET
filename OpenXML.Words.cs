@@ -11,6 +11,7 @@ using PIC = DocumentFormat.OpenXml.Drawing.Pictures;
 using FF = Openize.Words.IElements;
 using OWD = OpenXML.Words.Data;
 using OT = OpenXML.Templates;
+using Openize.Words;
 
 namespace OpenXML.Words
 {
@@ -51,7 +52,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Initialize OOXML Element(s)");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -83,7 +84,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Initialize OOXML Element(s)");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -108,7 +109,7 @@ namespace OpenXML.Words
                 ["Subject"] = "WordProcessing OWDocument Generation",
                 ["Keywords"] = "DOCX",
                 ["Description"] = "A WordProcessing OWDocument Created from Scratch.",
-                ["Creator"] = "FileFormat.Words"
+                ["Creator"] = "Openize.Words"
             };
             var currentTime = System.DateTime.UtcNow;
             dictCoreProp["Created"] = currentTime.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ");
@@ -129,7 +130,7 @@ namespace OpenXML.Words
             return new OwDocument(pkg);
         }
 
-        #region Create OpenXML Word Document Contents Based on FileFormat.Words.IElements
+        #region Create OpenXML Word Document Contents Based on Openize.Words.IElements
 
         #region Main Method
         internal void CreateDocument(List<FF.IElement> lst)
@@ -139,7 +140,7 @@ namespace OpenXML.Words
                 _wpBody = _mainPart.Document.Body;
 
                 if (_wpBody == null)
-                    throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
+                    throw new OpenizeException("Package or Document or Body is null", new NullReferenceException());
 
                 var sectionProperties = _wpBody.Elements<WP.SectionProperties>().FirstOrDefault();
 
@@ -171,7 +172,7 @@ namespace OpenXML.Words
             catch (Exception ex)
             {
                 var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Initialize OOXML Element(s)");
-                throw new FileFormatException(errorMessage, ex);
+                throw new OpenizeException(errorMessage, ex);
             }
 
         }
@@ -189,8 +190,11 @@ namespace OpenXML.Words
                     if (ffP.Style != null)
                     {
                         var paragraphProperties = new WP.ParagraphProperties();
+                        
                         var paragraphStyleId = new WP.ParagraphStyleId { Val = ffP.Style };
                         paragraphProperties.Append(paragraphStyleId);
+                        
+                        #region Create List Paragraph
 
                         if (ffP.Style == "ListParagraph")
                         {
@@ -320,15 +324,54 @@ namespace OpenXML.Words
                             numberingProperties.Append(numberingId);
                             paragraphProperties.Append(numberingProperties);
                         }
-                        WP.JustificationValues justificationValue = CreateJustification(ffP.Alignment);
+                        #endregion
 
+
+                        // Create Borders
+                        if (ffP.ParagraphBorder.Size > 0)
+                        {
+                            WP.ParagraphBorders paragraphBorders = new WP.ParagraphBorders();
+                            WP.TopBorder topBorder = new WP.TopBorder()
+                            { Val = CreateBorder(ffP.ParagraphBorder.Width),
+                                Color = ffP.ParagraphBorder.Color,
+                                Size = (DF.UInt32Value)(uint)ffP.ParagraphBorder.Size,
+                                Space = (DF.UInt32Value)(uint)ffP.ParagraphBorder.Size
+                            };
+                            WP.LeftBorder leftBorder = new WP.LeftBorder()
+                            {
+                                Val = CreateBorder(ffP.ParagraphBorder.Width),
+                                Color = ffP.ParagraphBorder.Color,
+                                Size = (DF.UInt32Value)(uint)ffP.ParagraphBorder.Size,
+                                Space = (DF.UInt32Value)(uint)ffP.ParagraphBorder.Size
+                            };
+                            WP.BottomBorder bottomBorder = new WP.BottomBorder()
+                            {
+                                Val = CreateBorder(ffP.ParagraphBorder.Width),
+                                Color = ffP.ParagraphBorder.Color,
+                                Size = (DF.UInt32Value)(uint)ffP.ParagraphBorder.Size,
+                                Space = (DF.UInt32Value)(uint)ffP.ParagraphBorder.Size
+                            };
+                            WP.RightBorder rightBorder = new WP.RightBorder()
+                            {
+                                Val = CreateBorder(ffP.ParagraphBorder.Width),
+                                Color = ffP.ParagraphBorder.Color,
+                                Size = (DF.UInt32Value)(uint)ffP.ParagraphBorder.Size,
+                                Space = (DF.UInt32Value)(uint)ffP.ParagraphBorder.Size
+                            };
+
+                            paragraphBorders.Append(topBorder);
+                            paragraphBorders.Append(leftBorder);
+                            paragraphBorders.Append(bottomBorder);
+                            paragraphBorders.Append(rightBorder);
+
+                            paragraphProperties.Append(paragraphBorders);
+                        }
+                        // Create Justification
+                        WP.JustificationValues justificationValue = CreateJustification(ffP.Alignment);
                         paragraphProperties.Append(new WP.Justification { Val = justificationValue });
 
-                        if (ffP.Indentation != null)
-                        {
-                            CreateIndentation(paragraphProperties, ffP.Indentation);
-                        }
-
+                        // Create Indentation
+                        CreateIndentation(paragraphProperties, ffP.Indentation);
 
                         wpParagraph.Append(paragraphProperties);
                     }
@@ -391,7 +434,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Create Paragraph");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -410,6 +453,23 @@ namespace OpenXML.Words
                     return WP.JustificationValues.Both;
                 default:
                     return WP.JustificationValues.Left;
+            }
+        }
+
+        private WP.BorderValues CreateBorder(FF.BorderWidth borderWidth)
+        {
+            switch (borderWidth)
+            {
+                case FF.BorderWidth.Single:
+                    return WP.BorderValues.Single;
+                case FF.BorderWidth.Double:
+                    return WP.BorderValues.Double;
+                case FF.BorderWidth.Dotted:
+                    return WP.BorderValues.Dotted;
+                case FF.BorderWidth.DotDash:
+                    return WP.BorderValues.DotDash;
+                default:
+                    return WP.BorderValues.Single;
             }
         }
 
@@ -491,7 +551,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Create Table");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -597,14 +657,14 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Create Image");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
         #endregion
         #endregion
 
-        #region Load OpenXML Word Document Content into FileFormat.Words.IElements
+        #region Load OpenXML Word Document Content into Openize.Words.IElements
 
         #region Main Method
         internal List<FF.IElement> LoadDocument(Stream stream)
@@ -615,7 +675,7 @@ namespace OpenXML.Words
                 {
                     _pkgDocument = WordprocessingDocument.Open(stream, true);
 
-                    if (_pkgDocument.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
+                    if (_pkgDocument.MainDocumentPart?.Document?.Body == null) throw new OpenizeException("Package or Document or Body is null", new NullReferenceException());
 
                     OWD.OoxmlDocData.CreateInstance(_pkgDocument);
 
@@ -697,11 +757,12 @@ namespace OpenXML.Words
                     }
 
                     return elements;
+                
                 }
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load OOXML Elements");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -761,33 +822,43 @@ namespace OpenXML.Words
                         }
                     }
 
-
-                    var justificationElement = paraProps.Elements<WP.Justification>().FirstOrDefault();
-                    if (justificationElement != null)
+                    // Load Border
+                    if(isBordered(paraProps))
                     {
-                        ffP.Alignment = LoadAlignment(justificationElement.Val);
-                    }
-                    var Indentation = paraProps.Elements<WP.Indentation>().FirstOrDefault();
-                    if (Indentation != null)
-                    {
-                        if (Indentation.Left != null)
-                        {
-                            ffP.Indentation.Left = int.Parse(Indentation.Left);
-                        }
-                        if (Indentation.Right != null)
-                        {
-                            ffP.Indentation.Right = int.Parse(Indentation.Right);
-                        }
-                        if (Indentation.Hanging != null)
-                        {
-                            ffP.Indentation.Hanging = int.Parse(Indentation.Hanging);
-                        }
-                        if (Indentation.FirstLine != null)
-                        {
-                            ffP.Indentation.FirstLine = int.Parse(Indentation.FirstLine);
+                        var topBorder = paraProps.ParagraphBorders?.TopBorder;
+                        if (topBorder != null)
+                            {
+                            ffP.ParagraphBorder.Width = LoadBorder(topBorder.Val);
+                            ffP.ParagraphBorder.Color = topBorder.Color;
+                            ffP.ParagraphBorder.Size = (int)(uint)topBorder.Size;
                         }
                     }
 
+                    // Load Justification
+                    if (isJustified(paraProps))
+                    {
+                        var justificationElement = paraProps.Elements<WP.Justification>().FirstOrDefault();
+                        if (justificationElement != null)
+                            ffP.Alignment = LoadAlignment(justificationElement.Val);
+                    }
+                    else ffP.Alignment = FF.ParagraphAlignment.Left;
+
+                    // Load Indentation
+                    if (isIndented(paraProps))
+                    {
+                        var Indentation = paraProps.Elements<WP.Indentation>().FirstOrDefault();
+                        if (Indentation != null)
+                        {
+                            if (Indentation.Left != null)
+                                ffP.Indentation.Left = int.Parse(Indentation.Left);
+                            if (Indentation.Right != null)
+                                ffP.Indentation.Right = int.Parse(Indentation.Right);
+                            if (Indentation.Hanging != null)
+                                ffP.Indentation.Hanging = int.Parse(Indentation.Hanging);
+                            if (Indentation.FirstLine != null)
+                                ffP.Indentation.FirstLine = int.Parse(Indentation.FirstLine);
+                        }
+                    }
 
                     var runs = wpPara.Elements<WP.Run>();
 
@@ -812,10 +883,11 @@ namespace OpenXML.Words
 
                     return ffP;
                 }
+
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load Paragraph");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -834,6 +906,58 @@ namespace OpenXML.Words
                 return FF.ParagraphAlignment.Left;
         }
 
+        private FF.BorderWidth LoadBorder(WP.BorderValues borderValue)
+        {
+            if (borderValue == WP.BorderValues.Single)
+                return FF.BorderWidth.Single;
+            else if (borderValue == WP.BorderValues.Double)
+                return FF.BorderWidth.Double;
+            else if (borderValue == WP.BorderValues.Dotted)
+                return FF.BorderWidth.Dotted;
+            else if (borderValue == WP.BorderValues.DotDash)
+                return FF.BorderWidth.DotDash;
+            else
+                return FF.BorderWidth.Single;
+        }
+
+        private bool isBordered(WP.ParagraphProperties prop)
+        {
+            try
+            {
+                var paragraphBorders = prop.ParagraphBorders;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private bool isJustified(WP.ParagraphProperties prop)
+        {
+            try
+            {
+                var justification = prop.Justification;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private bool isIndented(WP.ParagraphProperties prop)
+        {
+            try
+            {
+                var indentation = prop.Indentation;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
 
         #endregion
 
@@ -886,7 +1010,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load Image");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -946,7 +1070,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load Table");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -996,7 +1120,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load Section");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -1093,7 +1217,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     //var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Save OOXML OWDocument");
-                    //throw new FileFormatException(errorMessage, ex);
+                    //throw new OpenizeException(errorMessage, ex);
                     throw new Exception(ex.Message);
                 }
             }

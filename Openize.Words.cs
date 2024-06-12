@@ -11,14 +11,14 @@ namespace Openize.Words
     /// <summary>
     /// Custom exception class for file format-related exceptions.
     /// </summary>
-    public class FileFormatException : Exception
+    public class OpenizeException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="FileFormatException"/> class with a specified error message and a reference to the inner exception.
+        /// Initializes a new instance of the <see cref="OpenizeException"/> class with a specified error message and a reference to the inner exception.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="innerException">The exception that is the cause of the current exception, or a null reference if no inner exception is specified.</param>
-        public FileFormatException(string message, Exception innerException) : base(message, innerException)
+        public OpenizeException(string message, Exception innerException) : base(message, innerException)
         {
             //Do nothing
         }
@@ -86,7 +86,7 @@ namespace Openize.Words
                 catch (Exception ex)
                 {
                     var errorMessage = ConstructMessage(ex, "Initializing OWDocument");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -94,7 +94,7 @@ namespace Openize.Words
         /// Initializes a new instance of the <see cref="Document"/> class by loading content from a file specified by its filename.
         /// </summary>
         /// <param name="filename">The path to the file from which to load the document content.</param>
-        /// <exception cref="FileFormatException">
+        /// <exception cref="OpenizeException">
         /// Thrown if an error occurs while loading the document.
         /// </exception>
         public Document(string filename)
@@ -116,11 +116,12 @@ namespace Openize.Words
                     _lstStructure = _ooxmlDoc.LoadDocument(_ms);
                     _elementStyles = _ooxmlDoc.LoadStyles();
                     _originalSize = _lstStructure.Count;
+
                 }
                 catch (Exception ex)
                 {
                     var errorMessage = ConstructMessage(ex, "Loading Document from file");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -128,7 +129,7 @@ namespace Openize.Words
         /// Initializes a new instance of the <see cref="Document"/> class by loading content from a <see cref="System.IO.Stream"/>.
         /// </summary>
         /// <param name="stream">The input stream from which to load the document content.</param>
-        /// <exception cref="FileFormatException">
+        /// <exception cref="OpenizeException">
         /// Thrown if an error occurs while loading the document.
         /// </exception>
         public Document(IO.Stream stream)
@@ -150,7 +151,7 @@ namespace Openize.Words
                 catch (Exception ex)
                 {
                     var errorMessage = ConstructMessage(ex, "Loading Document from stream");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -158,7 +159,7 @@ namespace Openize.Words
         /// Saves the document to a file specified by its filename.
         /// </summary>
         /// <param name="filename">The path to the file where the document will be saved.</param>
-        /// <exception cref="FileFormatException">
+        /// <exception cref="OpenizeException">
         /// Thrown if an error occurs while saving the document.
         /// </exception>
         public void Save(string filename)
@@ -183,7 +184,7 @@ namespace Openize.Words
                 catch (Exception ex)
                 {
                     var errorMessage = ConstructMessage(ex, "Saving Document to file");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -192,7 +193,7 @@ namespace Openize.Words
         /// Saves the document to the specified <see cref="System.IO.Stream"/>.
         /// </summary>
         /// <param name="stream">The stream to which the document will be saved.</param>
-        /// <exception cref="FileFormatException">
+        /// <exception cref="OpenizeException">
         /// Thrown if an error occurs while saving the document.
         /// </exception>
         public void Save(IO.Stream stream)
@@ -215,13 +216,13 @@ namespace Openize.Words
                 catch (Exception ex)
                 {
                     var errorMessage = ConstructMessage(ex, "Saving Document to stream");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
         private string ConstructMessage(Exception ex, string operation)
         {
-            return $"Error in Operation {operation} at FileFormat.Words: {ex.Message} \n Inner Exception: {ex.InnerException?.Message ?? "N/A"}";
+            return $"Error in Operation {operation} at Openize.Words: {ex.Message} \n Inner Exception: {ex.InnerException?.Message ?? "N/A"}";
         }
 
         internal int GetInstanceInfo()
@@ -254,7 +255,7 @@ namespace Openize.Words
         /// <returns>
         ///   <c>true</c> if the element is successfully updated; otherwise, <c>false</c>.
         ///   If the element is not found in the structure, <c>false</c> is returned.
-        ///   If an error occurs during the update operation, a <see cref="FileFormatException"/> is thrown.
+        ///   If an error occurs during the update operation, a <see cref="OpenizeException"/> is thrown.
         /// </returns>
         /// <remarks>
         /// This method updates an existing element within the structure based on the element's unique identifier.
@@ -262,7 +263,7 @@ namespace Openize.Words
         /// If the update operation is successful, the method returns <c>true></c>.
         /// If the element is not found in the structure, <c>false</c> is returned, and no changes are made to the structure.
         /// If an exception occurs during the update operation, the method attempts to restore the structure to its previous state
-        /// and throws a <see cref="FileFormatException"/> with detailed error information.
+        /// and throws a <see cref="OpenizeException"/> with detailed error information.
         /// </remarks>
         public bool Update(IElement element)
         {
@@ -270,7 +271,7 @@ namespace Openize.Words
             {
                 if (_lstStructure == null)
                 {
-                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                    throw new OpenizeException("Structure is unavailable...", new NullReferenceException());
                 }
 
                 var position = _lstStructure.FindIndex(e => e.ElementId == element.ElementId);
@@ -290,7 +291,7 @@ namespace Openize.Words
                 {
                     _lstStructure[position] = backupElement;
                     var errorMessage = ConstructMessage(ex, "Update");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -302,8 +303,8 @@ namespace Openize.Words
         /// <returns>
         ///   <c>true</c> if the element is successfully updated; otherwise, <c>false</c>.
         ///   If the element with the specified ID is not found in the structure, <c>false</c> is returned.
-        ///   If the elements' IDs do not match, a <see cref="FileFormatException"/> is thrown.
-        ///   If an error occurs during the update operation, a <see cref="FileFormatException"/> is thrown.
+        ///   If the elements' IDs do not match, a <see cref="OpenizeException"/> is thrown.
+        ///   If an error occurs during the update operation, a <see cref="OpenizeException"/> is thrown.
         /// </returns>
         /// <remarks>
         /// This method updates an existing element within the structure based on the provided element's unique identifier.
@@ -311,9 +312,9 @@ namespace Openize.Words
         /// If the IDs match, the method attempts to locate the element in the structure and replace it with the updated element.
         /// If the update operation is successful, the method returns <c>true></c>.
         /// If the element with the specified ID is not found, <c>false</c> is returned, and no changes are made to the structure.
-        /// If the provided element's ID does not match the specified element ID, a <see cref="FileFormatException"/> is thrown.
+        /// If the provided element's ID does not match the specified element ID, a <see cref="OpenizeException"/> is thrown.
         /// If an exception occurs during the update operation, the method attempts to restore the structure to its previous state
-        /// and throws a <see cref="FileFormatException"/> with detailed error information.
+        /// and throws a <see cref="OpenizeException"/> with detailed error information.
         /// </remarks>
         public bool Update(int elementId, IElement element)
         {
@@ -321,13 +322,13 @@ namespace Openize.Words
             {
                 if (_lstStructure == null)
                 {
-                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                    throw new OpenizeException("Structure is unavailable...", new NullReferenceException());
                 }
 
                 if (elementId != element.ElementId)
                 {
                     var ex = new Exception("The elements mismatch: Update is only available for same element");
-                    throw new FileFormatException(ex.Message, new InvalidOperationException());
+                    throw new OpenizeException(ex.Message, new InvalidOperationException());
                 }
 
                 var position = _lstStructure.FindIndex(e => e.ElementId == elementId);
@@ -347,7 +348,7 @@ namespace Openize.Words
                 {
                     _lstStructure[position] = backupElement;
                     var errorMessage = ConstructMessage(ex, "Update");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -359,7 +360,7 @@ namespace Openize.Words
         /// <returns>
         ///   The unique identifier <see cref="IElement.ElementId"/> of inserted element if the new element is successfully inserted before the reference element.
         ///   If the reference element is not found in the structure, -1 is returned.
-        ///   If an error occurs during the insertion operation, a <see cref="FileFormatException"/> is thrown.
+        ///   If an error occurs during the insertion operation, a <see cref="OpenizeException"/> is thrown.
         /// </returns>
         /// <remarks>
         /// This method inserts the specified element before the provided reference element in the structure.
@@ -367,7 +368,7 @@ namespace Openize.Words
         /// If the insertion operation is successful, the method returns <see cref="IElement.ElementId"/> of the inserted element.
         /// If the reference element is not found, -1 is returned, and no changes are made to the structure.
         /// If an exception occurs during the insertion operation, the method attempts to restore the structure to its previous state
-        /// and throws a <see cref="FileFormatException"/> with detailed error information.
+        /// and throws a <see cref="OpenizeException"/> with detailed error information.
         /// </remarks>
         public int InsertBefore(IElement newElement, IElement element)
         {
@@ -375,7 +376,7 @@ namespace Openize.Words
             {
                 if (_lstStructure == null)
                 {
-                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                    throw new OpenizeException("Structure is unavailable...", new NullReferenceException());
                 }
 
                 var position = _lstStructure.FindIndex(e => e.ElementId == element.ElementId);
@@ -410,7 +411,7 @@ namespace Openize.Words
                 {
                     _lstStructure.RemoveAt(position);
                     var errorMessage = ConstructMessage(ex, "InsertBefore");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -422,7 +423,7 @@ namespace Openize.Words
         /// <returns>
         ///   The unique identifier <see cref="IElement.ElementId"/> of the inserted element if the new element is successfully inserted before the specified element.
         ///   If the specified element with the provided ID is not found, -1 is returned.
-        ///   If an error occurs during the insertion operation, a <see cref="FileFormatException"/> is thrown.
+        ///   If an error occurs during the insertion operation, a <see cref="OpenizeException"/> is thrown.
         /// </returns>
         /// <remarks>
         /// This method inserts the specified element before the element with the provided unique ID in the structure.
@@ -430,7 +431,7 @@ namespace Openize.Words
         /// If the insertion operation is successful, the method returns <see cref="IElement.ElementId"/> of the inserted element.
         /// If the element with the specified ID is not found, -1 is returned, and no changes are made to the structure.
         /// If an exception occurs during the insertion operation, the method attempts to restore the structure to its previous state
-        /// and throws a <see cref="FileFormatException"/> with detailed error information.
+        /// and throws a <see cref="OpenizeException"/> with detailed error information.
         /// </remarks>
         public int InsertBefore(IElement newElement, int elementId)
         {
@@ -438,7 +439,7 @@ namespace Openize.Words
             {
                 if (_lstStructure == null)
                 {
-                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                    throw new OpenizeException("Structure is unavailable...", new NullReferenceException());
                 }
 
                 var position = _lstStructure.FindIndex(e => e.ElementId == elementId);
@@ -468,7 +469,7 @@ namespace Openize.Words
                 {
                     _lstStructure.RemoveAt(position);
                     var errorMessage = ConstructMessage(ex, "InsertBefore");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -478,7 +479,7 @@ namespace Openize.Words
             {
                 if (_lstStructure == null)
                 {
-                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                    throw new OpenizeException("Structure is unavailable...", new NullReferenceException());
                 }
 
                 //Console.WriteLine($"Number of Elements in List: {_lstStructure.Count}");
@@ -530,7 +531,7 @@ namespace Openize.Words
                     }
 
                     var errorMessage = ConstructMessage(ex, "Append");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -542,7 +543,7 @@ namespace Openize.Words
         /// <returns>
         ///   The unique identifier <see cref="IElement.ElementId"/> if the new element is successfully inserted after the specified element.
         ///   If the specified element is not found, -1 is returned.
-        ///   If an error occurs during the insertion operation, a <see cref="FileFormatException"/> is thrown.
+        ///   If an error occurs during the insertion operation, a <see cref="OpenizeException"/> is thrown.
         /// </returns>
         /// <remarks>
         /// This method inserts the specified element after the provided element in the structure.
@@ -550,7 +551,7 @@ namespace Openize.Words
         /// If the insertion operation is successful, the method returns <see cref="IElement.ElementId"/> of the inserted element.
         /// If the specified element is not found, -1 is returned, and no changes are made to the structure.
         /// If an exception occurs during the insertion operation, the method attempts to restore the structure to its previous state
-        /// and throws a <see cref="FileFormatException"/> with detailed error information.
+        /// and throws a <see cref="OpenizeException"/> with detailed error information.
         /// </remarks>
         public int InsertAfter(IElement newElement, IElement element)
         {
@@ -558,7 +559,7 @@ namespace Openize.Words
             {
                 if (_lstStructure == null)
                 {
-                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                    throw new OpenizeException("Structure is unavailable...", new NullReferenceException());
                 }
 
                 var position = _lstStructure.FindIndex(e => e.ElementId == element.ElementId);
@@ -588,7 +589,7 @@ namespace Openize.Words
                 {
                     _lstStructure.RemoveAt(position + 1);
                     var errorMessage = ConstructMessage(ex, "InsertAfter");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -600,7 +601,7 @@ namespace Openize.Words
         /// <returns>
         ///   The unique identifier <see cref="IElement.ElementId"/> of the inserted element if the new element is successfully inserted after the specified element.
         ///   If the specified element is not found, -1 is returned.
-        ///   If an error occurs during the insertion operation, a <see cref="FileFormatException"/> is thrown.
+        ///   If an error occurs during the insertion operation, a <see cref="OpenizeException"/> is thrown.
         /// </returns>
         /// <remarks>
         /// This method inserts the specified element after the element with the provided unique ID in the structure.
@@ -608,7 +609,7 @@ namespace Openize.Words
         /// If the insertion operation is successful, the method returns <see cref="IElement.ElementId"/> of the inserted element.
         /// If the specified element is not found, -1 is returned, and no changes are made to the structure.
         /// If an exception occurs during the insertion operation, the method attempts to restore the structure to its previous state
-        /// and throws a <see cref="FileFormatException"/> with detailed error information.
+        /// and throws a <see cref="OpenizeException"/> with detailed error information.
         /// </remarks>
         public int InsertAfter(IElement newElement, int elementId)
         {
@@ -616,7 +617,7 @@ namespace Openize.Words
             {
                 if (_lstStructure == null)
                 {
-                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                    throw new OpenizeException("Structure is unavailable...", new NullReferenceException());
                 }
                 var position = _lstStructure.FindIndex(e => e.ElementId == elementId);
                 if (position < 0) return -1;
@@ -645,7 +646,7 @@ namespace Openize.Words
                 {
                     _lstStructure.RemoveAt(position + 1);
                     var errorMessage = ConstructMessage(ex, "InsertAfter");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -656,7 +657,7 @@ namespace Openize.Words
         /// <returns>
         ///   <c>true</c> if the element following the specified element is successfully removed; otherwise, <c>false</c>.
         ///   If the specified element is not found or if there is no element following it, <c>false</c> is returned.
-        ///   If an error occurs during the removal operation, a <see cref="FileFormatException"/> is thrown.
+        ///   If an error occurs during the removal operation, a <see cref="OpenizeException"/> is thrown.
         /// </returns>
         /// <remarks>
         /// This method removes the element that comes after the specified element in the structure. It is essential to ensure that the
@@ -664,7 +665,7 @@ namespace Openize.Words
         /// If the removal operation is successful, the method returns <c>true</c>.
         /// If the element is not found or there is no element following it, <c>false</c> is returned, and no changes are made to the structure.
         /// If an exception occurs during the removal operation, the method attempts to restore the structure to its previous state
-        /// and throws a <see cref="FileFormatException"/> with detailed error information.
+        /// and throws a <see cref="OpenizeException"/> with detailed error information.
         /// </remarks>
         public bool RemoveAfter(IElement element)
         {
@@ -672,7 +673,7 @@ namespace Openize.Words
             {
                 if (_lstStructure == null)
                 {
-                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                    throw new OpenizeException("Structure is unavailable...", new NullReferenceException());
                 }
                 var position = _lstStructure.FindIndex(e => e.ElementId == element.ElementId);
                 if (position >= 0 && position < _lstStructure.Count - 1)
@@ -688,7 +689,7 @@ namespace Openize.Words
                     {
                         _lstStructure.Insert(position + 1, backupElement);
                         var errorMessage = ConstructMessage(ex, "RemoveAfter");
-                        throw new FileFormatException(errorMessage, ex);
+                        throw new OpenizeException(errorMessage, ex);
                     }
                 }
 
@@ -702,7 +703,7 @@ namespace Openize.Words
         /// <returns>
         ///   <c>true</c> if the element following the specified element is successfully removed; otherwise, <c>false</c>.
         ///   If the specified element is not found or if there is no element following it, <c>false</c> is returned.
-        ///   If an error occurs during the removal operation, a <see cref="FileFormatException"/> is thrown.
+        ///   If an error occurs during the removal operation, a <see cref="OpenizeException"/> is thrown.
         /// </returns>
         /// <remarks>
         /// This method removes the element that comes after the specified element with the provided unique ID in the structure.
@@ -710,7 +711,7 @@ namespace Openize.Words
         /// If the removal operation is successful, the method returns <c>true</c>.
         /// If the element is not found or there is no element following it, <c>false</c> is returned, and no changes are made to the structure.
         /// If an exception occurs during the removal operation, the method attempts to restore the structure to its previous state
-        /// and throws a <see cref="FileFormatException"/> with detailed error information.
+        /// and throws a <see cref="OpenizeException"/> with detailed error information.
         /// </remarks>
         public bool RemoveAfter(int elementId)
         {
@@ -718,7 +719,7 @@ namespace Openize.Words
             {
                 if (_lstStructure == null)
                 {
-                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                    throw new OpenizeException("Structure is unavailable...", new NullReferenceException());
                 }
 
                 var position = _lstStructure.FindIndex(e => e.ElementId == elementId);
@@ -735,7 +736,7 @@ namespace Openize.Words
                     {
                         _lstStructure.Insert(position + 1, backupElement);
                         var errorMessage = ConstructMessage(ex, "RemoveAfter");
-                        throw new FileFormatException(errorMessage, ex);
+                        throw new OpenizeException(errorMessage, ex);
                     }
                 }
 
@@ -756,7 +757,7 @@ namespace Openize.Words
         /// <param name="element">The element whose predecessor should be removed.</param>
         /// <returns>
         ///   <c>true</c> if the preceding element is successfully removed; otherwise, <c>false</c> if the element is not found.
-        ///   Throws a <see cref="FileFormatException"/> if an exception occurs during the operation.
+        ///   Throws a <see cref="OpenizeException"/> if an exception occurs during the operation.
         /// </returns>
         /// <seealso cref="IElement.ElementId"/>
         public bool RemoveBefore(IElement element)
@@ -765,7 +766,7 @@ namespace Openize.Words
             {
                 if (_lstStructure == null)
                 {
-                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                    throw new OpenizeException("Structure is unavailable...", new NullReferenceException());
                 }
 
                 var position = _lstStructure.FindIndex(e => e.ElementId == element.ElementId);
@@ -781,7 +782,7 @@ namespace Openize.Words
                 {
                     _lstStructure.Insert(position - 1, backupElement);
                     var errorMessage = ConstructMessage(ex, "RemoveBefore");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -791,7 +792,7 @@ namespace Openize.Words
         /// <param name="elementId">The unique identifier of the element after which you want to remove the preceding element.</param>
         /// <returns>
         ///   <c>true</c> if the preceding element is successfully removed; otherwise, <c>false</c> if the element is not found.
-        ///   Throws a <see cref="FileFormatException"/> if an exception occurs during the operation.
+        ///   Throws a <see cref="OpenizeException"/> if an exception occurs during the operation.
         /// </returns>
         /// <remarks>
         /// If the specified element is not found in the document, this method returns <c>false</c>.
@@ -804,7 +805,7 @@ namespace Openize.Words
             {
                 if (_lstStructure == null)
                 {
-                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                    throw new OpenizeException("Structure is unavailable...", new NullReferenceException());
                 }
 
                 var position = _lstStructure.FindIndex(e => e.ElementId == elementId);
@@ -820,7 +821,7 @@ namespace Openize.Words
                 {
                     _lstStructure.Insert(position - 1, backupElement);
                     var errorMessage = ConstructMessage(ex, "RemoveBefore");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
@@ -830,7 +831,7 @@ namespace Openize.Words
         /// <param name="elementId">The unique identifier of the element you want to remove.</param>
         /// <returns>
         ///   <c>true</c> if the element is successfully removed; otherwise, <c>false</c> if the element is not found.
-        ///   Throws a <see cref="FileFormatException"/> if an exception occurs during the operation.
+        ///   Throws a <see cref="OpenizeException"/> if an exception occurs during the operation.
         /// </returns>
         /// <remarks>
         /// If the specified element is not found in the document, this method returns <c>false</c>.
@@ -843,7 +844,7 @@ namespace Openize.Words
             {
                 if (_lstStructure == null)
                 {
-                    throw new FileFormatException("Structure is unavailable...", new NullReferenceException());
+                    throw new OpenizeException("Structure is unavailable...", new NullReferenceException());
                 }
 
                 var position = _lstStructure.FindIndex(e => e.ElementId == elementId);
@@ -859,7 +860,7 @@ namespace Openize.Words
                 {
                     _lstStructure.Insert(position, backupElement);
                     var errorMessage = ConstructMessage(ex, "Remove");
-                    throw new FileFormatException(errorMessage, ex);
+                    throw new OpenizeException(errorMessage, ex);
                 }
             }
         }
