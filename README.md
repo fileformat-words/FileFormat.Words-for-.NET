@@ -1,4 +1,4 @@
-# Openize.Words for .NET (formerly FileFormat.Words for .NET)
+# Openize.Words for .NET (formerly FileFormat.Words)
 
 [Openize.Words for .NET](https://github.com/openize-words/Openize.Words-for-.NET) - A versatile free open source .NET SDK for creating, loading, and modifying MS Word documents. With this SDK, you can easily write your own C# code to insert, update, remove or append any elements including paragraphs, images and tables into Microsoft Word Documents.
 
