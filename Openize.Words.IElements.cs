@@ -40,7 +40,7 @@ namespace Openize.Words.IElements
 
         //public Indentation()
         //{
-            //Left = 0;
+        //Left = 0;
         //}
     }
 
@@ -76,32 +76,49 @@ namespace Openize.Words.IElements
     public enum BorderWidth
     {
         /// <summary>
-        /// Aligns the paragraph to the left.
+        /// Single width border/frame.
         /// </summary>
         Single,
 
         /// <summary>
-        /// Centers the paragraph within the available space.
+        /// Double width border/frame.
         /// </summary>
         Double,
 
         /// <summary>
-        /// Aligns the paragraph to the right.
+        /// Dotted style border/frame.
         /// </summary>
         Dotted,
 
         /// <summary>
-        /// Justifies the text within the paragraph, aligning both the left and right edges.
+        /// DotDash style border/frame.
         /// </summary>
         DotDash
     }
 
+    /// <summary>
+    /// Represents border/frame of an element within word document.
+    /// </summary>
     public class Border
     {
+        /// <summary>
+        /// Gets or sets the border width.
+        /// </summary>
         public BorderWidth Width { get; set; }
+
+        /// <summary>
+        /// Gets or sets the border color.
+        /// </summary>
         public string Color { get; set; }
+
+        /// <summary>
+        /// Gets or sets the border color.
+        /// </summary>
         public int Size { get; set; }
 
+        /// <summary>
+        /// Constructor for border.
+        /// </summary>
         public Border()
         {
             Size = 0;
@@ -174,7 +191,7 @@ namespace Openize.Words.IElements
         public bool IsAlphabeticNumber { get; set; }
 
         /// <summary>
-        /// Gets or sets whether the paragraph border.
+        /// Gets or sets the paragraph border.
         /// </summary>
         public Border ParagraphBorder { get; set; }
 
