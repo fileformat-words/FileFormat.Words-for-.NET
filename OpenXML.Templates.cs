@@ -12816,7 +12816,7 @@ namespace OpenXML.Templates
             var subject = dict["Subject"];// "My Subject";//dict["Subject"];
             var keywords = dict["Keywords"];//"My Keyword";//dict["Keywords"];
             var description = dict["Description"];// "My Description";//dict["Description"];
-            var creator = dict["Creator"];// "Openize.Words"; //dict["Creator"];
+            var creator = dict["Creator"];// "FileFormat.Words"; //dict["Creator"];
             var created = dict["Created"];
             var modified = dict["Modified"];
             var writer = new System.Xml.XmlTextWriter(part.GetStream(
@@ -12850,7 +12850,7 @@ namespace OpenXML.Templates
             var characters1 = new Ap.Characters();
             characters1.Text = "0";
             var application1 = new Ap.Application();
-            application1.Text = "Openize.Words";
+            application1.Text = "FileFormat.Words";
             var documentSecurity1 = new Ap.DocumentSecurity();
             documentSecurity1.Text = "0";
             var lines1 = new Ap.Lines();
@@ -12860,7 +12860,7 @@ namespace OpenXML.Templates
             var scaleCrop1 = new Ap.ScaleCrop();
             scaleCrop1.Text = "false";
             var company1 = new Ap.Company();
-            company1.Text = "Openize.Words";
+            company1.Text = "FileFormat.Words";
             var linksUpToDate1 = new Ap.LinksUpToDate();
             linksUpToDate1.Text = "false";
             var charactersWithSpaces1 = new Ap.CharactersWithSpaces();

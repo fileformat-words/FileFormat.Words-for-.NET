@@ -4,8 +4,8 @@ using System.Collections.Concurrent;
 using DF = DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using WP = DocumentFormat.OpenXml.Wordprocessing;
-using FF = Openize.Words.IElements;
-using Openize.Words;
+using FF = FileFormat.Words.IElements;
+using FileFormat.Words;
 using System.Linq;
 
 namespace OpenXML.Words.Data
@@ -57,7 +57,7 @@ namespace OpenXML.Words.Data
             {
                 _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out WordprocessingDocument staticDoc);
 
-                if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new OpenizeException("Package or Document or Body is null", new NullReferenceException());
+                if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
 
                 _ooxmlDoc = OwDocument.CreateInstance(staticDoc);
 
@@ -95,7 +95,7 @@ namespace OpenXML.Words.Data
                     staticDoc.MainDocumentPart.Document.Body.RemoveAllChildren();
                     staticDoc.MainDocumentPart.Document.Body.Append(originalElements);
                     var errorMessage = ConstructMessage(ex, "Remove OOXML Element(s)");
-                    throw new OpenizeException(errorMessage, ex);
+                    throw new FileFormatException(errorMessage, ex);
                 }
             }
         }
@@ -106,7 +106,7 @@ namespace OpenXML.Words.Data
             {
                 _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out WordprocessingDocument staticDoc);
 
-                if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new OpenizeException("Package or Document or Body is null", new NullReferenceException());
+                if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
 
                 _ooxmlDoc = OwDocument.CreateInstance(staticDoc);
 
@@ -147,7 +147,7 @@ namespace OpenXML.Words.Data
                     staticDoc.MainDocumentPart.Document.Body.RemoveAllChildren();
                     staticDoc.MainDocumentPart.Document.Body.Append(originalElements);
                     var errorMessage = ConstructMessage(ex, "Update OOXML Element(s)");
-                    throw new OpenizeException(errorMessage, ex);
+                    throw new FileFormatException(errorMessage, ex);
                 }
             }
         }
@@ -158,7 +158,7 @@ namespace OpenXML.Words.Data
             {
                 _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out WordprocessingDocument staticDoc);
 
-                if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new OpenizeException("Package or Document or Body is null", new NullReferenceException());
+                if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
 
                 var enumerable = staticDoc.MainDocumentPart.Document.Body.Elements().ToList();
                 var originalElements = new List<DF.OpenXmlElement>(enumerable);
@@ -174,7 +174,7 @@ namespace OpenXML.Words.Data
                     staticDoc.MainDocumentPart.Document.Body.RemoveAllChildren();
                     staticDoc.MainDocumentPart.Document.Body.Append(originalElements);
                     var errorMessage = ConstructMessage(ex, "Remove OOXML Element(s)");
-                    throw new OpenizeException(errorMessage, ex);
+                    throw new FileFormatException(errorMessage, ex);
                 }
             }
         }
@@ -185,7 +185,7 @@ namespace OpenXML.Words.Data
             {
                 _staticDocDict.TryGetValue(doc.GetInstanceInfo(), out WordprocessingDocument staticDoc);
 
-                if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new OpenizeException("Package or Document or Body is null", new NullReferenceException());
+                if (staticDoc?.MainDocumentPart?.Document?.Body == null) throw new FileFormatException("Package or Document or Body is null", new NullReferenceException());
 
                 _ooxmlDoc = OwDocument.CreateInstance(staticDoc);
 
@@ -225,7 +225,7 @@ namespace OpenXML.Words.Data
                     staticDoc.MainDocumentPart.Document.Body.RemoveAllChildren();
                     staticDoc.MainDocumentPart.Document.Body.Append(originalElements);
                     var errorMessage = ConstructMessage(ex, "Append OOXML Element(s)");
-                    throw new OpenizeException(errorMessage, ex);
+                    throw new FileFormatException(errorMessage, ex);
                 }
             }
         }
@@ -245,7 +245,7 @@ namespace OpenXML.Words.Data
                 catch (Exception ex)
                 {
                     var errorMessage = ConstructMessage(ex, "Save OOXML OWDocument");
-                    throw new OpenizeException(errorMessage, ex);
+                    throw new FileFormatException(errorMessage, ex);
                 }
             }
         }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-namespace Openize.Words.IElements
+namespace FileFormat.Words.IElements
 {
     /// <summary>
     /// Represents an element in a Word document.
