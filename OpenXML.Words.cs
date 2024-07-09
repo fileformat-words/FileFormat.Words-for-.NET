@@ -8,10 +8,10 @@ using WP = DocumentFormat.OpenXml.Wordprocessing;
 using A = DocumentFormat.OpenXml.Drawing;
 using DW = DocumentFormat.OpenXml.Drawing.Wordprocessing;
 using PIC = DocumentFormat.OpenXml.Drawing.Pictures;
-using FF = Openize.Words.IElements;
+using FF = FileFormat.Words.IElements;
 using OWD = OpenXML.Words.Data;
 using OT = OpenXML.Templates;
-using Openize.Words;
+using FileFormat.Words;
 
 namespace OpenXML.Words
 {
@@ -52,7 +52,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Initialize OOXML Element(s)");
-                    throw new OpenizeException(errorMessage, ex);
+                    throw new FileFormat.Words.FileFormatException(errorMessage, ex);
                 }
             }
         }
@@ -84,7 +84,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Initialize OOXML Element(s)");
-                    throw new OpenizeException(errorMessage, ex);
+                    throw new FileFormat.Words.FileFormatException(errorMessage, ex);
                 }
             }
         }
@@ -109,7 +109,7 @@ namespace OpenXML.Words
                 ["Subject"] = "WordProcessing OWDocument Generation",
                 ["Keywords"] = "DOCX",
                 ["Description"] = "A WordProcessing OWDocument Created from Scratch.",
-                ["Creator"] = "Openize.Words"
+                ["Creator"] = "FileFormat.Words"
             };
             var currentTime = System.DateTime.UtcNow;
             dictCoreProp["Created"] = currentTime.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ");
@@ -130,7 +130,7 @@ namespace OpenXML.Words
             return new OwDocument(pkg);
         }
 
-        #region Create OpenXML Word Document Contents Based on Openize.Words.IElements
+        #region Create OpenXML Word Document Contents Based on FileFormat.Words.IElements
 
         #region Main Method
         internal void CreateDocument(List<FF.IElement> lst)
@@ -140,7 +140,7 @@ namespace OpenXML.Words
                 _wpBody = _mainPart.Document.Body;
 
                 if (_wpBody == null)
-                    throw new OpenizeException("Package or Document or Body is null", new NullReferenceException());
+                    throw new FileFormat.Words.FileFormatException("Package or Document or Body is null", new NullReferenceException());
 
                 var sectionProperties = _wpBody.Elements<WP.SectionProperties>().FirstOrDefault();
 
@@ -172,7 +172,7 @@ namespace OpenXML.Words
             catch (Exception ex)
             {
                 var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Initialize OOXML Element(s)");
-                throw new OpenizeException(errorMessage, ex);
+                throw new FileFormat.Words.FileFormatException(errorMessage, ex);
             }
 
         }
@@ -434,7 +434,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Create Paragraph");
-                    throw new OpenizeException(errorMessage, ex);
+                    throw new FileFormat.Words.FileFormatException(errorMessage, ex);
                 }
             }
         }
@@ -551,7 +551,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Create Table");
-                    throw new OpenizeException(errorMessage, ex);
+                    throw new FileFormat.Words.FileFormatException(errorMessage, ex);
                 }
             }
         }
@@ -657,14 +657,14 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Create Image");
-                    throw new OpenizeException(errorMessage, ex);
+                    throw new FileFormat.Words.FileFormatException(errorMessage, ex);
                 }
             }
         }
         #endregion
         #endregion
 
-        #region Load OpenXML Word Document Content into Openize.Words.IElements
+        #region Load OpenXML Word Document Content into FileFormat.Words.IElements
 
         #region Main Method
         internal List<FF.IElement> LoadDocument(Stream stream)
@@ -675,7 +675,7 @@ namespace OpenXML.Words
                 {
                     _pkgDocument = WordprocessingDocument.Open(stream, true);
 
-                    if (_pkgDocument.MainDocumentPart?.Document?.Body == null) throw new OpenizeException("Package or Document or Body is null", new NullReferenceException());
+                    if (_pkgDocument.MainDocumentPart?.Document?.Body == null) throw new FileFormat.Words.FileFormatException("Package or Document or Body is null", new NullReferenceException());
 
                     OWD.OoxmlDocData.CreateInstance(_pkgDocument);
 
@@ -762,7 +762,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load OOXML Elements");
-                    throw new OpenizeException(errorMessage, ex);
+                    throw new FileFormat.Words.FileFormatException(errorMessage, ex);
                 }
             }
         }
@@ -887,7 +887,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load Paragraph");
-                    throw new OpenizeException(errorMessage, ex);
+                    throw new FileFormat.Words.FileFormatException(errorMessage, ex);
                 }
             }
         }
@@ -1010,7 +1010,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load Image");
-                    throw new OpenizeException(errorMessage, ex);
+                    throw new FileFormat.Words.FileFormatException(errorMessage, ex);
                 }
             }
         }
@@ -1070,7 +1070,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load Table");
-                    throw new OpenizeException(errorMessage, ex);
+                    throw new FileFormat.Words.FileFormatException(errorMessage, ex);
                 }
             }
         }
@@ -1120,7 +1120,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load Section");
-                    throw new OpenizeException(errorMessage, ex);
+                    throw new FileFormat.Words.FileFormatException(errorMessage, ex);
                 }
             }
         }
@@ -1217,7 +1217,7 @@ namespace OpenXML.Words
                 catch (Exception ex)
                 {
                     //var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Save OOXML OWDocument");
-                    //throw new OpenizeException(errorMessage, ex);
+                    //throw new FileFormatException(errorMessage, ex);
                     throw new Exception(ex.Message);
                 }
             }
