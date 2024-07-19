@@ -790,35 +790,38 @@ namespace OpenXML.Words
 
                     if (ffP.Style == "ListParagraph")
                     {
-                        if (_numberingPart != null)
+                        if (isNumbered(paraProps))
                         {
-                            if (paraProps.NumberingProperties.NumberingId.Val != null &&
-                                paraProps.NumberingProperties.NumberingLevelReference.Val != null)
+                            if (_numberingPart != null)
                             {
-                                ffP.NumberingId = paraProps.NumberingProperties.NumberingId.Val;
-                                ffP.NumberingLevel = paraProps.NumberingProperties.NumberingLevelReference.Val + 1;
-
-                                var numbering = _numberingPart.Numbering;
-                                var abstractNum = numbering.Elements<WP.AbstractNum>().FirstOrDefault(an => an.AbstractNumberId == ffP.NumberingId);
-                                if (abstractNum != null)
+                                if (paraProps.NumberingProperties.NumberingId.Val != null &&
+                                paraProps.NumberingProperties.NumberingLevelReference.Val != null)
                                 {
-                                    var level = abstractNum.Elements<WP.Level>().FirstOrDefault(l => l.LevelIndex == ffP.NumberingLevel - 1);
-                                    if (level != null)
+                                    ffP.NumberingId = paraProps.NumberingProperties.NumberingId.Val;
+                                    ffP.NumberingLevel = paraProps.NumberingProperties.NumberingLevelReference.Val + 1;
+
+                                    var numbering = _numberingPart.Numbering;
+                                    var abstractNum = numbering.Elements<WP.AbstractNum>().FirstOrDefault(an => an.AbstractNumberId == ffP.NumberingId);
+                                    if (abstractNum != null)
                                     {
-                                        if (level.NumberingFormat.Val == WP.NumberFormatValues.Decimal)
-                                            ffP.IsNumbered = true;
-                                        else if (level.NumberingFormat.Val == WP.NumberFormatValues.LowerLetter)
-                                            ffP.IsAlphabeticNumber = true;
-                                        else if (level.NumberingFormat.Val == WP.NumberFormatValues.LowerRoman)
-                                            ffP.IsRoman = true;
-                                        else if (level.NumberingFormat.Val == WP.NumberFormatValues.Bullet)
-                                            ffP.IsBullet = true;
-                                        else
-                                            ffP.IsNumbered = true;
+                                        var level = abstractNum.Elements<WP.Level>().FirstOrDefault(l => l.LevelIndex == ffP.NumberingLevel - 1);
+                                        if (level != null)
+                                        {
+                                            if (level.NumberingFormat.Val == WP.NumberFormatValues.Decimal)
+                                                ffP.IsNumbered = true;
+                                            else if (level.NumberingFormat.Val == WP.NumberFormatValues.LowerLetter)
+                                                ffP.IsAlphabeticNumber = true;
+                                            else if (level.NumberingFormat.Val == WP.NumberFormatValues.LowerRoman)
+                                                ffP.IsRoman = true;
+                                            else if (level.NumberingFormat.Val == WP.NumberFormatValues.Bullet)
+                                                ffP.IsBullet = true;
+                                            else
+                                                ffP.IsNumbered = true;
+                                        }
                                     }
                                 }
-                            }
 
+                            }
                         }
                     }
 
@@ -951,6 +954,21 @@ namespace OpenXML.Words
             try
             {
                 var indentation = prop.Indentation;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private bool isNumbered(WP.ParagraphProperties prop)
+        {
+            try
+            {
+                var numbering = prop.NumberingProperties;
+                var numberingId = numbering.NumberingId.Val;
+                var numberingRef = numbering.NumberingLevelReference.Val;
                 return true;
             }
             catch (Exception ex)
