@@ -8,6 +8,7 @@ using WP = DocumentFormat.OpenXml.Wordprocessing;
 using A = DocumentFormat.OpenXml.Drawing;
 using DW = DocumentFormat.OpenXml.Drawing.Wordprocessing;
 using PIC = DocumentFormat.OpenXml.Drawing.Pictures;
+using DWS = DocumentFormat.OpenXml.Office2010.Word.DrawingShape;
 using FF = FileFormat.Words.IElements;
 using OWD = OpenXML.Words.Data;
 using OT = OpenXML.Templates;
@@ -160,6 +161,14 @@ namespace OpenXML.Words
                                 _wpBody.InsertBefore(para, sectionProperties);
                                 break;
                             }
+
+                        case FF.Shape ffShape:
+                            {
+                                var para = CreateShape(ffShape);
+                                _wpBody.InsertBefore(para, sectionProperties);
+                                break;
+                            }
+
                         case FF.Table ffTable:
                             {
                                 var table = CreateTable(ffTable);
@@ -662,6 +671,170 @@ namespace OpenXML.Words
             }
         }
         #endregion
+
+        #region Create OpenXML Shape
+        internal WP.Paragraph CreateShape(FF.Shape shape)
+        {
+            lock (_lockObject)
+            {
+                try
+                {
+                    var paragraph = new WP.Paragraph();
+                    //{ RsidParagraphAddition = "5B44A70C", RsidRunAdditionDefault = "5B44A70C", ParagraphId = "5D0A7A7E", TextId = "6BD56A01" };
+
+                    var run = new WP.Run();
+
+                    var runProperties = new WP.RunProperties();
+                    var noProof = new WP.NoProof();
+
+                    runProperties.Append(noProof);
+
+                    var alternateContent = new DF.AlternateContent();
+                    alternateContent.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
+
+                    var alternateContentChoice = new DF.AlternateContentChoice() { Requires = "wps" };
+                    alternateContentChoice.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
+
+                    var drawing = new WP.Drawing();
+                    drawing.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
+
+                    var inline = new DW.Inline()
+                    { DistanceFromTop = (DF.UInt32Value)0U, DistanceFromBottom = (DF.UInt32Value)0U, DistanceFromLeft = (DF.UInt32Value)0U, DistanceFromRight = (DF.UInt32Value)0U, AnchorId = "27EE2959", EditId = "551435BE" };
+                    inline.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+                    inline.AddNamespaceDeclaration("wp14", "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing");
+
+                    //var extent1 = new DW.Extent() { Cx = 1491330L, Cy = 1186518L };
+                    var extent = new DW.Extent() { Cx = shape.Width * 9525, Cy = shape.Height * 9525 };
+                    extent.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+
+                    var effectExtent = new DW.EffectExtent() { LeftEdge = 0L, TopEdge = 0L, RightEdge = 13970L, BottomEdge = 13970L };
+                    effectExtent.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+
+                    var docProperties = new DW.DocProperties() { Id = (DF.UInt32Value)1609145151U, Name = "Oval 1" };
+                    docProperties.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+
+                    var nonVisualGraphicFrameDrawingProperties = new DW.NonVisualGraphicFrameDrawingProperties();
+                    nonVisualGraphicFrameDrawingProperties.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+
+                    var graphic = new A.Graphic();
+                    graphic.AddNamespaceDeclaration("a", "http://schemas.openxmlformats.org/drawingml/2006/main");
+
+                    var graphicData = new A.GraphicData() { Uri = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape" };
+
+                    var wordprocessingShape = new DWS.WordprocessingShape();
+                    wordprocessingShape.AddNamespaceDeclaration("wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
+                    var nonVisualDrawingShapeProperties = new DWS.NonVisualDrawingShapeProperties();
+
+                    var shapeProperties = new DWS.ShapeProperties();
+
+                    var transform2D = new A.Transform2D();
+                    //var offset1 = new A.Offset() { X = 0L, Y = 0L };
+                    var offset = new A.Offset() { X = shape.X * 9525, Y = shape.Y * 9525 };
+                    //var extents1 = new A.Extents() { Cx = 1491330L, Cy = 1186518L };
+                    var extents = new A.Extents() { Cx = shape.Width * 9525, Cy = shape.Height * 9525 };
+
+                    transform2D.Append(offset);
+                    transform2D.Append(extents);
+
+                    var presetGeometry = new A.PresetGeometry() { Preset = CreateShapeType(shape.Type) }; //A.ShapeTypeValues.Ellipse };
+                    var adjustValueList = new A.AdjustValueList();
+
+                    presetGeometry.Append(adjustValueList);
+                    var outline = new A.Outline();
+
+                    shapeProperties.Append(transform2D);
+                    shapeProperties.Append(presetGeometry);
+                    shapeProperties.Append(outline);
+
+                    DWS.ShapeStyle shapeStyle = new DWS.ShapeStyle();
+
+                    var lineReference = new A.LineReference() { Index = (DF.UInt32Value)2U };
+
+                    var schemeColor = new A.SchemeColor() { Val = A.SchemeColorValues.Accent1 };
+                    var shade = new A.Shade() { Val = 50000 };
+
+                    schemeColor.Append(shade);
+
+                    lineReference.Append(schemeColor);
+
+                    var fillReference = new A.FillReference() { Index = (DF.UInt32Value)1U };
+                    schemeColor = new A.SchemeColor() { Val = A.SchemeColorValues.Accent1 };
+
+                    fillReference.Append(schemeColor);
+
+                    var effectReference = new A.EffectReference() { Index = (DF.UInt32Value)0U };
+                    var rgbColorModelPercentage = new A.RgbColorModelPercentage() { RedPortion = 0, GreenPortion = 0, BluePortion = 0 };
+
+                    effectReference.Append(rgbColorModelPercentage);
+
+                    var fontReference = new A.FontReference() { Index = A.FontCollectionIndexValues.Minor };
+                    schemeColor = new A.SchemeColor() { Val = A.SchemeColorValues.Light1 };
+
+                    fontReference.Append(schemeColor);
+
+                    shapeStyle.Append(lineReference);
+                    shapeStyle.Append(fillReference);
+                    shapeStyle.Append(effectReference);
+                    shapeStyle.Append(fontReference);
+                    DWS.TextBodyProperties textBodyProperties = new DWS.TextBodyProperties() { Anchor = A.TextAnchoringTypeValues.Center };
+
+                    wordprocessingShape.Append(nonVisualDrawingShapeProperties);
+                    wordprocessingShape.Append(shapeProperties);
+                    wordprocessingShape.Append(shapeStyle);
+                    wordprocessingShape.Append(textBodyProperties);
+
+                    graphicData.Append(wordprocessingShape);
+
+                    graphic.Append(graphicData);
+
+                    inline.Append(extent);
+                    inline.Append(effectExtent);
+                    inline.Append(docProperties);
+                    inline.Append(nonVisualGraphicFrameDrawingProperties);
+                    inline.Append(graphic);
+
+                    drawing.Append(inline);
+
+                    alternateContentChoice.Append(drawing);
+
+                    var alternateContentFallback = new DF.AlternateContentFallback();
+                    alternateContentFallback.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
+
+                    alternateContent.Append(alternateContentChoice);
+                    alternateContent.Append(alternateContentFallback);
+
+                    run.Append(runProperties);
+                    run.Append(alternateContent);
+
+                    paragraph.Append(run);
+
+                    return paragraph;
+                }
+                catch (Exception ex)
+                {
+                    var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Create Shape");
+                    throw new FileFormat.Words.FileFormatException(errorMessage, ex);
+                }
+            }
+        }
+
+        private A.ShapeTypeValues CreateShapeType(FF.ShapeType shapeType)
+        {
+            switch (shapeType)
+            {
+                case FF.ShapeType.Ellipse:
+                    return A.ShapeTypeValues.Ellipse;
+                case FF.ShapeType.Diamond:
+                    return A.ShapeTypeValues.Diamond;
+                case FF.ShapeType.Hexagone:
+                    return A.ShapeTypeValues.Hexagon;
+                default:
+                    return A.ShapeTypeValues.Ellipse;
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Load OpenXML Word Document Content into FileFormat.Words.IElements
@@ -696,22 +869,26 @@ namespace OpenXML.Words
                                     var drawingFound = false;
 
                                     foreach (var drawing in wpPara.Descendants<WP.Drawing>())
-                                    {
+                                    {                                   
                                         var image = LoadImage(drawing, sequence);
+
                                         if (image != null)
                                         {
-                                            elements.Add(LoadImage(drawing, sequence));
+                                            elements.Add(image);
                                             sequence++;
                                             drawingFound = true;
                                         }
                                         else
                                         {
-                                            elements.Add(new FF.Unknown { ElementId = sequence });
-                                            sequence++;
-                                            drawingFound = true;
+                                            var shape = LoadShape(drawing,sequence);
+                                            if (shape != null)
+                                            {
+                                                elements.Add(shape);
+                                                sequence++;
+                                                drawingFound = true;
+                                            }
                                         }
                                     }
-
 
                                     if (!drawingFound)
                                     {
@@ -1033,6 +1210,56 @@ namespace OpenXML.Words
             }
         }
         #endregion
+
+        internal FF.Shape LoadShape(WP.Drawing drawing, int sequence)
+        {
+            var inline = drawing.Inline;
+
+            if (inline != null)
+            {
+                // Extract shape information from inline
+                var graphic = inline.Graphic;
+                var graphicData = graphic.GraphicData;
+
+                if (graphicData.Uri.Value == "http://schemas.microsoft.com/office/word/2010/wordprocessingShape")
+                {
+                    var wordprocessingShape = graphicData.GetFirstChild<DWS.WordprocessingShape>();
+                    if (wordprocessingShape != null)
+                    {
+                        // Extract position and size from shape properties
+                        var shapeProperties = wordprocessingShape.GetFirstChild<DWS.ShapeProperties>();
+                        var transform2D = shapeProperties.GetFirstChild<A.Transform2D>();
+
+                        var offset = transform2D.Offset;
+                        var extents = transform2D.Extents;
+
+                        int x = (int)(offset.X.Value / 9525); // Convert EMU to points
+                        int y = (int)(offset.Y.Value / 9525);
+                        int width = (int)(extents.Cx.Value / 9525);
+                        int height = (int)(extents.Cy.Value / 9525);
+
+                        // Determine the shape type
+                        var presetGeometry = shapeProperties.GetFirstChild<A.PresetGeometry>();
+                        var shapeType = FF.ShapeType.Ellipse; // Default
+
+                        if (presetGeometry.Preset == A.ShapeTypeValues.Diamond)
+                        {
+                            shapeType = FF.ShapeType.Diamond;
+                        }
+                        else if (presetGeometry.Preset == A.ShapeTypeValues.Hexagon)
+                        {
+                            shapeType = FF.ShapeType.Hexagone;
+                        }
+                        var shape = new FF.Shape(x, y, width, height, shapeType);
+                        shape.ElementId = sequence;
+
+                        // Return the shape object with extracted data
+                        return shape;
+                    }
+                }
+            }
+            return null;
+        }
 
         #region Load OpenXML Table
         internal FF.Table LoadTable(WP.Table wpTable, int id)

@@ -398,6 +398,9 @@ namespace FileFormat.Words
                     case Image image:
                         image.ElementId = newElementId;
                         break;
+                    case Shape shape:
+                        shape.ElementId = newElementId;
+                        break;
                 }
 
                 try
@@ -456,6 +459,9 @@ namespace FileFormat.Words
                     case Image image:
                         image.ElementId = newElementId;
                         break;
+                    case Shape shape:
+                        shape.ElementId = newElementId;
+                        break;
                 }
 
                 try
@@ -495,6 +501,9 @@ namespace FileFormat.Words
                         break;
                     case Image image:
                         image.ElementId = newElementId;
+                        break;
+                    case Shape shape:
+                        shape.ElementId = newElementId;
                         break;
                 }
 
@@ -576,6 +585,9 @@ namespace FileFormat.Words
                     case Image image:
                         image.ElementId = newElementId;
                         break;
+                    case Shape shape:
+                        shape.ElementId = newElementId;
+                        break;
                 }
 
                 try
@@ -632,6 +644,9 @@ namespace FileFormat.Words
                         break;
                     case Image image:
                         image.ElementId = newElementId;
+                        break;
+                    case Shape shape:
+                        shape.ElementId = newElementId;
                         break;
                 }
 
@@ -912,6 +927,10 @@ namespace FileFormat.Words
         /// </summary>
         public List<Image> Images { get; internal set; }
         /// <summary>
+        /// Gets the list of shapes in the body.
+        /// </summary>
+        public List<Shape> Shapes { get; internal set; }
+        /// <summary>
         /// Gets the list of sections in the body.
         /// </summary>
         public List<Section> Sections { get; internal set; }
@@ -927,6 +946,7 @@ namespace FileFormat.Words
                 Paragraphs = new List<Paragraph>();
                 Tables = new List<Table>();
                 Images = new List<Image>();
+                Shapes = new List<Shape>();
                 Sections = new List<Section>();
                 foreach (var element in doc.GetElements())
                 {
@@ -943,6 +963,11 @@ namespace FileFormat.Words
                     if (element is Image)
                     {
                         Images.Add((Image)element);
+                    }
+
+                    if (element is Shape)
+                    {
+                        Shapes.Add((Shape)element);
                     }
 
                     if (element is Section section)

@@ -87,6 +87,10 @@ namespace OpenXML.Words.Data
                             elements.ElementAt(position).InsertBeforeSelf(wpImage);
                             break;
 
+                        case FF.Shape ffShape:
+                            var wpShape = _ooxmlDoc.CreateShape(ffShape);
+                            elements.ElementAt(position).InsertBeforeSelf(wpShape);
+                            break;
                     }
 
                 }
@@ -94,7 +98,7 @@ namespace OpenXML.Words.Data
                 {
                     staticDoc.MainDocumentPart.Document.Body.RemoveAllChildren();
                     staticDoc.MainDocumentPart.Document.Body.Append(originalElements);
-                    var errorMessage = ConstructMessage(ex, "Remove OOXML Element(s)");
+                    var errorMessage = ConstructMessage(ex, "Insert OOXML Element(s)");
                     throw new FileFormatException(errorMessage, ex);
                 }
             }
@@ -136,6 +140,10 @@ namespace OpenXML.Words.Data
                             case FF.Image ffImage:
                                 var wpImage = _ooxmlDoc.CreateImage(ffImage, staticDoc.MainDocumentPart);
                                 enumerable1.ElementAt(position).InsertBeforeSelf(wpImage);
+                                break;
+                            case FF.Shape ffShape:
+                                var wpShape = _ooxmlDoc.CreateShape(ffShape);
+                                enumerable1.ElementAt(position).InsertBeforeSelf(wpShape);
                                 break;
                         }
 
@@ -215,6 +223,11 @@ namespace OpenXML.Words.Data
                             var wpImage = _ooxmlDoc.CreateImage(ffImage, staticDoc.MainDocumentPart);
                             if (lastSectionProperties != null) staticDoc.MainDocumentPart.Document.Body.InsertBefore(wpImage, lastSectionProperties);
                             else staticDoc.MainDocumentPart.Document.Body.Append(wpImage);
+                            break;
+                        case FF.Shape ffShape:
+                            var wpShape = _ooxmlDoc.CreateShape(ffShape);
+                            if (lastSectionProperties != null) staticDoc.MainDocumentPart.Document.Body.InsertBefore(wpShape, lastSectionProperties);
+                            else staticDoc.MainDocumentPart.Document.Body.Append(wpShape);
                             break;
                     }
 

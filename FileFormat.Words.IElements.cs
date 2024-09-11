@@ -467,6 +467,92 @@ namespace FileFormat.Words.IElements
         /// </summary>
         public int Width { get; set; }
     }
+
+    /// <summary>
+    /// Represents a shape element in a Word document.
+    /// </summary>
+    public class Shape : IElement
+    {
+        /// <summary>
+        /// Gets the unique identifier of the shape.
+        /// </summary>
+        public int ElementId { get; internal set; }
+
+        /// <summary>
+        /// Gets or sets the x position of the shape.
+        /// </summary>
+        public int X { get; set; }
+
+        /// <summary>
+        /// Gets or sets the y position of the shape.
+        /// </summary>
+        public int Y { get; set; }
+
+        /// <summary>
+        /// Gets or sets the height of the shape.
+        /// </summary>
+        public int Height { get; set; }
+
+        /// <summary>
+        /// Gets or sets the width of the shape.
+        /// </summary>
+        public int Width { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the shape.
+        /// </summary>
+        public ShapeType Type { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Shape"/> class.
+        /// </summary>
+        public Shape()
+        {
+            X = 100;
+            Y = 100;
+            Width = 200;
+            Height = 200;
+            Type = ShapeType.Ellipse;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Shape"/> class with specified values.
+        /// </summary>
+        /// <param name="x">x position of the shape.</param>
+        /// <param name="y">y position of the shape.</param>
+        /// <param name="width">Width of the shape.</param>
+        /// <param name="height">Height of the shape.</param>
+        public Shape(int x,int y,int width,int height,ShapeType shapeType)
+        {
+            X = x;
+            Y = y;
+            Width = width;
+            Height = height;
+            Type = shapeType;
+        }
+    }
+
+    /// <summary>
+    /// Specifies the type of a shape within the word document.
+    /// </summary>
+    public enum ShapeType
+    {
+        /// <summary>
+        /// Ellipse or Oval shape.
+        /// </summary>
+        Ellipse,
+
+        /// <summary>
+        /// Diamond shape.
+        /// </summary>
+        Diamond,
+
+        /// <summary>
+        /// Hexagone shape.
+        /// </summary>
+        Hexagone
+    }
+
     /// <summary>
     /// Represents a table element in a Word document.
     /// </summary>
