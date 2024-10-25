@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyVersion>24.9.0</AssemblyVersion>
-    <ReleaseVersion>24.9.0</ReleaseVersion>
+    <AssemblyVersion>24.10.0</AssemblyVersion>
+    <ReleaseVersion>24.10.0</ReleaseVersion>
     <SynchReleaseVersion>false</SynchReleaseVersion>
-    <PackageVersion>24.9.0</PackageVersion>
+    <PackageVersion>24.10.0</PackageVersion>
     <Authors>Openize</Authors>
     <Copyright>(C) Openize Pty Ltd 2024. All Rights Reserved.</Copyright>
     <Owners>Openize</Owners>
