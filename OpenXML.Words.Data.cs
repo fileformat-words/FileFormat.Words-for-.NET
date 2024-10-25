@@ -91,6 +91,11 @@ namespace OpenXML.Words.Data
                             var wpShape = _ooxmlDoc.CreateShape(ffShape);
                             elements.ElementAt(position).InsertBeforeSelf(wpShape);
                             break;
+
+                        case FF.GroupShape ffGroupShape:
+                            var wpGroupShape = _ooxmlDoc.CreateConnectedShapes(ffGroupShape);
+                            elements.ElementAt(position).InsertBeforeSelf(wpGroupShape);
+                            break;
                     }
 
                 }
@@ -141,9 +146,15 @@ namespace OpenXML.Words.Data
                                 var wpImage = _ooxmlDoc.CreateImage(ffImage, staticDoc.MainDocumentPart);
                                 enumerable1.ElementAt(position).InsertBeforeSelf(wpImage);
                                 break;
+
                             case FF.Shape ffShape:
                                 var wpShape = _ooxmlDoc.CreateShape(ffShape);
                                 enumerable1.ElementAt(position).InsertBeforeSelf(wpShape);
+                                break;
+
+                            case FF.GroupShape ffGroupShape:
+                                var wpGroupShape = _ooxmlDoc.CreateConnectedShapes(ffGroupShape);
+                                elements.ElementAt(position).InsertBeforeSelf(wpGroupShape);
                                 break;
                         }
 
@@ -228,6 +239,12 @@ namespace OpenXML.Words.Data
                             var wpShape = _ooxmlDoc.CreateShape(ffShape);
                             if (lastSectionProperties != null) staticDoc.MainDocumentPart.Document.Body.InsertBefore(wpShape, lastSectionProperties);
                             else staticDoc.MainDocumentPart.Document.Body.Append(wpShape);
+                            break;
+
+                        case FF.GroupShape ffGroupShape:
+                            var wpGroupShape = _ooxmlDoc.CreateConnectedShapes(ffGroupShape);
+                            if (lastSectionProperties != null) staticDoc.MainDocumentPart.Document.Body.InsertBefore(wpGroupShape, lastSectionProperties);
+                            else staticDoc.MainDocumentPart.Document.Body.Append(wpGroupShape);
                             break;
                     }
 

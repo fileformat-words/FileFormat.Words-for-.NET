@@ -522,6 +522,7 @@ namespace FileFormat.Words.IElements
         /// <param name="y">y position of the shape.</param>
         /// <param name="width">Width of the shape.</param>
         /// <param name="height">Height of the shape.</param>
+        /// <param name="shapeType">Type of the shape (e.g rectangle, ellipse etc).</param>
         public Shape(int x,int y,int width,int height,ShapeType shapeType)
         {
             X = x;
@@ -533,10 +534,63 @@ namespace FileFormat.Words.IElements
     }
 
     /// <summary>
+    /// Represents a grouped shapes element in a Word document.
+    /// </summary>
+    public class GroupShape : IElement
+    {
+        /// <summary>
+        /// Gets the unique identifier of the group shape.
+        /// </summary>
+        public int ElementId { get; internal set; }
+
+        /// <summary>
+        /// Gets or sets the type of the first shape in the group.
+        /// </summary>
+        public Shape Shape1 { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the second shape in the group.
+        /// </summary>
+        public Shape Shape2 { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GroupShape"/> class.
+        /// </summary>
+        public GroupShape()
+        {
+            Shape1 = new Shape();
+            Shape2 = new Shape();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GroupShape"/> class with specified values.
+        /// </summary>
+        /// <param name="shape1">Firs shape in the group.</param>
+        /// <param name="shape2">Second shape in the group.</param>
+        public GroupShape(Shape shape1,Shape shape2)
+        {
+            Shape1 = shape1;
+            //Shape1.ElementId = ElementId + 1;
+            Shape2 = shape2;
+            //Shape2.ElementId = ElementId + 2;
+        }
+    }
+
+    /// <summary>
     /// Specifies the type of a shape within the word document.
     /// </summary>
     public enum ShapeType
     {
+        /// <summary>
+        /// Ellipse or Oval shape.
+        /// </summary>
+        Rectangle,
+
+        /// <summary>
+        /// Ellipse or Oval shape.
+        /// </summary>
+        Triangle,
+
         /// <summary>
         /// Ellipse or Oval shape.
         /// </summary>
