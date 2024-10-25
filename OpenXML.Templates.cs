@@ -9,6 +9,9 @@ using W15 = DocumentFormat.OpenXml.Office2013.Word;
 using A = DocumentFormat.OpenXml.Drawing;
 using Thm15 = DocumentFormat.OpenXml.Office2013.Theme;
 using Ap = DocumentFormat.OpenXml.ExtendedProperties;
+using Wp = DocumentFormat.OpenXml.Drawing.Wordprocessing;
+using Wpg = DocumentFormat.OpenXml.Office2010.Word.DrawingGroup;
+using Wps = DocumentFormat.OpenXml.Office2010.Word.DrawingShape;
 
 namespace OpenXML.Templates
 {
@@ -12654,6 +12657,304 @@ namespace OpenXML.Templates
             **/
             #endregion
 
+            #region "Shapes with connector"
+            /**
+            Paragraph paragraph1 = new Paragraph() { ParagraphId = "2C078E63", TextId = "175858C0" };
+            paragraph1.AddNamespaceDeclaration("wp14", "http://schemas.microsoft.com/office/word/2010/wordml");
+
+            Run run1 = new Run();
+
+            RunProperties runProperties1 = new RunProperties();
+            NoProof noProof1 = new NoProof();
+
+            runProperties1.Append(noProof1);
+
+            AlternateContent alternateContent1 = new AlternateContent();
+            alternateContent1.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
+
+            AlternateContentChoice alternateContentChoice1 = new AlternateContentChoice() { Requires = "wpg" };
+            alternateContentChoice1.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
+
+            Drawing drawing1 = new Drawing();
+            drawing1.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
+
+            Wp.Inline inline1 = new Wp.Inline() { DistanceFromTop = (UInt32Value)0U, DistanceFromBottom = (UInt32Value)0U, DistanceFromLeft = (UInt32Value)0U, DistanceFromRight = (UInt32Value)0U, AnchorId = "24C249F3", EditId = "163BC827" };
+            inline1.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+            inline1.AddNamespaceDeclaration("wp14", "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing");
+
+            Wp.Extent extent1 = new Wp.Extent() { Cx = 3778250L, Cy = 622300L };
+            extent1.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+
+            Wp.EffectExtent effectExtent1 = new Wp.EffectExtent() { LeftEdge = 0L, TopEdge = 0L, RightEdge = 12700L, BottomEdge = 25400L };
+            effectExtent1.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+
+            Wp.DocProperties docProperties1 = new Wp.DocProperties() { Id = (UInt32Value)122768519U, Name = "Group 1" };
+            docProperties1.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+
+            Wp.NonVisualGraphicFrameDrawingProperties nonVisualGraphicFrameDrawingProperties1 = new Wp.NonVisualGraphicFrameDrawingProperties();
+            nonVisualGraphicFrameDrawingProperties1.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
+
+            A.Graphic graphic1 = new A.Graphic();
+            graphic1.AddNamespaceDeclaration("a", "http://schemas.openxmlformats.org/drawingml/2006/main");
+
+            A.GraphicData graphicData1 = new A.GraphicData() { Uri = "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" };
+
+            
+            Wpg.WordprocessingGroup wordprocessingGroup1 = new Wpg.WordprocessingGroup();
+            wordprocessingGroup1.AddNamespaceDeclaration("wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup");
+            Wpg.NonVisualGroupDrawingShapeProperties nonVisualGroupDrawingShapeProperties1 = new Wpg.NonVisualGroupDrawingShapeProperties();
+
+
+            Wpg.GroupShapeProperties groupShapeProperties1 = new Wpg.GroupShapeProperties();
+
+            A.TransformGroup transformGroup1 = new A.TransformGroup();
+            A.Offset offset1 = new A.Offset() { X = 0L, Y = 0L };
+            A.Extents extents1 = new A.Extents() { Cx = 3778250L, Cy = 622300L };
+            A.ChildOffset childOffset1 = new A.ChildOffset() { X = 0L, Y = 0L };
+            A.ChildExtents childExtents1 = new A.ChildExtents() { Cx = 3778250L, Cy = 622300L };
+
+            transformGroup1.Append(offset1);
+            transformGroup1.Append(extents1);
+            transformGroup1.Append(childOffset1);
+            transformGroup1.Append(childExtents1);
+
+            groupShapeProperties1.Append(transformGroup1);
+
+            
+            Wps.WordprocessingShape wordprocessingShape1 = new Wps.WordprocessingShape();
+            wordprocessingShape1.AddNamespaceDeclaration("wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
+            // this one is extra
+            Wps.NonVisualDrawingProperties nonVisualDrawingProperties1 = new Wps.NonVisualDrawingProperties() { Id = (UInt32Value)448142074U, Name = "Rectangle 448142074" };
+            // End: this one is extra
+            Wps.NonVisualDrawingShapeProperties nonVisualDrawingShapeProperties1 = new Wps.NonVisualDrawingShapeProperties();
+
+            Wps.ShapeProperties shapeProperties1 = new Wps.ShapeProperties();
+            A.Transform2D transform2D1 = new A.Transform2D();
+            A.Offset offset2 = new A.Offset() { X = 0L, Y = 0L };
+            A.Extents extents2 = new A.Extents() { Cx = 914400L, Cy = 622300L };
+
+            transform2D1.Append(offset2);
+            transform2D1.Append(extents2);
+
+            A.PresetGeometry presetGeometry1 = new A.PresetGeometry() { Preset = A.ShapeTypeValues.Rectangle };
+            A.AdjustValueList adjustValueList1 = new A.AdjustValueList();
+
+            presetGeometry1.Append(adjustValueList1);
+            A.Outline outline4 = new A.Outline();
+
+            shapeProperties1.Append(transform2D1);
+            shapeProperties1.Append(presetGeometry1);
+            shapeProperties1.Append(outline4);
+
+            Wps.ShapeStyle shapeStyle1 = new Wps.ShapeStyle();
+
+            A.LineReference lineReference1 = new A.LineReference() { Index = (UInt32Value)2U };
+
+            A.SchemeColor schemeColor16 = new A.SchemeColor() { Val = A.SchemeColorValues.Accent1 };
+            A.Shade shade6 = new A.Shade() { Val = 50000 };
+
+            schemeColor16.Append(shade6);
+
+            lineReference1.Append(schemeColor16);
+
+            A.FillReference fillReference1 = new A.FillReference() { Index = (UInt32Value)1U };
+            A.SchemeColor schemeColor17 = new A.SchemeColor() { Val = A.SchemeColorValues.Accent1 };
+
+            fillReference1.Append(schemeColor17);
+
+            A.EffectReference effectReference1 = new A.EffectReference() { Index = (UInt32Value)0U };
+            A.RgbColorModelPercentage rgbColorModelPercentage1 = new A.RgbColorModelPercentage() { RedPortion = 0, GreenPortion = 0, BluePortion = 0 };
+
+            effectReference1.Append(rgbColorModelPercentage1);
+
+            A.FontReference fontReference1 = new A.FontReference() { Index = A.FontCollectionIndexValues.Minor };
+            A.SchemeColor schemeColor18 = new A.SchemeColor() { Val = A.SchemeColorValues.Light1 };
+
+            fontReference1.Append(schemeColor18);
+
+            shapeStyle1.Append(lineReference1);
+            shapeStyle1.Append(fillReference1);
+            shapeStyle1.Append(effectReference1);
+            shapeStyle1.Append(fontReference1);
+            Wps.TextBodyProperties textBodyProperties1 = new Wps.TextBodyProperties() { Anchor = A.TextAnchoringTypeValues.Center };
+
+            // this one is extra
+            wordprocessingShape1.Append(nonVisualDrawingProperties1);
+            // End: this one is extra
+            wordprocessingShape1.Append(nonVisualDrawingShapeProperties1);
+            wordprocessingShape1.Append(shapeProperties1);
+            wordprocessingShape1.Append(shapeStyle1);
+            wordprocessingShape1.Append(textBodyProperties1);
+
+            Wps.WordprocessingShape wordprocessingShape2 = new Wps.WordprocessingShape();
+            wordprocessingShape2.AddNamespaceDeclaration("wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
+            // extra
+            Wps.NonVisualDrawingProperties nonVisualDrawingProperties2 = new Wps.NonVisualDrawingProperties() { Id = (UInt32Value)1011268246U, Name = "Oval 1011268246" };
+            // End: extra
+            Wps.NonVisualDrawingShapeProperties nonVisualDrawingShapeProperties2 = new Wps.NonVisualDrawingShapeProperties();
+
+            Wps.ShapeProperties shapeProperties2 = new Wps.ShapeProperties();
+
+            A.Transform2D transform2D2 = new A.Transform2D();
+            A.Offset offset3 = new A.Offset() { X = 2647950L, Y = 50800L };
+            A.Extents extents3 = new A.Extents() { Cx = 1130300L, Cy = 533400L };
+
+            transform2D2.Append(offset3);
+            transform2D2.Append(extents3);
+
+            A.PresetGeometry presetGeometry2 = new A.PresetGeometry() { Preset = A.ShapeTypeValues.Ellipse };
+            A.AdjustValueList adjustValueList2 = new A.AdjustValueList();
+
+            presetGeometry2.Append(adjustValueList2);
+            A.Outline outline5 = new A.Outline();
+
+            shapeProperties2.Append(transform2D2);
+            shapeProperties2.Append(presetGeometry2);
+            shapeProperties2.Append(outline5);
+
+            Wps.ShapeStyle shapeStyle2 = new Wps.ShapeStyle();
+
+            A.LineReference lineReference2 = new A.LineReference() { Index = (UInt32Value)2U };
+
+            A.SchemeColor schemeColor19 = new A.SchemeColor() { Val = A.SchemeColorValues.Accent1 };
+            A.Shade shade7 = new A.Shade() { Val = 50000 };
+
+            schemeColor19.Append(shade7);
+
+            lineReference2.Append(schemeColor19);
+
+            A.FillReference fillReference2 = new A.FillReference() { Index = (UInt32Value)1U };
+            A.SchemeColor schemeColor20 = new A.SchemeColor() { Val = A.SchemeColorValues.Accent1 };
+
+            fillReference2.Append(schemeColor20);
+
+            A.EffectReference effectReference2 = new A.EffectReference() { Index = (UInt32Value)0U };
+            A.RgbColorModelPercentage rgbColorModelPercentage2 = new A.RgbColorModelPercentage() { RedPortion = 0, GreenPortion = 0, BluePortion = 0 };
+
+            effectReference2.Append(rgbColorModelPercentage2);
+
+            A.FontReference fontReference2 = new A.FontReference() { Index = A.FontCollectionIndexValues.Minor };
+            A.SchemeColor schemeColor21 = new A.SchemeColor() { Val = A.SchemeColorValues.Light1 };
+
+            fontReference2.Append(schemeColor21);
+
+            shapeStyle2.Append(lineReference2);
+            shapeStyle2.Append(fillReference2);
+            shapeStyle2.Append(effectReference2);
+            shapeStyle2.Append(fontReference2);
+            Wps.TextBodyProperties textBodyProperties2 = new Wps.TextBodyProperties() { Anchor = A.TextAnchoringTypeValues.Center };
+
+            // extra
+            wordprocessingShape2.Append(nonVisualDrawingProperties2);
+            // End: extra
+            wordprocessingShape2.Append(nonVisualDrawingShapeProperties2);
+            wordprocessingShape2.Append(shapeProperties2);
+            wordprocessingShape2.Append(shapeStyle2);
+            wordprocessingShape2.Append(textBodyProperties2);
+
+            Wps.WordprocessingShape wordprocessingShape3 = new Wps.WordprocessingShape();
+            wordprocessingShape3.AddNamespaceDeclaration("wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
+            Wps.NonVisualDrawingProperties nonVisualDrawingProperties3 = new Wps.NonVisualDrawingProperties() { Id = (UInt32Value)161453463U, Name = "Connector: Elbow 161453463" };
+
+            // extra
+            Wps.NonVisualConnectorProperties nonVisualConnectorProperties1 = new Wps.NonVisualConnectorProperties();
+            A.StartConnection startConnection1 = new A.StartConnection() { Id = (UInt32Value)448142074U, Index = (UInt32Value)3U };
+            A.EndConnection endConnection1 = new A.EndConnection() { Id = (UInt32Value)1011268246U, Index = (UInt32Value)2U };
+
+            nonVisualConnectorProperties1.Append(startConnection1);
+            nonVisualConnectorProperties1.Append(endConnection1);
+            // End: extra
+
+            Wps.ShapeProperties shapeProperties3 = new Wps.ShapeProperties();
+
+            A.Transform2D transform2D3 = new A.Transform2D();
+            A.Offset offset4 = new A.Offset() { X = 914400L, Y = 311150L };
+            A.Extents extents4 = new A.Extents() { Cx = 1733550L, Cy = 6350L };
+
+            transform2D3.Append(offset4);
+            transform2D3.Append(extents4);
+
+            A.PresetGeometry presetGeometry3 = new A.PresetGeometry() { Preset = A.ShapeTypeValues.BentConnector3 };
+            A.AdjustValueList adjustValueList3 = new A.AdjustValueList();
+
+            presetGeometry3.Append(adjustValueList3);
+            A.Outline outline6 = new A.Outline();
+
+            shapeProperties3.Append(transform2D3);
+            shapeProperties3.Append(presetGeometry3);
+            shapeProperties3.Append(outline6);
+
+            Wps.ShapeStyle shapeStyle3 = new Wps.ShapeStyle();
+
+            A.LineReference lineReference3 = new A.LineReference() { Index = (UInt32Value)1U };
+            A.SchemeColor schemeColor22 = new A.SchemeColor() { Val = A.SchemeColorValues.Accent1 };
+
+            lineReference3.Append(schemeColor22);
+
+            A.FillReference fillReference3 = new A.FillReference() { Index = (UInt32Value)0U };
+            A.SchemeColor schemeColor23 = new A.SchemeColor() { Val = A.SchemeColorValues.Accent1 };
+
+            fillReference3.Append(schemeColor23);
+
+            A.EffectReference effectReference3 = new A.EffectReference() { Index = (UInt32Value)0U };
+            A.RgbColorModelPercentage rgbColorModelPercentage3 = new A.RgbColorModelPercentage() { RedPortion = 0, GreenPortion = 0, BluePortion = 0 };
+
+            effectReference3.Append(rgbColorModelPercentage3);
+
+            A.FontReference fontReference3 = new A.FontReference() { Index = A.FontCollectionIndexValues.Minor };
+            A.SchemeColor schemeColor24 = new A.SchemeColor() { Val = A.SchemeColorValues.Text1 };
+
+            fontReference3.Append(schemeColor24);
+
+            shapeStyle3.Append(lineReference3);
+            shapeStyle3.Append(fillReference3);
+            shapeStyle3.Append(effectReference3);
+            shapeStyle3.Append(fontReference3);
+            Wps.TextBodyProperties textBodyProperties3 = new Wps.TextBodyProperties();
+
+            wordprocessingShape3.Append(nonVisualDrawingProperties3);
+            // different (nonVisualDrawingShapeProperties is replaced by nonVisualConnectorProperties)
+            wordprocessingShape3.Append(nonVisualConnectorProperties1);
+            // End: different (nonVisualDrawingShapeProperties is replaced by nonVisualConnectorProperties)
+            wordprocessingShape3.Append(shapeProperties3);
+            wordprocessingShape3.Append(shapeStyle3);
+            wordprocessingShape3.Append(textBodyProperties3);
+
+            // extra
+            wordprocessingGroup1.Append(nonVisualGroupDrawingShapeProperties1);
+            wordprocessingGroup1.Append(groupShapeProperties1);
+            wordprocessingGroup1.Append(wordprocessingShape1);
+            wordprocessingGroup1.Append(wordprocessingShape2);
+            wordprocessingGroup1.Append(wordprocessingShape3);
+            // End: extra
+
+            graphicData1.Append(wordprocessingGroup1);
+
+            graphic1.Append(graphicData1);
+
+            inline1.Append(extent1);
+            inline1.Append(effectExtent1);
+            inline1.Append(docProperties1);
+            inline1.Append(nonVisualGraphicFrameDrawingProperties1);
+            inline1.Append(graphic1);
+
+            drawing1.Append(inline1);
+
+            alternateContentChoice1.Append(drawing1);
+
+            AlternateContentFallback alternateContentFallback1 = new AlternateContentFallback();
+            alternateContentFallback1.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
+
+            alternateContent1.Append(alternateContentChoice1);
+            alternateContent1.Append(alternateContentFallback1);
+
+            run1.Append(runProperties1);
+            run1.Append(alternateContent1);
+
+            paragraph1.Append(run1);
+            **/
+            #endregion
+
             SectionProperties sectionProperties1 = new SectionProperties();
             PageSize pageSize1 = new PageSize() { Width = (UInt32Value)12240U, Height = (UInt32Value)15840U, Orient = PageOrientationValues.Portrait };
             PageMargin pageMargin1 = new PageMargin() { Top = 1440, Right = (UInt32Value)1440U, Bottom = 1440, Left = (UInt32Value)1440U, Header = (UInt32Value)720U, Footer = (UInt32Value)720U, Gutter = (UInt32Value)0U };
@@ -12668,6 +12969,7 @@ namespace OpenXML.Templates
             sectionProperties1.Append(docGrid1);
             sectionProperties1.Append(headerReference1);
             sectionProperties1.Append(footerReference1);
+
             #region "List Contents Append" 
             /**
             body1.Append(paragraph9);
@@ -12789,6 +13091,11 @@ namespace OpenXML.Templates
             body1.Append(paragraph125);
             **/
             #endregion
+
+            #region "Append shapes paragraph"
+            //body1.Append(paragraph1);
+            #endregion
+
             body1.Append(sectionProperties1);
 
             document1.Append(body1);

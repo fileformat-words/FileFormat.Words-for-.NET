@@ -2,23 +2,28 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <ReleaseVersion>24.6.0</ReleaseVersion>
+    <AssemblyVersion>24.9.0</AssemblyVersion>
+    <ReleaseVersion>24.9.0</ReleaseVersion>
     <SynchReleaseVersion>false</SynchReleaseVersion>
-    <PackageVersion>24.6.0</PackageVersion>
+    <PackageVersion>24.9.0</PackageVersion>
     <Authors>Openize</Authors>
     <Copyright>(C) Openize Pty Ltd 2024. All Rights Reserved.</Copyright>
     <Owners>Openize</Owners>
     <Description>Written in native C#, Openize.Words for .NET is a free, open-source SDK designed to easily create, load, and modify Microsoft Word documents with just a few lines of code.</Description>
-    <PackageId>Openize.Words</PackageId>
-    <PackageLicenseUrl>https://github.com/openize-words/Openize.Words-for-.NET/blob/main/LICENSE</PackageLicenseUrl>
+    <PackageId>FileFormat.Words</PackageId>
+    <PackageLicenseUrl>https://github.com/fileformat-words/FileFormat.Words-for-.NET/blob/main/LICENSE</PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://www.openize.com</PackageProjectUrl>
     <Summary>A C# library to work with word documents without requiring MS word be installed.</Summary>
     <PackageTags>openxml document word-documents word-processing word-processing-file-api word-processing-document-api document-automation word-api word-document-api word-sdk word-document-sdk word-document-library word-processing-sdk word-processing-library open-source-word-sdk</PackageTags>
-    <Title>Openize.Words for .NET</Title>
+    <Title>FileFormat.Words for .NET</Title>
     <DevelopmentDependency>true</DevelopmentDependency>
     <PackOnBuild>true</PackOnBuild>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+</PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DocumentationFile>bin\Debug\netcoreapp3.1\Openize.Words.xml</DocumentationFile>
