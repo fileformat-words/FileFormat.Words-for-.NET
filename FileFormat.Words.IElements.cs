@@ -582,12 +582,12 @@ namespace FileFormat.Words.IElements
     public enum ShapeType
     {
         /// <summary>
-        /// Ellipse or Oval shape.
+        /// Rectangle shape.
         /// </summary>
         Rectangle,
 
         /// <summary>
-        /// Ellipse or Oval shape.
+        /// Triangle shape.
         /// </summary>
         Triangle,
 
