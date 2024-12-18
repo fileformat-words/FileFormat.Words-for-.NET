@@ -172,7 +172,7 @@ namespace OpenXML.Words
 
                         case FF.GroupShape ffGroupShape:
                             {
-                                var para = CreateConnectedShapes(ffGroupShape);
+                                var para = CreateGroupShape(ffGroupShape);
                                 _wpBody.InsertBefore(para, sectionProperties);
                                 break;
                             }
@@ -840,8 +840,8 @@ namespace OpenXML.Words
             }
         }
 
-        #region "Shapes with connector"
-        internal WP.Paragraph CreateConnectedShapes(FF.GroupShape groupShape)
+        #region "Create Group Shape with connector"
+        internal WP.Paragraph CreateGroupShape(FF.GroupShape groupShape)
         {
             lock (_lockObject)
             {
@@ -1080,7 +1080,7 @@ namespace OpenXML.Words
                 }
                 catch (Exception ex)
                 {
-                    var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Create Coonected Shapes");
+                    var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Create Group Shape");
                     throw new FileFormat.Words.FileFormatException(errorMessage, ex);
                 }
             }
@@ -1195,9 +1195,9 @@ namespace OpenXML.Words
                 try
                 {
                     _pkgDocument = WordprocessingDocument.Open(stream, true);
-
-                    if (_pkgDocument.MainDocumentPart?.Document?.Body == null) throw new FileFormat.Words.FileFormatException("Package or Document or Body is null", new NullReferenceException());
-
+                    if (_pkgDocument.MainDocumentPart?.Document?.Body == null)
+                        throw new FileFormat.Words.FileFormatException("Package or Document or Body is null",
+                            new NullReferenceException());
                     OWD.OoxmlDocData.CreateInstance(_pkgDocument);
 
                     _mainPart = _pkgDocument.MainDocumentPart;
@@ -1209,31 +1209,51 @@ namespace OpenXML.Words
 
                     foreach (var element in _wpBody.Elements())
                     {
-
                         switch (element)
                         {
                             case WP.Paragraph wpPara:
+                            { 
+                                var drawingFound = false;
+
+                                foreach (var drawing in wpPara.Descendants<WP.Drawing>())
                                 {
-                                    var drawingFound = false;
+                                    var image = LoadImage(drawing, sequence);
+                                    if (image != null)
+                                    {
+                                        elements.Add(image);
+                                        sequence++;
+                                        drawingFound = true;
+                                    }
+                                    else
+                                    {
+                                        var inline = drawing.Inline;
 
-                                    foreach (var drawing in wpPara.Descendants<WP.Drawing>())
-                                    {                                   
-                                        var image = LoadImage(drawing, sequence);
+                                        if (inline != null)
+                                        {
+                                            // Extract shape information from inline
+                                            var graphic = inline.Graphic;
+                                            var graphicData = graphic.GraphicData;
 
-                                        if (image != null)
-                                        {
-                                            elements.Add(image);
-                                            sequence++;
-                                            drawingFound = true;
-                                        }
-                                        else
-                                        {
-                                            var shape = LoadShape(drawing,sequence);
-                                            if (shape != null)
-                                            {
-                                                elements.Add(shape);
-                                                sequence++;
-                                                drawingFound = true;
+                                                if (graphicData.Uri.Value == "http://schemas.microsoft.com/office/word/2010/wordprocessingShape")
+                                                {
+                                                    var shape = LoadShape(graphicData, sequence);
+                                                    if (shape != null)
+                                                    {
+                                                        elements.Add(shape);
+                                                        sequence++;
+                                                        drawingFound = true;
+                                                    }
+                                                }
+                                                else if (graphicData.Uri.Value == "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup")
+                                                {
+                                                    var groupShape = LoadGroupShape(graphicData, sequence);
+                                                    if (groupShape != null)
+                                                    {
+                                                        elements.Add(groupShape);
+                                                        sequence++;
+                                                        drawingFound = true;
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -1243,7 +1263,6 @@ namespace OpenXML.Words
                                         elements.Add(LoadParagraph(wpPara, sequence));
                                         sequence++;
                                     }
-
                                     break;
                                 }
 
@@ -1268,7 +1287,6 @@ namespace OpenXML.Words
                                 elements.Add(LoadTable(wpTable, sequence));
                                 sequence++;
                                 break;
-
                             case WP.SectionProperties wpSection:
                                 elements.Add(LoadSection(wpSection, sequence));
                                 sequence++;
@@ -1278,7 +1296,6 @@ namespace OpenXML.Words
                                 sequence++;
                                 break;
                         }
-
                     }
 
                     return elements;
@@ -1559,55 +1576,112 @@ namespace OpenXML.Words
         }
         #endregion
 
-        internal FF.Shape LoadShape(WP.Drawing drawing, int sequence)
+        internal FF.Shape LoadShape(A.GraphicData graphicData, int sequence)
         {
-            var inline = drawing.Inline;
-
-            if (inline != null)
+            if (graphicData.Uri.Value == "http://schemas.microsoft.com/office/word/2010/wordprocessingShape")
             {
-                // Extract shape information from inline
-                var graphic = inline.Graphic;
-                var graphicData = graphic.GraphicData;
-
-                if (graphicData.Uri.Value == "http://schemas.microsoft.com/office/word/2010/wordprocessingShape")
+                var wordprocessingShape = graphicData.GetFirstChild<DWS.WordprocessingShape>();
+                if (wordprocessingShape != null)
                 {
-                    var wordprocessingShape = graphicData.GetFirstChild<DWS.WordprocessingShape>();
-                    if (wordprocessingShape != null)
-                    {
-                        // Extract position and size from shape properties
-                        var shapeProperties = wordprocessingShape.GetFirstChild<DWS.ShapeProperties>();
-                        var transform2D = shapeProperties.GetFirstChild<A.Transform2D>();
+                    // Extract position and size from shape properties
+                    var shapeProperties = wordprocessingShape.GetFirstChild<DWS.ShapeProperties>();
+                    var transform2D = shapeProperties.GetFirstChild<A.Transform2D>();
 
-                        var offset = transform2D.Offset;
-                        var extents = transform2D.Extents;
+                    var offset = transform2D.Offset;
+                    var extents = transform2D.Extents;
 
-                        int x = (int)(offset.X.Value / 9525); // Convert EMU to points
-                        int y = (int)(offset.Y.Value / 9525);
-                        int width = (int)(extents.Cx.Value / 9525);
-                        int height = (int)(extents.Cy.Value / 9525);
+                    int x = (int)(offset.X.Value / 9525); // Convert EMU to points
+                    int y = (int)(offset.Y.Value / 9525);
+                    int width = (int)(extents.Cx.Value / 9525);
+                    int height = (int)(extents.Cy.Value / 9525);
 
-                        // Determine the shape type
-                        var presetGeometry = shapeProperties.GetFirstChild<A.PresetGeometry>();
-                        var shapeType = FF.ShapeType.Ellipse; // Default
+                    // Determine the shape type
+                    var presetGeometry = shapeProperties.GetFirstChild<A.PresetGeometry>();
+                    var shapeType = FF.ShapeType.Ellipse; // Default
 
-                        if (presetGeometry.Preset == A.ShapeTypeValues.Diamond)
-                        {
-                            shapeType = FF.ShapeType.Diamond;
-                        }
-                        else if (presetGeometry.Preset == A.ShapeTypeValues.Hexagon)
-                        {
-                            shapeType = FF.ShapeType.Hexagone;
-                        }
-                        var shape = new FF.Shape(x, y, width, height, shapeType);
-                        shape.ElementId = sequence;
 
-                        // Return the shape object with extracted data
-                        return shape;
-                    }
+                    shapeType = LoadShapeType(presetGeometry.Preset);
+
+                    var shape = new FF.Shape(x, y, width, height, shapeType);
+                    shape.ElementId = sequence;
+
+                    // Return the shape object with extracted data
+                    return shape;
                 }
             }
+            
             return null;
         }
+
+        private FF.ShapeType LoadShapeType(A.ShapeTypeValues shapeType)
+        {
+            if (shapeType == A.ShapeTypeValues.Rectangle)
+                return FF.ShapeType.Rectangle;
+            else if (shapeType == A.ShapeTypeValues.Triangle)
+                return FF.ShapeType.Triangle;
+            else if (shapeType == A.ShapeTypeValues.Ellipse)
+                return FF.ShapeType.Ellipse;
+            else if (shapeType == A.ShapeTypeValues.Diamond)
+                return FF.ShapeType.Diamond;
+            else if (shapeType == A.ShapeTypeValues.Hexagon)
+                return FF.ShapeType.Hexagone;
+            else
+                return FF.ShapeType.Ellipse;
+        }
+
+        internal FF.GroupShape LoadGroupShape(A.GraphicData graphicData, int sequence)
+        {
+            lock (_lockObject)
+            {
+                try
+                {
+
+                    if (graphicData.Uri.Value == "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup")
+                    {
+                        var wordprocessingShapes = graphicData.Descendants<DWS.WordprocessingShape>();//.GetFirstChild<DWS.WordprocessingShape>();
+                        if (wordprocessingShapes != null)
+                        {
+                            var count = 0;
+                            var listShapes = new List<FF.Shape>();
+                            foreach (var wpShape in wordprocessingShapes)
+                            {
+                                var shapeProperties = wpShape.GetFirstChild<DWS.ShapeProperties>();
+                                var presetGeometry = shapeProperties.GetFirstChild<A.PresetGeometry>();
+                                var shapeType = FF.ShapeType.Ellipse;
+
+                                if (presetGeometry.Preset != A.ShapeTypeValues.BentConnector3)
+                                {
+                                    count = count + 1;
+                                    var transform2D = shapeProperties.GetFirstChild<A.Transform2D>();
+
+                                    var offset = transform2D.Offset;
+                                    var extents = transform2D.Extents;
+
+                                    int x = (int)(offset.X.Value / 9525); // Convert EMU to points
+                                    int y = (int)(offset.Y.Value / 9525);
+                                    int width = (int)(extents.Cx.Value / 9525);
+                                    int height = (int)(extents.Cy.Value / 9525);
+                                    shapeType = LoadShapeType(presetGeometry.Preset);
+                                    var shape = new FF.Shape(x, y, width, height, shapeType);
+                                    shape.ElementId = sequence * 50 + count;
+                                    listShapes.Add(shape);
+                                }
+                            }
+                            var groupShape = new FF.GroupShape(listShapes[0], listShapes[1]);
+                            groupShape.ElementId = sequence;
+                            return groupShape;
+                        }
+                    }
+                    return null;
+                }
+                catch (Exception ex)
+                {
+                    var errorMessage = OWD.OoxmlDocData.ConstructMessage(ex, "Load Group Shape");
+                    throw new FileFormat.Words.FileFormatException(errorMessage, ex);
+                }
+            }
+        }
+
 
         #region Load OpenXML Table
         internal FF.Table LoadTable(WP.Table wpTable, int id)
